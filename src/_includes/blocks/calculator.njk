@@ -1,24 +1,76 @@
 {#
-  "What is poor mental health costing your business?" — one estimate from one number.
+  "What is poor mental health costing your business?"
 
   Shown on the Training & Coaching page and on its own page at /cost-calculator/, the
   address meant for sharing. Both read the same content (src/content/calculator.json),
   so editing the wording in the CMS changes it in both places.
 
-  The maths is staff × a per-employee cost for each of absence, presenteeism and
-  turnover. Those three figures are editable; a cleared one falls back to the default
-  below rather than quietly counting as zero.
+  What a visitor sees, in order:
+    1. one question (headcount) and an instant answer — no sign-up, ever, for this;
+    2. "Make this estimate more accurate" — their own figures, compared side by side;
+    3. "How we calculated this" — every assumption stated, and editable;
+    4. illustrative savings;
+    5. the full breakdown and a printable summary, behind a short form (Formspree,
+       the same endpoint as the contact form).
+
+  The arithmetic lives in src/js/cost-calculator.js, tested by scripts/test-calculator.js.
 
   Expects: bg (section background), calcHeadingTag ("h1" on its own page, else "h2").
 #}
 {%- set calc = content.calculator or {} -%}
-{%- set costs = [
-  { key: "presenteeism", label: "Working while unwell", note: "Lower focus and productivity when people come in but are struggling", value: calc.presenteeismCost | float(800) },
-  { key: "turnover", label: "Staff leaving", note: "Recruiting, onboarding and lost experience when people leave", value: calc.turnoverCost | float(670) },
-  { key: "absence", label: "Sickness absence", note: "Days lost to stress, anxiety, depression and burnout", value: calc.absenceCost | float(230) }
+{%- set categories = [
+  { key: "presenteeism", label: "Working while unwell", note: "Lower focus and productivity when people come in but are struggling" },
+  { key: "turnover", label: "Staff leaving", note: "Recruiting, onboarding and lost experience when people leave" },
+  { key: "absence", label: "Sickness absence", note: "Days lost to stress, anxiety, depression and burnout" }
 ] -%}
-{%- set perEmployee = costs[0].value + costs[1].value + costs[2].value -%}
+{#- Cleared figures fall back to the defaults rather than quietly counting as zero. -#}
+{%- set calcConfig = {
+  perEmployee: {
+    presenteeism: calc.presenteeismCost | float(793),
+    turnover: calc.turnoverCost | float(650),
+    absence: calc.absenceCost | float(243)
+  },
+  assumptions: {
+    daysPerAbsence: calc.daysPerAbsence | float(20),
+    replacementPct: calc.replacementPct | float(30),
+    productivityLossPct: calc.productivityLossPct | float(20),
+    onCostPct: calc.onCostPct | float(15),
+    workingDays: 230
+  },
+  categories: categories,
+  calculatorUrl: links.site + links.calculator,
+  contactEmail: content.contact.email,
+  orgName: content.header.logoLine1 + " " + content.header.logoLine2,
+  heading: calc.heading or "What Is Poor Mental Health Costing Your Business?",
+  sourceNote: calc.sourceNote,
+  roiText: calc.ctaText
+} -%}
+{%- set perEmployee = calcConfig.perEmployee.presenteeism + calcConfig.perEmployee.turnover + calcConfig.perEmployee.absence -%}
 {%- set tag = calcHeadingTag or "h2" -%}
+{%- set inputClass = "w-full border border-gray-300 rounded px-4 py-3 text-gray-800 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-sage/40 focus:border-sage transition-colors aria-[invalid=true]:border-red-600" -%}
+{%- set labelClass = "block text-sm font-semibold text-forest mb-1.5" -%}
+{%- set hintClass = "text-xs text-gray-600 mb-2" -%}
+{%- set errorClass = "hidden text-xs text-red-700 mt-1.5" -%}
+
+{#- One labelled numeric field. Text rather than type=number so "£35,000" is accepted
+    and anything else gets a clear message, rather than the browser silently emptying it. -#}
+{%- macro numberField(id, name, label, hint, placeholder, mode, prefix, suffix, value) -%}
+<div>
+  <label for="{{ id }}" class="{{ labelClass }}">{{ label }}</label>
+  {% if hint %}<p id="{{ id }}-hint" class="{{ hintClass }}">{{ hint }}</p>{% endif %}
+  <div class="relative">
+    {% if prefix %}<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" aria-hidden="true">{{ prefix }}</span>{% endif %}
+    <input id="{{ id }}" name="{{ name }}" type="text" inputmode="{{ mode or 'numeric' }}" autocomplete="off"
+      {% if value is defined %}value="{{ value }}"{% endif %}
+      {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+      aria-describedby="{% if hint %}{{ id }}-hint {% endif %}{{ id }}-error"
+      class="{{ inputClass }}{% if prefix %} pl-8{% endif %}{% if suffix %} pr-16{% endif %}" data-calc-field="{{ name }}" />
+    {% if suffix %}<span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-600" aria-hidden="true">{{ suffix }}</span>{% endif %}
+  </div>
+  <p id="{{ id }}-error" class="{{ errorClass }}" role="alert"></p>
+</div>
+{%- endmacro -%}
+
 <!-- ══════════════════════════ COST CALCULATOR ══════════════════════════ -->
 <section id="calculator" class="{{ bg }} py-20" data-calculator>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,7 +84,7 @@
       </div>
       {% endif %}
       <{{ tag }} class="font-serif text-forest {% if tag == 'h1' %}text-4xl lg:text-5xl{% else %}text-3xl{% endif %} leading-tight max-w-3xl mx-auto">
-        {{ calc.heading or "What Is Poor Mental Health Costing Your Business?" }}
+        {{ calcConfig.heading }}
       </{{ tag }}>
       <div class="divider mt-4 mb-8 mx-auto"></div>
       {% if calc.intro %}
@@ -40,9 +92,9 @@
       {% endif %}
     </div>
 
+    <!-- ── 1. The one question, and the answer ── -->
     <div class="max-w-4xl mx-auto bg-white rounded-lg border border-gray-100 border-t-4 border-t-sage shadow-sm grid md:grid-cols-5">
 
-      <!-- The one question -->
       <div class="md:col-span-2 p-6 sm:p-8 bg-stone/60 md:rounded-bl-lg flex flex-col justify-center">
         <label for="calc-staff" class="block font-medium text-forest mb-3">
           {{ calc.staffLabel or "How many people does your organisation employ?" }}
@@ -50,48 +102,242 @@
         <div class="flex items-stretch rounded border border-gray-300 bg-white focus-within:border-sage focus-within:ring-2 focus-within:ring-sage/30">
           <span class="flex items-center pl-4 text-sage" aria-hidden="true"><i data-lucide="users" class="w-5 h-5"></i></span>
           <input id="calc-staff" type="number" inputmode="numeric" min="1" max="1000000" step="1" value="50"
+            aria-describedby="calc-staff-error"
             class="w-full px-3 py-3 text-2xl font-semibold text-forest bg-transparent outline-none" data-calc-staff />
         </div>
+        <p id="calc-staff-error" class="{{ errorClass }}" role="alert"></p>
         <input type="range" min="1" max="500" step="1" value="50" aria-label="Number of employees"
           class="calc-range w-full mt-5" data-calc-range />
-        <div class="flex justify-between text-xs text-gray-500 mt-1" aria-hidden="true">
+        <div class="flex justify-between text-xs text-gray-600 mt-1" aria-hidden="true">
           <span>1</span><span>500+</span>
         </div>
       </div>
 
-      <!-- The answer -->
       <div class="md:col-span-3 p-6 sm:p-8" aria-live="polite">
         <p class="text-gray-600 text-sm">{{ calc.resultLabel or "Poor mental health could be costing your organisation around" }}</p>
         <p class="font-serif text-forest text-4xl sm:text-5xl mt-2">
-          <span data-calc-total>&pound;{{ (perEmployee * 50) | round | int }}</span><span class="text-lg text-gray-500 font-sans"> a year</span>
+          <span data-calc-total>&pound;{{ (perEmployee * 50) | round | int }}</span><span class="text-lg text-gray-600 font-sans"> a year</span>
         </p>
-        <p class="text-sm text-gray-500 mt-2">
+        <p class="text-sm text-gray-600 mt-2">
           That's about <span class="font-medium text-forest" data-calc-per>&pound;{{ perEmployee | round | int }}</span> per employee, every year.
         </p>
 
+        <!-- Appears once their own figures change the answer -->
+        <div class="hidden mt-4 rounded border border-sage/30 bg-sage/10 px-4 py-3" data-calc-yours-summary>
+          <p class="text-sm text-forest">
+            Using your figures: <strong class="text-lg" data-calc-yours-total></strong> a year
+          </p>
+          <p class="text-xs text-gray-700 mt-0.5" data-calc-yours-diff></p>
+        </div>
+
         <ul class="mt-8 space-y-5">
-          {% for cost in costs %}
-          <li>
+          {% for cat in categories %}
+          <li data-calc-row="{{ cat.key }}">
             <div class="flex items-baseline justify-between gap-4">
-              <span class="font-medium text-forest">{{ cost.label }}</span>
-              <span class="font-semibold text-forest tabular-nums" data-calc-part="{{ cost.value }}">&pound;{{ (cost.value * 50) | round | int }}</span>
+              <span class="font-medium text-forest">{{ cat.label }}</span>
+              <span class="text-right">
+                <span class="block font-semibold text-forest tabular-nums" data-calc-part>&pound;{{ (calcConfig.perEmployee[cat.key] * 50) | round | int }}</span>
+                <span class="hidden text-xs text-gray-700 tabular-nums" data-calc-part-yours></span>
+              </span>
             </div>
             <div class="h-2 rounded-full bg-stone mt-2 overflow-hidden">
-              <div class="h-full rounded-full bg-sage" style="width: {{ (cost.value / perEmployee * 100) | round(1) if perEmployee else 0 }}%"></div>
+              <div class="h-full rounded-full bg-sage transition-all" data-calc-bar style="width: {{ (calcConfig.perEmployee[cat.key] / perEmployee * 100) | round(1) }}%"></div>
             </div>
-            <p class="text-xs text-gray-500 mt-1.5">{{ cost.note }}</p>
+            <p class="text-xs text-gray-600 mt-1.5">{{ cat.note }}</p>
           </li>
           {% endfor %}
         </ul>
       </div>
     </div>
 
-    {% if calc.sourceNote %}
-    <p class="text-xs text-gray-500 leading-relaxed max-w-4xl mx-auto mt-4">{{ calc.sourceNote | lines }}</p>
-    {% endif %}
+    <div class="max-w-4xl mx-auto mt-6 space-y-4">
 
-    <!-- What to do about it -->
-    {%- if calc.ctaHeading or calc.ctaText or calc.ctaButtonLabel %}
+      <!-- ── 2. Their own figures ── -->
+      <details class="calc-panel group bg-white rounded-lg border border-gray-200" data-calc-more>
+        <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5">
+          <span>
+            <span class="flex items-center gap-2 font-medium text-forest"><i data-lucide="sliders-horizontal" class="w-4 h-4 text-sage"></i> Make this estimate more accurate</span>
+            <span class="block text-sm text-gray-600 mt-0.5">Optional. Add your own figures and compare.</span>
+          </span>
+          <i data-lucide="plus" class="calc-panel-icon w-4 h-4 text-sage flex-shrink-0"></i>
+        </summary>
+        <div class="px-6 pb-6 border-t border-gray-100 pt-5">
+          <p class="text-sm text-gray-600 mb-5">
+            Fill in as many as you know. Anything left blank uses the headcount estimate for that cost.
+            Your figures stay in your browser — nothing is sent anywhere unless you ask for the full breakdown below.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-5">
+            {{ numberField("calc-salary", "salary", "Average annual salary per employee", "Before tax, in pounds.", "e.g. 32,000", "decimal", "£") }}
+            {{ numberField("calc-absent", "absentStaff", "Staff off sick with a mental health reason", "In the last 12 months.", "e.g. 3") }}
+            {{ numberField("calc-leavers", "leavers", "Staff who left where mental health was a factor", "In the last 12 months.", "e.g. 2") }}
+            {{ numberField("calc-struggling", "strugglingStaff", "Staff still working but struggling with performance", "Your best estimate, right now.", "e.g. 5") }}
+          </div>
+          <p class="hidden text-sm text-forest mt-5 rounded bg-stone px-4 py-3" data-calc-more-status></p>
+        </div>
+      </details>
+
+      <!-- ── 3. The assumptions ── -->
+      <details class="calc-panel group bg-white rounded-lg border border-gray-200">
+        <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5">
+          <span class="flex items-center gap-2 font-medium text-forest"><i data-lucide="calculator" class="w-4 h-4 text-sage"></i> How we calculated this</span>
+          <i data-lucide="plus" class="calc-panel-icon w-4 h-4 text-sage flex-shrink-0"></i>
+        </summary>
+        <div class="px-6 pb-6 border-t border-gray-100 pt-5 text-sm text-gray-700 leading-relaxed space-y-4">
+          <div>
+            <h3 class="font-semibold text-forest mb-1">The headcount estimate</h3>
+            <p>
+              Your number of staff multiplied by an average cost per employee:
+              <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.presenteeism | round | int }}</span> for working while unwell,
+              <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.turnover | round | int }}</span> for staff leaving and
+              <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.absence | round | int }}</span> for sickness absence.
+              These come from Deloitte's UK totals divided by roughly 30 million UK employees — that division is our own approximation.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-forest mb-1">Your figures</h3>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>Sickness absence</strong> = staff off × days lost per absence × daily pay (salary plus on-costs, over {{ calcConfig.assumptions.workingDays }} working days)</li>
+              <li><strong>Staff leaving</strong> = leavers × salary × cost of replacing a leaver</li>
+              <li><strong>Working while unwell</strong> = staff struggling × salary plus on-costs × productivity lost</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-forest mb-1">Our assumptions</h3>
+            <p class="mb-4">
+              These are our own working assumptions, <strong>not figures from Deloitte or any other published source</strong>.
+              Change any of them to match your organisation — the estimate updates as you type.
+            </p>
+            <div class="grid sm:grid-cols-2 gap-5">
+              {{ numberField("calc-days", "daysPerAbsence", "Working days lost per absence", "", "", "decimal", "", "days", calcConfig.assumptions.daysPerAbsence) }}
+              {{ numberField("calc-replace", "replacementPct", "Cost of replacing a leaver", "As a share of their salary.", "", "decimal", "", "%", calcConfig.assumptions.replacementPct) }}
+              {{ numberField("calc-productivity", "productivityLossPct", "Productivity lost per struggling employee", "", "", "decimal", "", "%", calcConfig.assumptions.productivityLossPct) }}
+              {{ numberField("calc-oncost", "onCostPct", "Employer on-costs", "National Insurance and pension, on top of salary.", "", "decimal", "", "%", calcConfig.assumptions.onCostPct) }}
+            </div>
+            <button type="button" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-forest underline underline-offset-2 hover:text-sage" data-calc-reset>
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset to our defaults
+            </button>
+          </div>
+        </div>
+      </details>
+
+      <!-- ── 4. Illustrative savings ── -->
+      <div class="bg-white rounded-lg border border-gray-200 px-6 py-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-700">Illustrative savings</p>
+            <p class="text-forest mt-1">
+              Reducing these costs by <span data-calc-saving-pct>10%</span> would be worth about
+              <strong class="font-serif text-2xl" data-calc-saving></strong> a year.
+            </p>
+          </div>
+          <fieldset class="flex-shrink-0">
+            <legend class="sr-only">Reduction to illustrate</legend>
+            <div class="inline-flex rounded border border-gray-300 overflow-hidden">
+              {% for pct in [5, 10, 20] %}
+              <label class="calc-pill">
+                <input type="radio" name="calc-saving" value="{{ pct }}" class="sr-only" {% if pct == 10 %}checked{% endif %} data-calc-saving-option />
+                <span>{{ pct }}%</span>
+              </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        </div>
+        <p class="text-xs text-gray-600 mt-3">
+          {{ calc.savingsNote or "Illustrative only. This is simple arithmetic on the estimate above, not a prediction or a guarantee of results from any training or service, including ours." }}
+        </p>
+      </div>
+
+      <!-- ── 5. Full breakdown, behind a short form ── -->
+      <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest px-6 py-6 sm:px-8 sm:py-8" id="calc-breakdown" tabindex="-1">
+        <div data-calc-locked>
+          <h3 class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get your full breakdown" }}</h3>
+          <p class="text-gray-600 mt-2 mb-6">{{ (calc.captureText or "See the workings behind each figure and download a printable summary to share with your team.") | lines }}</p>
+
+          <form class="space-y-5" data-calc-form action="{{ content.site.formspreeEndpoint }}" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="Cost calculator lead" />
+            <input type="hidden" name="source" value="Cost calculator" />
+            <input type="hidden" name="estimate" value="" data-calc-form-estimate />
+            {#- Formspree's honeypot: people never see it, bots fill it in. -#}
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="calc-name" class="{{ labelClass }}">Your name <span class="text-red-700" aria-hidden="true">*</span></label>
+                <input id="calc-name" name="name" type="text" autocomplete="name" required aria-describedby="calc-name-error" class="{{ inputClass }}" />
+                <p id="calc-name-error" class="{{ errorClass }}" role="alert"></p>
+              </div>
+              <div>
+                <label for="calc-email" class="{{ labelClass }}">Work email <span class="text-red-700" aria-hidden="true">*</span></label>
+                <input id="calc-email" name="email" type="email" autocomplete="email" required aria-describedby="calc-email-error" class="{{ inputClass }}" />
+                <p id="calc-email-error" class="{{ errorClass }}" role="alert"></p>
+              </div>
+            </div>
+            <div>
+              <label for="calc-org" class="{{ labelClass }}">Organisation <span class="text-gray-600 font-normal">(optional)</span></label>
+              <input id="calc-org" name="organisation" type="text" autocomplete="organization" class="{{ inputClass }}" />
+            </div>
+
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" name="wants_to_talk" value="Yes" class="mt-1 w-4 h-4 accent-forest flex-shrink-0" data-calc-talk-box />
+              <span class="text-sm text-gray-700">I'd like to talk to you about training for our managers or HR team.</span>
+            </label>
+            <div class="hidden" data-calc-message>
+              <label for="calc-message" class="{{ labelClass }}">Anything you'd like us to know? <span class="text-gray-600 font-normal">(optional)</span></label>
+              <textarea id="calc-message" name="message" rows="3" class="{{ inputClass }} resize-none"></textarea>
+            </div>
+
+            <div>
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input id="calc-consent" type="checkbox" name="consent" value="Yes" required aria-describedby="calc-consent-error" class="mt-1 w-4 h-4 accent-forest flex-shrink-0" data-calc-consent />
+                <span class="text-sm text-gray-700">
+                  I agree to {{ calcConfig.orgName }} storing my details and the figures above so they can send my breakdown and, if I've asked, get in touch about training.
+                  See our <a href="/privacy/" class="text-forest font-medium underline underline-offset-2 hover:text-sage" target="_blank">privacy policy</a>.
+                  <span class="text-red-700" aria-hidden="true">*</span>
+                </span>
+              </label>
+              <p id="calc-consent-error" class="{{ errorClass }}" role="alert"></p>
+            </div>
+
+            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors disabled:opacity-60" data-calc-submit>
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              <span data-calc-submit-label>Show my full breakdown</span>
+            </button>
+            <p class="hidden text-sm text-red-700" role="alert" data-calc-form-error></p>
+          </form>
+        </div>
+
+        <div class="hidden" data-calc-unlocked>
+          <h3 class="font-serif text-forest text-2xl">Your full breakdown</h3>
+          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you — here are the workings behind each figure.</p>
+          <div class="mt-6 overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead>
+                <tr class="border-b border-gray-200 text-gray-700">
+                  <th scope="col" class="py-2 pr-4 font-semibold">Cost</th>
+                  <th scope="col" class="py-2 pr-4 font-semibold">How it's worked out</th>
+                  <th scope="col" class="py-2 font-semibold text-right">Per year</th>
+                </tr>
+              </thead>
+              <tbody data-calc-workings></tbody>
+            </table>
+          </div>
+          <div class="flex flex-wrap gap-4 mt-6">
+            <button type="button" class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors" data-calc-download>
+              <i data-lucide="download" class="w-4 h-4"></i>
+              Download summary (PDF)
+            </button>
+          </div>
+          <p class="text-xs text-gray-600 mt-3">Opens a printable summary — choose "Save as PDF" in the print window.</p>
+        </div>
+      </div>
+
+      {% if calc.sourceNote %}
+      <p class="text-xs text-gray-600 leading-relaxed">{{ calc.sourceNote | lines }}</p>
+      {% endif %}
+    </div>
+
+    <!-- ── What to do about it ── -->
+    {%- if calc.ctaHeading or calc.ctaText %}
     <div class="max-w-2xl mx-auto text-center mt-14">
       {% if calc.ctaHeading %}
       <h3 class="font-serif text-forest text-2xl mb-3">{{ calc.ctaHeading }}</h3>
@@ -103,7 +349,9 @@
     {%- endif %}
     <div class="flex flex-wrap gap-4 justify-center{% if not (calc.ctaHeading or calc.ctaText) %} mt-10{% endif %}">
       {%- if calc.ctaButtonLabel %}
-      <a href="{{ calc.ctaButtonHref or links.contact }}" class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors">
+      {#- Opens the form above with "talk about training" ticked; without JavaScript it
+          falls back to the contact page. -#}
+      <a href="{{ links.contact }}" data-calc-talk class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors">
         <i data-lucide="message-circle" class="w-4 h-4"></i>
         {{ calc.ctaButtonLabel }}
       </a>
@@ -120,49 +368,18 @@
 
 <style>
   .calc-range { accent-color: {{ colors.accent }}; }
-  [data-calculator] input[type=number]::-webkit-inner-spin-button { opacity: 0.5; }
+  .calc-panel[open] .calc-panel-icon { transform: rotate(45deg); }
+  .calc-panel-icon { transition: transform 0.2s ease; }
+  .calc-panel summary::-webkit-details-marker { display: none; }
+  .calc-panel summary:focus-visible, .calc-pill:focus-within { outline: 3px solid {{ colors.accent }}; outline-offset: 2px; }
+  .calc-pill span {
+    display: block; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+    color: {{ colors.dark }}; background: #fff; cursor: pointer; transition: background-color 0.15s ease;
+  }
+  .calc-pill + .calc-pill span { border-left: 1px solid #d1d5db; }
+  .calc-pill input:checked + span { background: {{ colors.dark }}; color: #fff; }
+  @media (prefers-reduced-motion: reduce) { .calc-panel-icon { transition: none; } }
 </style>
-<script>
-  (function () {
-    var root = document.getElementById("calculator");
-    var staff = root.querySelector("[data-calc-staff]");
-    var range = root.querySelector("[data-calc-range]");
-    var parts = root.querySelectorAll("[data-calc-part]");
-    var gbp = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 });
-    var per = 0;
-    parts.forEach(function (el) { per += parseFloat(el.dataset.calcPart) || 0; });
-    root.querySelector("[data-calc-per]").textContent = gbp.format(per);
-
-    function update(n) {
-      n = Math.max(0, Math.floor(n) || 0);
-      root.querySelector("[data-calc-total]").textContent = gbp.format(per * n);
-      parts.forEach(function (el) { el.textContent = gbp.format((parseFloat(el.dataset.calcPart) || 0) * n); });
-    }
-    staff.addEventListener("input", function () {
-      update(staff.value);
-      range.value = Math.min(staff.value, range.max);
-    });
-    range.addEventListener("input", function () {
-      staff.value = range.value;
-      update(range.value);
-    });
-    update(staff.value);
-
-    // Shares the calculator's own page, whose link preview is written for it, even when
-    // this copy sits on the Training page.
-    var shareBtn = root.querySelector("[data-calc-share]");
-    var shareLabel = root.querySelector("[data-calc-share-label]");
-    shareBtn.addEventListener("click", function () {
-      var url = location.origin + "{{ links.calculator }}";
-      var title = {{ (calc.heading or "What is poor mental health costing your business?") | dump | safe }};
-      if (navigator.share) {
-        navigator.share({ title: title, url: url }).catch(function () {});
-        return;
-      }
-      navigator.clipboard.writeText(url).then(function () {
-        shareLabel.textContent = "Link copied";
-        setTimeout(function () { shareLabel.textContent = "Share this calculator"; }, 2500);
-      }, function () { window.prompt("Copy this link:", url); });
-    });
-  })();
-</script>
+<script id="calc-config" type="application/json">{{ calcConfig | dump | replace("<", "\\u003c") | safe }}</script>
+<script src="/js/cost-calculator.js"></script>
+<script src="/js/cost-calculator-page.js"></script>

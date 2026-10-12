@@ -1,0 +1,122 @@
+---
+permalink: "/privacy/"
+pageTitle: "Privacy Policy"
+pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal information on this website."
+---
+{#- Covers the website only: the contact form, the cost calculator's breakdown form and
+    the outside services the pages load. Counselling client records are governed
+    separately, under BACP guidelines. Not in the CMS; linked from the footer and from
+    both forms' consent boxes. -#}
+{%- set orgName = content.header.logoLine1 + " " + content.header.logoLine2 -%}
+{% include "site-header.njk" %}
+
+<section class="bg-stone py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="font-serif text-forest text-4xl lg:text-5xl leading-tight">Privacy Policy</h1>
+    <div class="divider mt-6 mb-6 mx-auto"></div>
+    <p class="text-gray-600">Last updated: October 2026</p>
+  </div>
+</section>
+
+<section class="bg-white py-16">
+  <div class="privacy max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-gray-700 leading-relaxed">
+
+    <p>
+      This policy explains how {{ orgName }} ("we", "us") collects and uses personal information through this
+      website, and your rights over it. It covers the website only. Information shared in counselling sessions
+      is handled separately and in strict confidence, in line with BACP ethical guidelines.
+    </p>
+
+    <h2>Who we are</h2>
+    <p>
+      {{ orgName }} is the data controller for information collected through this website. You can contact us
+      about anything in this policy at <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>.
+    </p>
+
+    <h2>What we collect and why</h2>
+    <h3>Enquiry form</h3>
+    <p>
+      When you send an enquiry we collect your name, email address, your message, and anything else you choose
+      to give us (such as a phone number, the service you're interested in, or how you heard about us). We use it
+      only to reply to your enquiry and, if you go ahead, to arrange our services.
+    </p>
+    <h3>Cost calculator</h3>
+    <p>
+      The calculator works entirely in your browser. The numbers you type into it are not sent to us or stored
+      anywhere unless you choose to request the full breakdown.
+    </p>
+    <p>
+      If you request the full breakdown, we collect your name, email address, organisation (if given), the
+      figures you entered and the resulting estimate, and whether you'd like to talk to us about training. We use
+      this to provide the breakdown and, if you've asked us to, to get in touch about training. We won't add you to
+      a mailing list.
+    </p>
+
+    <h2>Our legal basis</h2>
+    <p>
+      We rely on your <strong>consent</strong>, which you give by ticking the box on each form. You can withdraw
+      it at any time by emailing us, and we will delete your details. Where you go on to use our services, we
+      also process your information to take steps at your request before entering into a contract with you.
+    </p>
+
+    <h2>Who we share it with</h2>
+    <p>
+      We never sell your information or share it with third parties for marketing. We use a small number of
+      service providers to run the website:
+    </p>
+    <ul>
+      <li><strong>Formspree</strong> receives form submissions and forwards them to us by email. Formspree is based in the United States, so your information may be transferred there; Formspree states that it protects such transfers with appropriate safeguards.</li>
+      <li><strong>Cloudflare</strong> hosts the website and, like any web host, processes technical information such as your IP address to deliver pages and protect the site.</li>
+      <li><strong>Google Fonts, Tailwind CSS and unpkg</strong> supply the site's fonts, styling and icons. Your browser requests these directly, which shares your IP address with those providers.</li>
+      <li><strong>YouTube</strong>: podcast videos load only if you press play, using YouTube's privacy-enhanced mode.</li>
+    </ul>
+
+    <h2>How long we keep it</h2>
+    <p>
+      We keep enquiries and calculator requests for up to two years from our last contact with you, then delete
+      them. If you become a client, records are kept as required by our professional obligations.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>
+      This website does not set advertising or tracking cookies. The calculator remembers, for the rest of your
+      visit only, that you've already requested the breakdown, using your browser's session storage; this is
+      cleared when you close the tab.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>Under UK data protection law you have the right to:</p>
+    <ul>
+      <li>ask for a copy of the information we hold about you;</li>
+      <li>ask us to correct or delete it;</li>
+      <li>object to or ask us to restrict how we use it;</li>
+      <li>withdraw your consent at any time.</li>
+    </ul>
+    <p>
+      To use any of these rights, email <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>.
+      We'll respond within one month.
+    </p>
+
+    <h2>Complaints</h2>
+    <p>
+      If you're unhappy with how we've handled your information, please tell us first so we can put it right.
+      You also have the right to complain to the Information Commissioner's Office (ICO) at
+      <a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener">ico.org.uk</a> or on 0303 123 1113.
+    </p>
+
+    <h2>Changes to this policy</h2>
+    <p>We may update this policy from time to time. The date at the top shows when it last changed.</p>
+  </div>
+</section>
+
+<style>
+  .privacy > * + * { margin-top: 1rem; }
+  .privacy h2 { font-family: 'Playfair Display', Georgia, serif; color: {{ colors.dark }}; font-size: 1.5rem; margin-top: 2.5rem; }
+  .privacy h3 { font-weight: 600; color: {{ colors.dark }}; margin-top: 1.5rem; }
+  .privacy ul { list-style: disc; padding-left: 1.25rem; }
+  .privacy li + li { margin-top: 0.5rem; }
+  .privacy a { color: {{ colors.dark }}; font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
+  .privacy a:hover { color: {{ colors.accent }}; }
+</style>
+
+{% include "site-footer.njk" %}

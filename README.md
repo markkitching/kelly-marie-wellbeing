@@ -574,6 +574,30 @@ It parses the YAML, compares each form against its JSON file (including the sub-
 of every list block), then simulates a save — writing each file back with only the keys
 the form knows — and confirms the built site is byte-for-byte unchanged.
 
+### Cost calculator
+
+"What is poor mental health costing your business?" lives at `/cost-calculator/` (the
+address to share; not in the menu) and also on the Training & Coaching page. Its wording,
+and the default figures, are under **Cost calculator** in the editor.
+
+| File | Role |
+|---|---|
+| `src/js/cost-calculator.js` | The arithmetic only — no page code, so it can be tested |
+| `src/js/cost-calculator-page.js` | Reads the fields, draws the results, sends the form, builds the printable summary |
+| `src/_includes/blocks/calculator.njk` | The markup, used by both pages |
+| `src/content/calculator.json` | Wording and default figures (CMS) |
+| `scripts/test-calculator.js` | Worked examples — `npm run test:calc` |
+| `src/privacy.njk` | The privacy policy both forms link to |
+
+- **Headcount estimate:** staff × a per-employee cost per category (Deloitte 2024 UK
+  totals ÷ ~30 million employees — that division is our approximation). Always free.
+- **Your figures:** optional salary and staff counts, run through assumptions the visitor
+  can see and edit. A blank category keeps its headcount figure. Counts need a salary.
+- **Full breakdown + printable summary** sit behind a short form that posts to the same
+  Formspree endpoint as the contact form, with the subject "Cost calculator lead" and the
+  visitor's figures attached. Nothing they type is sent anywhere until they submit it.
+- Everything is worked out in the browser; there is no server code.
+
 ### Optional extras for later
 
 - **Per-page SEO** — `metaTitle` / `metaDescription` fields. Titles are currently derived

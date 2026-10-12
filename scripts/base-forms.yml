@@ -203,32 +203,57 @@ content:
       - name: resultLabel
         label: Text above the result
         type: string
+      - name: captureHeading
+        label: Full breakdown — heading
+        description: Above the short form people fill in to see the full breakdown and download a summary.
+        type: string
+      - name: captureText
+        label: Full breakdown — text
+        type: text
+      - name: savingsNote
+        label: Illustrative savings — small print
+        description: Keep this saying the figure is illustrative and not a guarantee.
+        type: text
       - name: sourceNote
         label: Small print (source of the figures)
+        description: Keep the line saying this is an estimate based on UK averages.
         type: text
       - name: ctaHeading
         label: Closing heading
         type: string
       - name: ctaText
         label: Closing text
+        description: If you mention Deloitte's £4.70 per £1, keep it clear that it's an average across workplace mental health support in general, not a result of our training.
         type: text
       - name: ctaButtonLabel
         label: Button text
-        description: Leave empty to remove the button.
-        type: string
-      - name: ctaButtonHref
-        label: Button link
-        description: Blank sends it to the enquiry form.
+        description: Opens the breakdown form with "talk about training" ticked. Leave empty to remove the button.
         type: string
       - name: presenteeismCost
-        label: Advanced — cost per employee per year of working while unwell (£)
-        description: The calculator multiplies this by the number of staff. Leave blank to use the default (£800). Update the small print if you change it.
+        label: Advanced — headcount estimate, working while unwell, £ per employee per year
+        description: Leave blank to use the default (£793). Update the small print if you change any of these.
         type: number
       - name: turnoverCost
-        label: Advanced — cost per employee per year of staff leaving (£)
-        description: Leave blank to use the default (£670).
+        label: Advanced — headcount estimate, staff leaving, £ per employee per year
+        description: Leave blank to use the default (£650).
         type: number
       - name: absenceCost
-        label: Advanced — cost per employee per year of sickness absence (£)
-        description: Leave blank to use the default (£230).
+        label: Advanced — headcount estimate, sickness absence, £ per employee per year
+        description: Leave blank to use the default (£243).
+        type: number
+      - name: daysPerAbsence
+        label: Advanced — starting assumption, working days lost per absence
+        description: Visitors can change this on the page. Leave blank to use the default (20).
+        type: number
+      - name: replacementPct
+        label: Advanced — starting assumption, cost of replacing a leaver (% of salary)
+        description: Leave blank to use the default (30).
+        type: number
+      - name: productivityLossPct
+        label: Advanced — starting assumption, productivity lost per struggling employee (%)
+        description: Leave blank to use the default (20).
+        type: number
+      - name: onCostPct
+        label: Advanced — starting assumption, employer on-costs (%)
+        description: Leave blank to use the default (15).
         type: number
