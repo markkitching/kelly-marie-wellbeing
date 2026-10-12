@@ -104,7 +104,6 @@
       assumptions: assumptions,
       headcount: staff == null ? null : C.headcountEstimate(staff, config.perEmployee),
       yours: staff == null ? null : C.ownEstimate(inputs, assumptions, config.perEmployee),
-      savingPct: 10,
     };
   }
 
@@ -146,8 +145,6 @@
     status.textContent = message;
     status.classList.toggle("hidden", !message);
 
-    var savingBase = usingYours ? y.total : (h ? h.total : 0);
-    $("[data-calc-saving]").textContent = h ? fmt(C.illustrativeSaving(savingBase, state.savingPct)) : "-";
 
     renderWorkings();
   }
@@ -334,8 +331,6 @@
       "<h2>Our assumptions</h2><p>" + a.daysPerAbsence + " working days lost per absence; replacing a leaver costs " + a.replacementPct +
       "% of salary; " + a.productivityLossPct + "% productivity lost per struggling employee; " + a.onCostPct + "% employer on-costs; " +
       a.workingDays + " working days a year. Days lost is rounded from Health and Safety Executive 2024/25 figures; the others are our own working assumptions, not published figures.</p>" +
-      "<h2>Illustrative savings</h2><p>For illustration only: if these costs fell by " + s.savingPct + "%, that would be about " +
-      esc(fmt(C.illustrativeSaving(s.yours.total, s.savingPct))) + " a year. " + s.savingPct + "% is an example we've chosen, not a predicted result or a guarantee.</p>" +
       (config.sourceNote ? "<h2>About this estimate</h2><p class=muted>" + esc(config.sourceNote) + "</p>" : "") +
       (config.roiText ? "<p class=muted>" + esc(config.roiText) + "</p>" : "") +
       "<h2>Talk to us</h2><p>" + esc(config.contactEmail) + " · " + esc(config.calculatorUrl) + "</p>" +

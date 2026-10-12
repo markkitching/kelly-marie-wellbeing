@@ -210,10 +210,6 @@ content:
       - name: captureText
         label: Printable summary — text
         type: text
-      - name: savingsNote
-        label: Illustrative savings — small print
-        description: Shown after the 'if these costs fell by 10%' line under the result. Keep it clear that 10% is an example, not a predicted result or a guarantee.
-        type: string
       - name: sourceNote
         label: Small print (source of the figures)
         description: Keep the line saying this is an estimate based on UK averages.

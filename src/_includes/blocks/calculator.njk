@@ -6,8 +6,7 @@
   so editing the wording in the CMS changes it in both places.
 
   What a visitor sees, in order:
-    1. one question (headcount) and an instant answer, with an illustrative 10% saving —
-       no sign-up, ever, for this;
+    1. one question (headcount) and an instant answer — no sign-up, ever, for this;
     2. "Make this estimate more accurate" (optional, inside the calculator) — their own
        figures, compared side by side;
     3. "How we calculated this" — every assumption stated, and editable;
@@ -158,12 +157,6 @@
           </p>
           <p class="text-xs text-gray-700 mt-0.5" data-calc-yours-diff></p>
         </div>
-
-        <p class="flex items-start gap-2 text-sm text-gray-700 mt-4">
-          <i data-lucide="trending-down" class="w-4 h-4 text-sage flex-shrink-0 mt-0.5"></i>
-          <span>For illustration only: if these costs fell by 10%, that would be about <strong class="text-forest" data-calc-saving></strong> a year.
-          <span class="text-gray-600">{{ calc.savingsNote or "10% is an example we've chosen, not a predicted result or a guarantee." }}</span></span>
-        </p>
 
         <ul class="mt-8 space-y-5">
           {% for cat in categories %}

@@ -111,11 +111,6 @@
     return out;
   }
 
-  /** What cutting `total` by `pct` per cent would save. Illustrative only. */
-  function illustrativeSaving(total, pct) {
-    return total * pct / 100;
-  }
-
   var gbp = typeof Intl !== "undefined"
     ? new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 })
     : null;
@@ -134,7 +129,6 @@
     parseField: parseField,
     headcountEstimate: headcountEstimate,
     ownEstimate: ownEstimate,
-    illustrativeSaving: illustrativeSaving,
     formatGBP: formatGBP,
   };
 });

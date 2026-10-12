@@ -95,10 +95,6 @@ test("edited assumptions are used: 10 days, 50% replacement, 10% productivity, 0
   near(r.presenteeism.value, 10000, "presenteeism");
 });
 
-console.log("\nillustrative savings\n");
-
-test("10% of £84,300 is £8,430", () => near(C.illustrativeSaving(84300, 10), 8430, "saving"));
-
 console.log("\ninput checking\n");
 
 test("blank is blank, not zero", () => assert.deepStrictEqual(C.parseField("  "), { value: null, error: null }));
