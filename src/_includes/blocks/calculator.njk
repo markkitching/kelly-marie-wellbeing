@@ -144,10 +144,10 @@
       <div class="md:col-span-3 p-6 sm:p-8" aria-live="polite">
         <p class="text-gray-600 text-sm">{{ calc.resultLabel or "Poor mental health could be costing your organisation around" }}</p>
         <p class="font-serif text-forest text-4xl sm:text-5xl mt-2">
-          <span data-calc-total>&pound;{{ (perEmployee * 50) | round | int }}</span><span class="text-lg text-gray-600 font-sans"> a year</span>
+          <span data-calc-total>{{ (perEmployee * 50) | gbp }}</span><span class="text-lg text-gray-600 font-sans"> a year</span>
         </p>
         <p class="text-sm text-gray-600 mt-2">
-          That's about <span class="font-medium text-forest" data-calc-per>&pound;{{ perEmployee | round | int }}</span> per employee, every year.
+          That's about <span class="font-medium text-forest" data-calc-per>{{ perEmployee | gbp }}</span> per employee, every year.
         </p>
 
         <!-- Appears once their own figures change the answer -->
@@ -164,7 +164,7 @@
             <div class="flex items-baseline justify-between gap-4">
               <span class="font-medium text-forest">{{ cat.label }}</span>
               <span class="text-right">
-                <span class="block font-semibold text-forest tabular-nums" data-calc-part>&pound;{{ (calcConfig.perEmployee[cat.key] * 50) | round | int }}</span>
+                <span class="block font-semibold text-forest tabular-nums" data-calc-part>{{ (calcConfig.perEmployee[cat.key] * 50) | gbp }}</span>
                 <span class="hidden text-xs text-gray-700 tabular-nums" data-calc-part-yours></span>
               </span>
             </div>
@@ -207,9 +207,9 @@
             <{{ subTag }} class="font-semibold text-forest mb-1">The headcount estimate</{{ subTag }}>
             <p>
               Your number of staff multiplied by an average cost per employee:
-              <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.presenteeism | round | int }}</span> for working while unwell,
-              <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.turnover | round | int }}</span> for staff leaving and
-              <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.absence | round | int }}</span> for sickness absence.
+              <span class="tabular-nums">{{ calcConfig.perEmployee.presenteeism | gbp }}</span> for working while unwell,
+              <span class="tabular-nums">{{ calcConfig.perEmployee.turnover | gbp }}</span> for staff leaving and
+              <span class="tabular-nums">{{ calcConfig.perEmployee.absence | gbp }}</span> for sickness absence.
               These come from Deloitte's UK totals divided by roughly 30 million UK employees. That division is our own approximation.
             </p>
           </div>
@@ -308,6 +308,7 @@
               Download summary (PDF)
             </button>
           </div>
+          <p class="hidden text-sm text-red-700 mt-3" role="alert" data-calc-download-error></p>
           <p class="text-xs text-gray-600 mt-3">Opens a printable summary. Choose "Save as PDF" in the print window.</p>
         </div>
       </div>

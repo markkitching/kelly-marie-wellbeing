@@ -107,6 +107,12 @@ test("fractions of people are rejected", () => assert.ok(C.parseField("2.5", { i
 test("£ and thousands separators are accepted in a salary", () =>
   assert.strictEqual(C.parseField("£35,000").value, 35000));
 test("range limits apply", () => assert.ok(C.parseField("120", { max: 100 }).error));
+test("a trailing point is fine, so typing 22.5 never passes through an error", () => {
+  assert.strictEqual(C.parseField("22.").value, 22);
+  assert.strictEqual(C.parseField("32,000.").value, 32000);
+  assert.strictEqual(C.parseField(".5").value, 0.5);
+});
+test("a point on its own isn't a number", () => assert.ok(C.parseField(".").error));
 
 console.log("\nformatting\n");
 
