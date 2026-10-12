@@ -146,6 +146,15 @@ const test = async (name, fn) => {
     assert.ok(!/£\d{4,}/.test(html), `unformatted figure in the built page: ${html.match(/£\d{4,}/)}`);
   });
 
+  await test("the calculator scripts' addresses change whenever the scripts do", async () => {
+    const html = fs.readFileSync(path.join(SITE, "cost-calculator", "index.html"), "utf8");
+    for (const name of ["cost-calculator.js", "cost-calculator-page.js"]) {
+      const hash = require("crypto").createHash("sha256")
+        .update(fs.readFileSync(path.join(__dirname, "..", "src", "js", name))).digest("hex").slice(0, 10);
+      assert.ok(html.includes(`/js/${name}?v=${hash}"`), `${name} should load with ?v=${hash}`);
+    }
+  });
+
   await test("typing 22.5 days never shows an error on the way", async () => {
     await page.fill("#calc-days", "");
     await page.locator("#calc-days").pressSequentially("22.");

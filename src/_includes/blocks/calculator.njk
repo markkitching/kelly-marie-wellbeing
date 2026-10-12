@@ -355,5 +355,5 @@
   @media (prefers-reduced-motion: reduce) { .calc-panel-icon { transition: none; } }
 </style>
 <script id="calc-config" type="application/json">{{ calcConfig | dump | replace("<", "\\u003c") | safe }}</script>
-<script src="/js/cost-calculator.js"></script>
-<script src="/js/cost-calculator-page.js"></script>
+<script src="{{ '/js/cost-calculator.js' | versioned }}"></script>
+<script src="{{ '/js/cost-calculator-page.js' | versioned }}"></script>
