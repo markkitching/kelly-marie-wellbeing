@@ -135,6 +135,12 @@
 {%- endif %}
 {%- endif %}
 
+{%- if page_item.slug == "training-coaching" %}
+{#- The cost calculator. It also has a page of its own, /cost-calculator/, for sharing. -#}
+{%- set bg = "bg-white" if blockIndex % 2 == 0 else "bg-stone" -%}
+{% include "blocks/calculator.njk" %}
+{%- set blockIndex = blockIndex + 1 -%}
+{%- endif %}
 
 {% if pageContent.episodes | length %}
 <!-- ══════════════════════════ EPISODES ══════════════════════════ -->

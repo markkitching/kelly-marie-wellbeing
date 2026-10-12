@@ -177,3 +177,58 @@ content:
             label: Address
             description: The full https:// address of the profile.
             type: string
+  - name: calculator
+    label: Cost calculator
+    type: file
+    path: src/content/calculator.json
+    format: json
+    fields:
+      - name: eyebrow
+        label: Small heading
+        type: string
+      - name: heading
+        label: Heading
+        description: Also the title of the shareable page, kellymariewellbeing.com/cost-calculator/
+        type: string
+      - name: intro
+        label: Intro paragraph
+        type: text
+      - name: shareDescription
+        label: Social media preview text
+        description: The short description shown under the title when the calculator's link is shared on Facebook, LinkedIn and so on.
+        type: text
+      - name: staffLabel
+        label: Question above the number box
+        type: string
+      - name: resultLabel
+        label: Text above the result
+        type: string
+      - name: sourceNote
+        label: Small print (source of the figures)
+        type: text
+      - name: ctaHeading
+        label: Closing heading
+        type: string
+      - name: ctaText
+        label: Closing text
+        type: text
+      - name: ctaButtonLabel
+        label: Button text
+        description: Leave empty to remove the button.
+        type: string
+      - name: ctaButtonHref
+        label: Button link
+        description: Blank sends it to the enquiry form.
+        type: string
+      - name: presenteeismCost
+        label: Advanced — cost per employee per year of working while unwell (£)
+        description: The calculator multiplies this by the number of staff. Leave blank to use the default (£800). Update the small print if you change it.
+        type: number
+      - name: turnoverCost
+        label: Advanced — cost per employee per year of staff leaving (£)
+        description: Leave blank to use the default (£670).
+        type: number
+      - name: absenceCost
+        label: Advanced — cost per employee per year of sickness absence (£)
+        description: Leave blank to use the default (£230).
+        type: number
