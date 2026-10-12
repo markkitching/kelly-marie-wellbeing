@@ -40,6 +40,9 @@ jobs:
       - name: CMS titles and descriptions are escaped once
         run: npm run test:titles
 
+      - name: Calculator uses the figures from the editor
+        run: npm run test:figures
+
       - name: Build the site
         run: npm run build
 

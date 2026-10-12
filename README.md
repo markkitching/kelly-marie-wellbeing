@@ -582,15 +582,18 @@ the form knows — and confirms the built site is byte-for-byte unchanged.
 address to share; not in the menu) and also on the Training & Coaching page. The homepage
 links to it with the **Cost calculator button text** field under *Top section (hero)*;
 empty that field to remove the button. Its wording,
-and the default figures, are under **Cost calculator** in the editor.
+and the figures it uses, are under **Cost calculator** in the editor. A figure left blank
+there falls back to the default in `src/js/cost-calculator.js`.
 
 | File | Role |
 |---|---|
 | `src/js/cost-calculator.js` | The arithmetic only — no page code, so it can be tested |
 | `src/js/cost-calculator-page.js` | Reads the fields, draws the results, sends the form, builds the printable summary |
 | `src/_includes/blocks/calculator.njk` | The markup, used by both pages |
-| `src/content/calculator.json` | Wording and default figures (CMS) |
+| `src/content/calculator.json` | Wording and figures (CMS). These are the figures the page uses |
 | `scripts/test-calculator.js` | Worked examples — `npm run test:calc` |
+| `src/_data/calcDefaults.js` | The fallback figures for any left blank in the editor, taken from `cost-calculator.js` so they're written once |
+| `scripts/test-calculator-figures.js` | Builds a copy of the site with figures changed and cleared, and checks the page uses the editor's figures and falls back to the defaults for blank ones: `npm run test:figures` |
 | `scripts/test-page-titles.js` | Builds a copy of the site with an apostrophe and `&` in the calculator heading, and checks titles and link previews aren't escaped twice: `npm run test:titles` |
 | `scripts/test-calculator-page.js` | The page in a real browser (headcount, warnings, form, summary): `npm run build && npm run test:page` |
 | `src/privacy.njk` | The privacy policy both forms link to |

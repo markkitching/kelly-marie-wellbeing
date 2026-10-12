@@ -23,19 +23,22 @@
   { key: "turnover", label: "Staff leaving", note: "Recruiting, onboarding and lost experience when people leave" },
   { key: "absence", label: "Sickness absence", note: "Days lost to stress, anxiety, depression and burnout" }
 ] -%}
-{#- Cleared figures fall back to the defaults rather than quietly counting as zero. -#}
+{#- The figures in the editor's "Cost calculator" entry are the ones used. A figure left
+    blank falls back to the default in src/js/cost-calculator.js (via calcDefaults)
+    rather than quietly counting as zero. -#}
+{%- set def = calcDefaults -%}
 {%- set calcConfig = {
   perEmployee: {
-    presenteeism: calc.presenteeismCost | float(793),
-    turnover: calc.turnoverCost | float(650),
-    absence: calc.absenceCost | float(243)
+    presenteeism: calc.presenteeismCost | float(def.perEmployee.presenteeism),
+    turnover: calc.turnoverCost | float(def.perEmployee.turnover),
+    absence: calc.absenceCost | float(def.perEmployee.absence)
   },
   assumptions: {
-    daysPerAbsence: calc.daysPerAbsence | float(23),
-    replacementPct: calc.replacementPct | float(30),
-    productivityLossPct: calc.productivityLossPct | float(20),
-    onCostPct: calc.onCostPct | float(15),
-    workingDays: 230
+    daysPerAbsence: calc.daysPerAbsence | float(def.assumptions.daysPerAbsence),
+    replacementPct: calc.replacementPct | float(def.assumptions.replacementPct),
+    productivityLossPct: calc.productivityLossPct | float(def.assumptions.productivityLossPct),
+    onCostPct: calc.onCostPct | float(def.assumptions.onCostPct),
+    workingDays: def.assumptions.workingDays
   },
   categories: categories,
   calculatorUrl: links.site + links.calculator,

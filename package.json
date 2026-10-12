@@ -10,7 +10,8 @@
     "test:sync": "node scripts/test-sync-merge.js",
     "test:calc": "node scripts/test-calculator.js",
     "test:page": "node scripts/test-calculator-page.js",
-    "test:titles": "node scripts/test-page-titles.js"
+    "test:titles": "node scripts/test-page-titles.js",
+    "test:figures": "node scripts/test-calculator-figures.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
