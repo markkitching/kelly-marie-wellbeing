@@ -104,7 +104,7 @@
       assumptions: assumptions,
       headcount: staff == null ? null : C.headcountEstimate(staff, config.perEmployee),
       yours: staff == null ? null : C.ownEstimate(inputs, assumptions, config.perEmployee),
-      savingPct: Number(($("[data-calc-saving-option]:checked") || {}).value || 10),
+      savingPct: 10,
     };
   }
 
@@ -147,7 +147,6 @@
     status.classList.toggle("hidden", !message);
 
     var savingBase = usingYours ? y.total : (h ? h.total : 0);
-    $("[data-calc-saving-pct]").textContent = state.savingPct + "%";
     $("[data-calc-saving]").textContent = h ? fmt(C.illustrativeSaving(savingBase, state.savingPct)) : "-";
 
     renderWorkings();
@@ -378,7 +377,6 @@
     render();
   });
   Object.keys(fields).forEach(function (k) { fields[k].addEventListener("input", render); });
-  $$("[data-calc-saving-option]").forEach(function (el) { el.addEventListener("change", render); });
   $("[data-calc-reset]").addEventListener("click", function () {
     Object.keys(config.assumptions).forEach(function (k) { if (fields[k]) fields[k].value = config.assumptions[k]; });
     render();

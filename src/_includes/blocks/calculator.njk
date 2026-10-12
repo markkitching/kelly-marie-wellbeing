@@ -6,11 +6,11 @@
   so editing the wording in the CMS changes it in both places.
 
   What a visitor sees, in order:
-    1. one question (headcount) and an instant answer — no sign-up, ever, for this;
+    1. one question (headcount) and an instant answer, with an illustrative 10% saving —
+       no sign-up, ever, for this;
     2. "Make this estimate more accurate" — their own figures, compared side by side;
     3. "How we calculated this" — every assumption stated, and editable;
-    4. illustrative savings;
-    5. the full breakdown and a printable summary, behind a short form (Formspree,
+    4. the full breakdown and a printable summary, behind a short form (Formspree,
        the same endpoint as the contact form).
 
   The arithmetic lives in src/js/cost-calculator.js, tested by scripts/test-calculator.js.
@@ -130,6 +130,12 @@
           <p class="text-xs text-gray-700 mt-0.5" data-calc-yours-diff></p>
         </div>
 
+        <p class="flex items-start gap-2 text-sm text-gray-700 mt-4">
+          <i data-lucide="trending-down" class="w-4 h-4 text-sage flex-shrink-0 mt-0.5"></i>
+          <span>A 10% reduction would be worth about <strong class="text-forest" data-calc-saving></strong> a year.
+          <span class="text-gray-600">{{ calc.savingsNote or "Illustrative only, not a guarantee of results." }}</span></span>
+        </p>
+
         <ul class="mt-8 space-y-5">
           {% for cat in categories %}
           <li data-calc-row="{{ cat.key }}">
@@ -220,34 +226,7 @@
         </div>
       </details>
 
-      <!-- ── 4. Illustrative savings ── -->
-      <div class="bg-white rounded-lg border border-gray-200 px-6 py-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-gray-700">Illustrative savings</p>
-            <p class="text-forest mt-1">
-              Reducing these costs by <span data-calc-saving-pct>10%</span> would be worth about
-              <strong class="font-serif text-2xl" data-calc-saving></strong> a year.
-            </p>
-          </div>
-          <fieldset class="flex-shrink-0">
-            <legend class="sr-only">Reduction to illustrate</legend>
-            <div class="inline-flex rounded border border-gray-300 overflow-hidden">
-              {% for pct in [5, 10, 20] %}
-              <label class="calc-pill">
-                <input type="radio" name="calc-saving" value="{{ pct }}" class="sr-only" {% if pct == 10 %}checked{% endif %} data-calc-saving-option />
-                <span>{{ pct }}%</span>
-              </label>
-              {% endfor %}
-            </div>
-          </fieldset>
-        </div>
-        <p class="text-xs text-gray-600 mt-3">
-          {{ calc.savingsNote or "Illustrative only. This is simple arithmetic on the estimate above, not a prediction or a guarantee of results from any training or service, including ours." }}
-        </p>
-      </div>
-
-      <!-- ── 5. Full breakdown, behind a short form ── -->
+      <!-- ── 4. Full breakdown, behind a short form ── -->
       <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest px-6 py-6 sm:px-8 sm:py-8" id="calc-breakdown" tabindex="-1">
         <div data-calc-locked>
           <h3 class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get your full breakdown" }}</h3>
@@ -337,30 +316,25 @@
     </div>
 
     <!-- ── What to do about it ── -->
-    {%- if calc.ctaHeading or calc.ctaText %}
-    <div class="max-w-2xl mx-auto text-center mt-14">
-      {% if calc.ctaHeading %}
-      <h3 class="font-serif text-forest text-2xl mb-3">{{ calc.ctaHeading }}</h3>
-      {% endif %}
+    <div class="max-w-2xl mx-auto text-center mt-12">
       {% if calc.ctaText %}
-      <p class="text-gray-600 leading-relaxed mb-8">{{ calc.ctaText | lines }}</p>
+      <p class="text-gray-600 leading-relaxed mb-6">{{ calc.ctaText | lines }}</p>
       {% endif %}
-    </div>
-    {%- endif %}
-    <div class="flex flex-wrap gap-4 justify-center{% if not (calc.ctaHeading or calc.ctaText) %} mt-10{% endif %}">
-      {%- if calc.ctaButtonLabel %}
-      {#- Opens the form above with "talk about training" ticked; without JavaScript it
-          falls back to the contact page. -#}
-      <a href="{{ links.contact }}" data-calc-talk class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors">
-        <i data-lucide="message-circle" class="w-4 h-4"></i>
-        {{ calc.ctaButtonLabel }}
-      </a>
-      {%- endif %}
-      <button type="button" data-calc-share
-        class="inline-flex items-center gap-2 border border-forest text-forest font-medium px-6 py-3 rounded hover:bg-forest hover:text-white transition-colors">
-        <i data-lucide="share-2" class="w-4 h-4"></i>
-        <span data-calc-share-label>Share this calculator</span>
-      </button>
+      <div class="flex flex-wrap gap-4 justify-center">
+        {%- if calc.ctaButtonLabel %}
+        {#- Opens the form above with "talk about training" ticked; without JavaScript it
+            falls back to the contact page. -#}
+        <a href="{{ links.contact }}" data-calc-talk class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          {{ calc.ctaButtonLabel }}
+        </a>
+        {%- endif %}
+        <button type="button" data-calc-share
+          class="inline-flex items-center gap-2 border border-forest text-forest font-medium px-6 py-3 rounded hover:bg-forest hover:text-white transition-colors">
+          <i data-lucide="share-2" class="w-4 h-4"></i>
+          <span data-calc-share-label>Share this calculator</span>
+        </button>
+      </div>
     </div>
 
   </div>
@@ -371,13 +345,7 @@
   .calc-panel[open] .calc-panel-icon { transform: rotate(45deg); }
   .calc-panel-icon { transition: transform 0.2s ease; }
   .calc-panel summary::-webkit-details-marker { display: none; }
-  .calc-panel summary:focus-visible, .calc-pill:focus-within { outline: 3px solid {{ colors.accent }}; outline-offset: 2px; }
-  .calc-pill span {
-    display: block; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
-    color: {{ colors.dark }}; background: #fff; cursor: pointer; transition: background-color 0.15s ease;
-  }
-  .calc-pill + .calc-pill span { border-left: 1px solid #d1d5db; }
-  .calc-pill input:checked + span { background: {{ colors.dark }}; color: #fff; }
+  .calc-panel summary:focus-visible { outline: 3px solid {{ colors.accent }}; outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { .calc-panel-icon { transition: none; } }
 </style>
 <script id="calc-config" type="application/json">{{ calcConfig | dump | replace("<", "\\u003c") | safe }}</script>

@@ -577,7 +577,9 @@ the form knows — and confirms the built site is byte-for-byte unchanged.
 ### Cost calculator
 
 "What is poor mental health costing your business?" lives at `/cost-calculator/` (the
-address to share; not in the menu) and also on the Training & Coaching page. Its wording,
+address to share; not in the menu) and also on the Training & Coaching page. The homepage
+links to it with the **Cost calculator button text** field under *Top section (hero)*;
+empty that field to remove the button. Its wording,
 and the default figures, are under **Cost calculator** in the editor.
 
 | File | Role |

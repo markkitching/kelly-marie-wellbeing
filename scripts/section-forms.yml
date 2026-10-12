@@ -40,6 +40,10 @@ sections:
       - name: secondaryButton
         label: Secondary button text
         type: string
+      - name: calculatorButton
+        label: Cost calculator button text
+        description: A button to the cost calculator. Leave empty to remove it.
+        type: string
       - name: image
         label: Hero photo
         type: image

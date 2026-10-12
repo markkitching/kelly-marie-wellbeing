@@ -254,17 +254,14 @@ content:
         type: text
       - name: savingsNote
         label: Illustrative savings — small print
-        description: Keep this saying the figure is illustrative and not a guarantee.
-        type: text
+        description: Shown after the 10% saving line under the result. Keep this saying the figure is illustrative and not a guarantee.
+        type: string
       - name: sourceNote
         label: Small print (source of the figures)
         description: Keep the line saying this is an estimate based on UK averages.
         type: text
-      - name: ctaHeading
-        label: Closing heading
-        type: string
       - name: ctaText
-        label: Closing text
+        label: Closing text (above the buttons)
         description: If you mention Deloitte's £4.70 per £1, keep it clear that it's an average across workplace mental health support in general, not a result of our training.
         type: text
       - name: ctaButtonLabel
@@ -371,6 +368,10 @@ content:
             - coffee
       - name: secondaryButton
         label: Secondary button text
+        type: string
+      - name: calculatorButton
+        label: Cost calculator button text
+        description: A button to the cost calculator. Leave empty to remove it.
         type: string
       - name: image
         label: Hero photo
@@ -1120,6 +1121,10 @@ content:
       - name: paragraph2
         label: Intro paragraph 2
         type: text
+      - name: calculatorButton
+        label: Cost calculator button text
+        description: A button to the cost calculator. Leave empty to remove it.
+        type: string
       - name: image
         label: Hero photo
         type: image
