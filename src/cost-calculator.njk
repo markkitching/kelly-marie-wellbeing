@@ -1,8 +1,10 @@
 ---
 permalink: "/cost-calculator/"
 eleventyComputed:
-  pageTitle: "{{ content.calculator.heading or 'Cost Calculator' }}"
-  pageDescription: "{{ content.calculator.shareDescription }}"
+  # | safe so the text is escaped once, by site-header, not twice: otherwise an
+  # apostrophe in the CMS heading shows as "&#39;" in browser tabs and link previews.
+  pageTitle: "{{ (content.calculator.heading or 'Cost Calculator') | safe }}"
+  pageDescription: "{{ content.calculator.shareDescription | safe }}"
 ---
 {#- The calculator on a page of its own: the address to share on social media, so the
     link preview describes the calculator rather than the whole Training page. The same

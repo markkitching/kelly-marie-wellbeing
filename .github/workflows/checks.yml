@@ -37,6 +37,12 @@ jobs:
       - name: A CMS save can't drop a stored field
         run: python3 scripts/check-pages-yml.py
 
+      - name: CMS titles and descriptions are escaped once
+        run: npm run test:titles
+
+      - name: Calculator uses the figures from the editor
+        run: npm run test:figures
+
       - name: Build the site
         run: npm run build
 

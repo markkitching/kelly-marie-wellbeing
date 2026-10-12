@@ -12,6 +12,7 @@ const fs = require("fs");
 const http = require("http");
 const path = require("path");
 const { chromium } = require("playwright");
+const C = require("../src/js/cost-calculator.js");
 
 const SITE = path.join(__dirname, "..", "_site");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml",
@@ -31,6 +32,15 @@ function serve() {
   });
   return new Promise((resolve) => server.listen(0, "127.0.0.1", () => resolve(server)));
 }
+
+// The headcount estimate for 50 staff, from the figures in the editor (blank ones use
+// the defaults), so changing a figure there doesn't break this test.
+const calc = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "src", "content", "calculator.json"), "utf8"));
+const figure = (v, fallback) => (v == null || v === "" || isNaN(Number(v)) ? fallback : Number(v));
+const FIFTY = C.formatGBP(50 * (
+  figure(calc.presenteeismCost, C.PER_EMPLOYEE.presenteeism) +
+  figure(calc.turnoverCost, C.PER_EMPLOYEE.turnover) +
+  figure(calc.absenceCost, C.PER_EMPLOYEE.absence)));
 
 let passed = 0;
 let beforeEach = async () => {};
@@ -83,14 +93,14 @@ const test = async (name, fn) => {
   const page = await openCalculator();
   beforeEach = () => reset(page);
 
-  await test("50 staff shows the £84,300 headcount estimate", async () => {
+  await test(`50 staff shows the ${FIFTY} headcount estimate`, async () => {
     await page.fill("#calc-staff", "50");
-    assert.strictEqual(await text(page, "[data-calc-total]"), "£84,300");
+    assert.strictEqual(await text(page, "[data-calc-total]"), FIFTY);
   });
 
   await test("clearing the headcount clears the workings table too", async () => {
     await page.fill("#calc-staff", "50");
-    assert.ok((await workings(page)).some((r) => r.includes("£84,300")), "workings should show the total first");
+    assert.ok((await workings(page)).some((r) => r.includes(FIFTY)), "workings should show the total first");
     await page.fill("#calc-staff", "");
     assert.strictEqual(await text(page, "[data-calc-total]"), "-");
     const rows = await workings(page);
@@ -132,8 +142,17 @@ const test = async (name, fn) => {
 
   await test("before the script runs, the figures already have thousands separators", async () => {
     const html = fs.readFileSync(path.join(SITE, "cost-calculator", "index.html"), "utf8");
-    assert.ok(html.includes("£84,300"), "the built page should show £84,300");
+    assert.ok(html.includes(FIFTY), `the built page should show ${FIFTY}`);
     assert.ok(!/£\d{4,}/.test(html), `unformatted figure in the built page: ${html.match(/£\d{4,}/)}`);
+  });
+
+  await test("the calculator scripts' addresses change whenever the scripts do", async () => {
+    const html = fs.readFileSync(path.join(SITE, "cost-calculator", "index.html"), "utf8");
+    for (const name of ["cost-calculator.js", "cost-calculator-page.js"]) {
+      const hash = require("crypto").createHash("sha256")
+        .update(fs.readFileSync(path.join(__dirname, "..", "src", "js", name))).digest("hex").slice(0, 10);
+      assert.ok(html.includes(`/js/${name}?v=${hash}"`), `${name} should load with ?v=${hash}`);
+    }
   });
 
   await test("typing 22.5 days never shows an error on the way", async () => {
@@ -157,7 +176,7 @@ const test = async (name, fn) => {
       page.click("[data-calc-download]"),
     ]);
     await popup.waitForLoadState();
-    assert.match(await popup.content(), /£84,300 a year/);
+    assert.ok((await popup.content()).includes(`${FIFTY} a year`), `the summary should show ${FIFTY} a year`);
     await popup.close();
   });
 

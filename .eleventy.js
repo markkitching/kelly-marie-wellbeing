@@ -1,3 +1,6 @@
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const { runtime } = require("nunjucks");
 const { formatGBP } = require("./src/js/cost-calculator.js");
 
@@ -34,6 +37,14 @@ module.exports = function (eleventyConfig) {
   // Pounds with thousands separators, to the pound: the same formatting the calculator
   // script uses, so its figures don't change shape when the script takes over.
   eleventyConfig.addFilter("gbp", (n) => formatGBP(Number(n) || 0));
+
+  // "/js/x.js" becomes "/js/x.js?v=<short hash of the file>", so the address changes
+  // whenever the file does and browsers can't keep running an old copy after an update.
+  eleventyConfig.addFilter("versioned", (url) => {
+    const file = path.join(__dirname, "src", url);
+    const hash = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").slice(0, 10);
+    return `${url}?v=${hash}`;
+  });
 
   return {
     dir: {
