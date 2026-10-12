@@ -18,28 +18,10 @@
   "audioArtwork": "/images/PodcastImage.jpg",
   "episodes": [
     {
-      "number": "",
-      "title": "What ACTUALLY Helps Me on a Bad Day",
-      "description": "For World Mental Health Day 2026, I share some of the specific things I do on bad days, and explain why they help me, so they can help you too! If you're struggling with your mental health, you're not alone. Samaritans are available 24/7…",
-      "meta": "10 Oct 2026",
-      "youtube": "V9EPCr-qJZ4",
-      "spotify": ""
-    },
-    {
-      "number": "",
-      "title": "Everything You Thought You Knew About Dopamine is a Lie!",
-      "description": "So what is the truth?",
-      "meta": "30 Sep 2026",
-      "youtube": "9uchsmuVKhA",
-      "spotify": ""
-    },
-    {
-      "number": "",
       "title": "The Truth About Dopamine",
       "description": "Dopamine doesn’t actually do what we think it does. So what does it really do? And how can we work with dopamine to improve our mental health and wellbeing? Follow us on TikTok: https://www.tiktok.com/@thekellymariepodcast",
       "meta": "29 Sep 2026",
-      "youtube": "kE8bOJvImaI",
-      "spotify": ""
+      "youtube": "kE8bOJvImaI"
     },
     {
       "title": "How Boundaries Keep Us Safe | The Kelly Marie Podcast",
@@ -66,11 +48,6 @@
       "spotify": "https://open.spotify.com/episode/5TAu3NlS7GYer0YTX8J1XP?si=BswkF-J2R-SwIoiEmj6Gbw"
     }
   ],
-  "ctaHeading": "Suggestion Box",
-  "ctaText": "Is there something you'd like us to cover? Or an expert you'd like to see us chat to?\nLet us know! ",
-  "ctaButtonLabel": "Send a Suggestion",
-  "ctaButtonIcon": "mail",
-  "ctaButtonHref": "mailto:suggestions@kellymariewellbeing.com?subject=Podcast%20topic%20suggestion",
   "removedEpisodes": [
     {
       "title": "Not Everything Is About You",
@@ -121,5 +98,10 @@
       "youtube": "ocnNtCFmyC4",
       "restore": false
     }
-  ]
+  ],
+  "ctaHeading": "Suggestion Box",
+  "ctaText": "Is there something you'd like us to cover? Or an expert you'd like to see us chat to?\nLet us know! ",
+  "ctaButtonLabel": "Send a Suggestion",
+  "ctaButtonIcon": "mail",
+  "ctaButtonHref": "mailto:suggestions@kellymariewellbeing.com?subject=Podcast%20topic%20suggestion"
 }
