@@ -48,6 +48,8 @@
 } -%}
 {%- set perEmployee = calcConfig.perEmployee.presenteeism + calcConfig.perEmployee.turnover + calcConfig.perEmployee.absence -%}
 {%- set tag = calcHeadingTag or "h2" -%}
+{#- One level below the heading, so the outline never skips a level. -#}
+{%- set subTag = "h2" if tag == "h1" else "h3" -%}
 {%- set inputClass = "w-full border border-gray-300 rounded px-4 py-3 text-gray-800 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-sage/40 focus:border-sage transition-colors aria-[invalid=true]:border-red-600" -%}
 {%- set labelClass = "block text-sm font-semibold text-forest mb-1.5" -%}
 {%- set hintClass = "text-xs text-gray-600 mb-2" -%}
@@ -193,8 +195,9 @@
         </summary>
         <div class="px-6 pb-6 border-t border-gray-100 pt-5 text-sm text-gray-700 leading-relaxed space-y-4">
           <div>
-            <h3 class="font-semibold text-forest mb-1">Your workings</h3>
-            <div class="overflow-x-auto">
+            <{{ subTag }} class="font-semibold text-forest mb-1">Your workings</{{ subTag }}>
+            {#- Focusable so keyboard users can scroll it sideways on narrow screens. -#}
+            <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Your workings">
               <table class="w-full text-sm text-left">
                 <thead>
                   <tr class="border-b border-gray-200 text-gray-700">
@@ -208,7 +211,7 @@
             </div>
           </div>
           <div>
-            <h3 class="font-semibold text-forest mb-1">The headcount estimate</h3>
+            <{{ subTag }} class="font-semibold text-forest mb-1">The headcount estimate</{{ subTag }}>
             <p>
               Your number of staff multiplied by an average cost per employee:
               <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.presenteeism | round | int }}</span> for working while unwell,
@@ -218,7 +221,7 @@
             </p>
           </div>
           <div>
-            <h3 class="font-semibold text-forest mb-1">Your figures</h3>
+            <{{ subTag }} class="font-semibold text-forest mb-1">Your figures</{{ subTag }}>
             <ul class="list-disc pl-5 space-y-1">
               <li><strong>Sickness absence</strong> = staff off × days lost per absence × daily pay (salary plus on-costs, over {{ calcConfig.assumptions.workingDays }} working days)</li>
               <li><strong>Staff leaving</strong> = leavers × salary × cost of replacing a leaver</li>
@@ -226,7 +229,7 @@
             </ul>
           </div>
           <div>
-            <h3 class="font-semibold text-forest mb-1">Our assumptions</h3>
+            <{{ subTag }} class="font-semibold text-forest mb-1">Our assumptions</{{ subTag }}>
             <p class="mb-4">
               Days lost per absence is rounded from Health and Safety Executive figures. The other three are our own working assumptions, <strong>not figures from Deloitte or any other published source</strong>.
               Change any of them to match your organisation and the estimate updates as you type.
@@ -247,7 +250,7 @@
       <!-- ── 4. Printable summary, behind a short form ── -->
       <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest px-6 py-6 sm:px-8 sm:py-8" id="calc-summary" tabindex="-1">
         <div data-calc-locked>
-          <h3 class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get a printable summary" }}</h3>
+          <{{ subTag }} class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get a printable summary" }}</{{ subTag }}>
           <p class="text-gray-600 mt-2 mb-6">{{ (calc.captureText or "Download a one-page summary of your estimate to share with your manager, leadership team or board.") | lines }}</p>
 
           <form class="space-y-5" data-calc-form action="{{ content.site.formspreeEndpoint }}" method="POST" novalidate>
@@ -304,7 +307,7 @@
         </div>
 
         <div class="hidden" data-calc-unlocked>
-          <h3 class="font-serif text-forest text-2xl">Your summary is ready</h3>
+          <{{ subTag }} class="font-serif text-forest text-2xl">Your summary is ready</{{ subTag }}>
           <p class="text-gray-600 mt-2" data-calc-thanks>Thank you. Download it below; it reflects the figures currently entered above.</p>
           <div class="flex flex-wrap gap-4 mt-6">
             <button type="button" class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors" data-calc-download>

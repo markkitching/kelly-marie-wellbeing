@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en-GB" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -38,7 +38,11 @@
           },
           colors: {
             forest: '{{ colors.dark }}',
-            sage:   '{{ colors.accent }}',
+            // Text-safe versions of the accent, worked out in _data/colors.js so every
+            // colour scheme meets WCAG AA contrast.
+            sage:   '{{ colors.accentText }}',
+            'sage-light': '{{ colors.accentOnDark }}',
+            mist:   '{{ colors.mutedOnDark }}',
             stone:  '{{ colors.light }}',
             cream:  '{{ colors.cream }}',
           },
@@ -157,10 +161,16 @@
     @media (prefers-reduced-motion: reduce) { .faq-icon { transition: none; } }
 
     .divider { width: 48px; height: 3px; background: {{ colors.accent }}; }
+    /* A clear focus ring for keyboard users, everywhere. Inputs keep their own ring. */
+    :focus-visible { outline: 3px solid {{ colors.accentText }}; outline-offset: 2px; }
+    footer :focus-visible, .bg-forest :focus-visible { outline-color: #ffffff; }
   </style>
 </head>
 
 <body class="font-sans bg-white text-gray-800 antialiased">
+
+  <!-- Lets keyboard and screen-reader users jump past the menu. Hidden until focused. -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-white focus:text-forest focus:font-medium focus:px-4 focus:py-2 focus:rounded focus:shadow">Skip to content</a>
 
   <!-- ═══════════════════════════════════════════════
        STICKY NAVIGATION
@@ -175,7 +185,7 @@
           <img src="{{ content.header.logoImage }}" alt="" width="40" height="40" class="w-10 h-10 object-contain flex-shrink-0" />
           {% else %}
           <span class="w-8 h-8 rounded-full bg-forest flex items-center justify-center flex-shrink-0">
-            <i data-lucide="{{ content.header.logoIcon }}" class="text-sage w-4 h-4"></i>
+            <i data-lucide="{{ content.header.logoIcon }}" class="text-sage-light w-4 h-4"></i>
           </span>
           {% endif %}
           <span class="font-serif text-forest text-lg font-semibold leading-tight">
@@ -219,3 +229,5 @@
       </div>
     </nav>
   </header>
+
+  <main id="main" tabindex="-1" class="focus:outline-none">

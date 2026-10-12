@@ -148,6 +148,12 @@
 <section class="{{ bg }} py-20">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     {{ blockHeading(pageContent.episodesTitle) }}
+    {%- if pageContent.episodes | selectattr("youtube") | length %}
+    <p class="text-center text-xs text-gray-600 -mt-6 mb-10">
+      Videos play from YouTube, which may store information on your device once you press play.
+      <a href="/privacy/" class="underline underline-offset-2 hover:text-forest">Privacy policy</a>
+    </p>
+    {%- endif %}
     <div class="grid md:grid-cols-2 gap-8">
       {% for episode in pageContent.episodes %}
       <article class="service-card bg-white rounded-lg border border-gray-100 overflow-hidden flex flex-col">
@@ -310,11 +316,11 @@
 <!-- ══════════════════════════ QUOTE (always the dark band) ══════════════════════════ -->
 <section class="bg-forest py-20">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <blockquote class="font-serif italic text-white/80 text-2xl max-w-2xl mx-auto leading-relaxed">
+    <blockquote class="font-serif italic text-mist text-2xl max-w-2xl mx-auto leading-relaxed">
       {{ pageContent.quote | lines }}
     </blockquote>
     {% if pageContent.quoteAuthor %}
-    <cite class="text-sage text-sm mt-4 block not-italic">{{ pageContent.quoteAuthor }}</cite>
+    <cite class="text-sage-light text-sm mt-4 block not-italic">{{ pageContent.quoteAuthor }}</cite>
     {% endif %}
   </div>
 </section>

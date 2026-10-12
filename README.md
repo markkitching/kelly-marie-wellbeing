@@ -28,6 +28,7 @@ photos are editable. If something doesn't look right, you can always change it b
 1. In the editor, open **Colours / theme**.
 2. Pick a ready-made **Colour scheme** (Navy, Forest green, Terracotta, Plum, or Charcoal & gold) and **Save** — the whole site re-colours itself, and text stays readable.
 3. *(Advanced, optional)* To use an exact brand colour, type a hex code (e.g. `#1c3553`) into one of the **Advanced** boxes. Leaving a box blank just uses the chosen scheme. Note: picking a very light "main dark colour" can make white text hard to read.
+4. You don't need to worry about readability: wherever the accent colour is used for small text, the site automatically uses a slightly darker (or, on dark backgrounds, lighter) version of it that passes the accessibility contrast standard (WCAG AA). This is worked out in `src/_data/colors.js`.
 
 
 ---
