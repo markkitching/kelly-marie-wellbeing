@@ -1,0 +1,11 @@
+{
+  "extraKnownMarketplaces": {
+    "mark-mods": {
+      "source": { "source": "github", "repo": "markkitching/mark-mods" }
+    }
+  },
+  "enabledPlugins": {
+    "usage-bar@mark-mods": true,
+    "whats-left@mark-mods": true
+  }
+}
