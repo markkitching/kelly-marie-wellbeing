@@ -285,7 +285,7 @@ content:
         type: number
       - name: daysPerAbsence
         label: Advanced — starting assumption, working days lost per absence
-        description: Visitors can change this on the page. Leave blank to use the default (20).
+        description: Visitors can change this on the page. Leave blank to use the default (23, rounded from HSE's 2024/25 average of 22.9 days per case).
         type: number
       - name: replacementPct
         label: Advanced — starting assumption, cost of replacing a leaver (% of salary)

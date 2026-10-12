@@ -93,7 +93,7 @@
     ["absentStaff", "leavers", "strugglingStaff"].forEach(function (key) {
       if (staff != null && inputs[key] != null && inputs[key] > staff) {
         var el = document.getElementById(fields[key].id + "-error");
-        el.textContent = "That's more than the " + staff + " people you employ — is the headcount right?";
+        el.textContent = "That's more than the " + staff + " people you employ. Is the headcount right?";
         el.classList.remove("hidden");
       }
     });
@@ -114,7 +114,7 @@
     var perEmployee = config.perEmployee.presenteeism + config.perEmployee.turnover + config.perEmployee.absence;
 
     $("[data-calc-per]").textContent = fmt(perEmployee);
-    $("[data-calc-total]").textContent = h ? fmt(h.total) : "—";
+    $("[data-calc-total]").textContent = h ? fmt(h.total) : "-";
 
     var usingYours = !!(y && y.used);
     $("[data-calc-yours-summary]").classList.toggle("hidden", !usingYours);
@@ -129,7 +129,7 @@
     var shown = usingYours ? y.total : (h ? h.total : 0);
     C.CATEGORIES.forEach(function (key) {
       var row = $('[data-calc-row="' + key + '"]');
-      row.querySelector("[data-calc-part]").textContent = h ? fmt(h[key]) : "—";
+      row.querySelector("[data-calc-part]").textContent = h ? fmt(h[key]) : "-";
       var yoursEl = row.querySelector("[data-calc-part-yours]");
       var fromYours = usingYours && y[key].source === "yours";
       yoursEl.classList.toggle("hidden", !fromYours);
@@ -148,7 +148,7 @@
 
     var savingBase = usingYours ? y.total : (h ? h.total : 0);
     $("[data-calc-saving-pct]").textContent = state.savingPct + "%";
-    $("[data-calc-saving]").textContent = h ? fmt(C.illustrativeSaving(savingBase, state.savingPct)) : "—";
+    $("[data-calc-saving]").textContent = h ? fmt(C.illustrativeSaving(savingBase, state.savingPct)) : "-";
 
     renderWorkings();
   }
@@ -212,7 +212,7 @@
       if (s.inputs[k] != null) lines.push(fields[k].labels[0].textContent.trim() + ": " + (k === "salary" ? fmt(s.inputs[k]) : s.inputs[k]));
     });
     lines.push("");
-    C.CATEGORIES.forEach(function (k) { lines.push(labelFor(k) + ": " + fmt(s.yours[k].value) + " — " + workingFor(k)); });
+    C.CATEGORIES.forEach(function (k) { lines.push(labelFor(k) + ": " + fmt(s.yours[k].value) + " (" + workingFor(k) + ")"); });
     lines.push("");
     lines.push("Assumptions: " + s.assumptions.daysPerAbsence + " days per absence, " + s.assumptions.replacementPct +
       "% replacement cost, " + s.assumptions.productivityLossPct + "% productivity lost, " + s.assumptions.onCostPct + "% on-costs");
@@ -275,7 +275,7 @@
         if (!res.ok) throw new Error("Server error");
         try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch (err) { /* private mode — fine */ }
         if (talkBox.checked) {
-          $("[data-calc-thanks]").textContent = "Thank you — we'll be in touch about training soon. Here are the workings behind each figure.";
+          $("[data-calc-thanks]").textContent = "Thank you. We'll be in touch about training soon. Here are the workings behind each figure.";
         }
         setUnlocked(true);
         renderWorkings();
@@ -335,9 +335,9 @@
       "<h2>Breakdown</h2><table>" + rows + "<tr><th>Total</th><td></td><td class=n><strong>" + esc(fmt(s.yours.total)) + "</strong></td></tr></table>" +
       "<h2>Our assumptions</h2><p>" + a.daysPerAbsence + " working days lost per absence; replacing a leaver costs " + a.replacementPct +
       "% of salary; " + a.productivityLossPct + "% productivity lost per struggling employee; " + a.onCostPct + "% employer on-costs; " +
-      a.workingDays + " working days a year. These are our working assumptions, not published figures.</p>" +
+      a.workingDays + " working days a year. Days lost is rounded from Health and Safety Executive 2024/25 figures; the others are our own working assumptions, not published figures.</p>" +
       "<h2>Illustrative savings</h2><p>Reducing these costs by " + s.savingPct + "% would be worth about " +
-      esc(fmt(C.illustrativeSaving(s.yours.total, s.savingPct))) + " a year. Illustrative only — not a prediction or a guarantee of results.</p>" +
+      esc(fmt(C.illustrativeSaving(s.yours.total, s.savingPct))) + " a year. Illustrative only, not a prediction or a guarantee of results.</p>" +
       (config.sourceNote ? "<h2>About this estimate</h2><p class=muted>" + esc(config.sourceNote) + "</p>" : "") +
       (config.roiText ? "<p class=muted>" + esc(config.roiText) + "</p>" : "") +
       "<h2>Talk to us</h2><p>" + esc(config.contactEmail) + " · " + esc(config.calculatorUrl) + "</p>" +

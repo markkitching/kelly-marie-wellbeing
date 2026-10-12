@@ -31,7 +31,7 @@
     absence: calc.absenceCost | float(243)
   },
   assumptions: {
-    daysPerAbsence: calc.daysPerAbsence | float(20),
+    daysPerAbsence: calc.daysPerAbsence | float(23),
     replacementPct: calc.replacementPct | float(30),
     productivityLossPct: calc.productivityLossPct | float(20),
     onCostPct: calc.onCostPct | float(15),
@@ -164,7 +164,7 @@
         <div class="px-6 pb-6 border-t border-gray-100 pt-5">
           <p class="text-sm text-gray-600 mb-5">
             Fill in as many as you know. Anything left blank uses the headcount estimate for that cost.
-            Your figures stay in your browser — nothing is sent anywhere unless you ask for the full breakdown below.
+            Your figures stay in your browser. Nothing is sent anywhere unless you ask for the full breakdown below.
           </p>
           <div class="grid sm:grid-cols-2 gap-5">
             {{ numberField("calc-salary", "salary", "Average annual salary per employee", "Before tax, in pounds.", "e.g. 32,000", "decimal", "£") }}
@@ -190,7 +190,7 @@
               <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.presenteeism | round | int }}</span> for working while unwell,
               <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.turnover | round | int }}</span> for staff leaving and
               <span class="tabular-nums">&pound;{{ calcConfig.perEmployee.absence | round | int }}</span> for sickness absence.
-              These come from Deloitte's UK totals divided by roughly 30 million UK employees — that division is our own approximation.
+              These come from Deloitte's UK totals divided by roughly 30 million UK employees. That division is our own approximation.
             </p>
           </div>
           <div>
@@ -204,11 +204,11 @@
           <div>
             <h3 class="font-semibold text-forest mb-1">Our assumptions</h3>
             <p class="mb-4">
-              These are our own working assumptions, <strong>not figures from Deloitte or any other published source</strong>.
-              Change any of them to match your organisation — the estimate updates as you type.
+              Days lost per absence is rounded from Health and Safety Executive figures. The other three are our own working assumptions, <strong>not figures from Deloitte or any other published source</strong>.
+              Change any of them to match your organisation and the estimate updates as you type.
             </p>
             <div class="grid sm:grid-cols-2 gap-5">
-              {{ numberField("calc-days", "daysPerAbsence", "Working days lost per absence", "", "", "decimal", "", "days", calcConfig.assumptions.daysPerAbsence) }}
+              {{ numberField("calc-days", "daysPerAbsence", "Working days lost per absence", "HSE's 2024/25 average was 22.9 days per case of work-related stress, depression or anxiety.", "", "decimal", "", "days", calcConfig.assumptions.daysPerAbsence) }}
               {{ numberField("calc-replace", "replacementPct", "Cost of replacing a leaver", "As a share of their salary.", "", "decimal", "", "%", calcConfig.assumptions.replacementPct) }}
               {{ numberField("calc-productivity", "productivityLossPct", "Productivity lost per struggling employee", "", "", "decimal", "", "%", calcConfig.assumptions.productivityLossPct) }}
               {{ numberField("calc-oncost", "onCostPct", "Employer on-costs", "National Insurance and pension, on top of salary.", "", "decimal", "", "%", calcConfig.assumptions.onCostPct) }}
@@ -308,7 +308,7 @@
 
         <div class="hidden" data-calc-unlocked>
           <h3 class="font-serif text-forest text-2xl">Your full breakdown</h3>
-          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you — here are the workings behind each figure.</p>
+          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you. Here are the workings behind each figure.</p>
           <div class="mt-6 overflow-x-auto">
             <table class="w-full text-sm text-left">
               <thead>
@@ -327,7 +327,7 @@
               Download summary (PDF)
             </button>
           </div>
-          <p class="text-xs text-gray-600 mt-3">Opens a printable summary — choose "Save as PDF" in the print window.</p>
+          <p class="text-xs text-gray-600 mt-3">Opens a printable summary. Choose "Save as PDF" in the print window.</p>
         </div>
       </div>
 

@@ -43,14 +43,14 @@ test("all blank → identical to the headcount estimate", () => {
 
 test("worked example: 50 staff, £30,000 salary, 3 off, 2 left, 5 struggling", () => {
   // loaded pay = 30,000 × 1.15 = 34,500; daily = 34,500 / 230 = 150
-  // absence      = 3 × 20 days × £150         =  9,000
+  // absence      = 3 × 23 days × £150         = 10,350
   // turnover     = 2 × 30,000 × 30%           = 18,000
   // presenteeism = 5 × 34,500 × 20%           = 34,500
   const r = C.ownEstimate({ staff: 50, salary: 30000, absentStaff: 3, leavers: 2, strugglingStaff: 5 });
-  near(r.absence.value, 9000, "absence");
+  near(r.absence.value, 10350, "absence");
   near(r.turnover.value, 18000, "turnover");
   near(r.presenteeism.value, 34500, "presenteeism");
-  near(r.total, 61500, "total");
+  near(r.total, 62850, "total");
   assert.strictEqual(r.used, 3);
 });
 

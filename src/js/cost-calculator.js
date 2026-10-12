@@ -26,9 +26,11 @@
   // own approximation, not Deloitte's.
   var PER_EMPLOYEE = { presenteeism: 793, turnover: 650, absence: 243 };
 
-  // Our assumptions, not sourced figures. Every one is shown and editable on the page.
+  // Shown and editable on the page. Days lost is rounded from HSE's 2024/25 average of
+  // 22.9 days per case of work-related stress, depression or anxiety; the rest are our
+  // own assumptions, not sourced figures.
   var ASSUMPTIONS = {
-    daysPerAbsence: 20,       // working days lost per person off with a mental health reason
+    daysPerAbsence: 23,       // working days lost per person off with a mental health reason
     replacementPct: 30,       // cost of replacing a leaver, as % of their salary
     productivityLossPct: 20,  // productivity lost while someone is struggling, %
     onCostPct: 15,            // employer NI + pension on top of salary, %
