@@ -13,6 +13,7 @@ const escapeHtml = (value) =>
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/images": "images" });
   eleventyConfig.addPassthroughCopy({ "src/js": "js" });
+  eleventyConfig.addPassthroughCopy({ "src/fonts": "fonts" });
 
   // Renders a multi-line CMS field with its line breaks intact.
   //

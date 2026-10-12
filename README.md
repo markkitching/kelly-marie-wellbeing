@@ -601,6 +601,19 @@ and the default figures, are under **Cost calculator** in the editor.
   visitor's figures attached. Nothing they type is sent anywhere until they submit it.
 - Everything is worked out in the browser; there is no server code.
 
+### Fonts, icons and the share image
+
+- **Fonts** (Playfair Display, Inter) are served from `src/fonts/`, not Google, so visitors'
+  details aren't sent to a third party. Both are SIL Open Font License; the licence files sit
+  beside them. The `@font-face` rules are in `site-header.njk`.
+- **Icons** come from a fixed copy of Lucide in `src/js/vendor/` (ISC licence alongside).
+  To upgrade, replace the file, update the path in `site-header.njk`, and check every name in
+  `ICONS` (`scripts/gen-pages-yml.py`) still exists in the new version.
+- **Share image**: `src/images/share-image.jpg` (1200×630, the logo in brand colours) is what
+  LinkedIn, Facebook and others show when a link to any page is shared.
+- The only outside script left is Tailwind's Play CDN. Building the CSS at deploy time instead
+  is a planned follow-up.
+
 ### Optional extras for later
 
 - **Per-page SEO** — `metaTitle` / `metaDescription` fields. Titles are currently derived
