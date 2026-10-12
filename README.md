@@ -595,7 +595,7 @@ and the default figures, are under **Cost calculator** in the editor.
   totals ÷ ~30 million employees — that division is our approximation). Always free.
 - **Your figures:** optional salary and staff counts, run through assumptions the visitor
   can see and edit. A blank category keeps its headcount figure. Counts need a salary.
-- **Full breakdown + printable summary** sit behind a short form that posts to the same
+- **The printable (PDF) summary** sits behind a short form that posts to the same
   Formspree endpoint as the contact form, with the subject "Cost calculator lead" and the
   visitor's figures attached. Nothing they type is sent anywhere until they submit it.
 - Everything is worked out in the browser; there is no server code.

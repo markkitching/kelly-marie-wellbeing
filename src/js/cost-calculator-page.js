@@ -3,7 +3,7 @@
  * fields, asks cost-calculator.js for the numbers, and draws them.
  *
  * Everything is worked out in the browser. The only thing ever sent anywhere is the
- * breakdown form, and only when the visitor submits it.
+ * summary form, and only when the visitor submits it.
  */
 (function () {
   "use strict";
@@ -152,7 +152,7 @@
     renderWorkings();
   }
 
-  // ── The full breakdown ──────────────────────────
+  // ── The workings (free, under "How we calculated this") ──
   function workingFor(key) {
     var y = state.yours, a = state.assumptions;
     if (!y) return "";
@@ -240,7 +240,7 @@
     var checks = [
       [name, !name.value.trim() ? "Please enter your name." : ""],
       [email, !email.value.trim() ? "Please enter your email address." : !email.validity.valid ? "Please enter a valid email address." : ""],
-      [consent, !consent.checked ? "Please tick to agree before we can send your breakdown." : ""],
+      [consent, !consent.checked ? "Please tick to agree before we can provide your summary." : ""],
     ];
     checks.forEach(function (c) {
       showError(c[0], c[1]);
@@ -274,11 +274,10 @@
         if (!res.ok) throw new Error("Server error");
         try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch (err) { /* private mode — fine */ }
         if (talkBox.checked) {
-          $("[data-calc-thanks]").textContent = "Thank you. We'll be in touch about training soon. Here are the workings behind each figure.";
+          $("[data-calc-thanks]").textContent = "Thank you. We'll be in touch about training soon. Download your summary below; it reflects the figures currently entered above.";
         }
         setUnlocked(true);
-        renderWorkings();
-        $("#calc-breakdown").focus();
+        $("#calc-summary").focus();
       })
       .catch(function () {
         formError.textContent = "Sorry, that didn't send. Please try again, or email " + config.contactEmail + ".";
@@ -286,7 +285,7 @@
       })
       .then(function () {
         submitBtn.disabled = false;
-        submitLabel.textContent = "Show my full breakdown";
+        submitLabel.textContent = "Get my summary";
       });
   });
 
@@ -298,7 +297,7 @@
       e.preventDefault();
       talkBox.checked = true;
       $("[data-calc-message]").classList.remove("hidden");
-      $("#calc-breakdown").scrollIntoView({ behavior: "smooth", block: "start" });
+      $("#calc-summary").scrollIntoView({ behavior: "smooth", block: "start" });
       form.elements.name.focus({ preventScroll: true });
     }
   });

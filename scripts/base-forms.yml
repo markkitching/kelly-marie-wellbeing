@@ -204,11 +204,11 @@ content:
         label: Text above the result
         type: string
       - name: captureHeading
-        label: Full breakdown — heading
-        description: Above the short form people fill in to see the full breakdown and download a summary.
+        label: Printable summary — heading
+        description: Above the short form people fill in to download a printable (PDF) summary.
         type: string
       - name: captureText
-        label: Full breakdown — text
+        label: Printable summary — text
         type: text
       - name: savingsNote
         label: Illustrative savings — small print
@@ -224,7 +224,7 @@ content:
         type: text
       - name: ctaButtonLabel
         label: Button text
-        description: Opens the breakdown form with "talk about training" ticked. Leave empty to remove the button.
+        description: Opens the summary form with "talk about training" ticked. Leave empty to remove the button.
         type: string
       - name: presenteeismCost
         label: Advanced — headcount estimate, working while unwell, £ per employee per year

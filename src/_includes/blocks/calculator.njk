@@ -11,7 +11,7 @@
     2. "Make this estimate more accurate" (optional, inside the calculator) — their own
        figures, compared side by side;
     3. "How we calculated this" — every assumption stated, and editable;
-    4. the full breakdown and a printable summary, behind a short form (Formspree,
+    4. a printable summary, behind a short form (Formspree,
        the same endpoint as the contact form).
 
   The arithmetic lives in src/js/cost-calculator.js, tested by scripts/test-calculator.js.
@@ -193,6 +193,21 @@
         </summary>
         <div class="px-6 pb-6 border-t border-gray-100 pt-5 text-sm text-gray-700 leading-relaxed space-y-4">
           <div>
+            <h3 class="font-semibold text-forest mb-1">Your workings</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead>
+                  <tr class="border-b border-gray-200 text-gray-700">
+                    <th scope="col" class="py-2 pr-4 font-semibold">Cost</th>
+                    <th scope="col" class="py-2 pr-4 font-semibold">How it's worked out</th>
+                    <th scope="col" class="py-2 font-semibold text-right">Per year</th>
+                  </tr>
+                </thead>
+                <tbody data-calc-workings></tbody>
+              </table>
+            </div>
+          </div>
+          <div>
             <h3 class="font-semibold text-forest mb-1">The headcount estimate</h3>
             <p>
               Your number of staff multiplied by an average cost per employee:
@@ -229,11 +244,11 @@
         </div>
       </details>
 
-      <!-- ── 4. Full breakdown, behind a short form ── -->
-      <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest px-6 py-6 sm:px-8 sm:py-8" id="calc-breakdown" tabindex="-1">
+      <!-- ── 4. Printable summary, behind a short form ── -->
+      <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest px-6 py-6 sm:px-8 sm:py-8" id="calc-summary" tabindex="-1">
         <div data-calc-locked>
-          <h3 class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get your full breakdown" }}</h3>
-          <p class="text-gray-600 mt-2 mb-6">{{ (calc.captureText or "See the workings behind each figure and download a printable summary to share with your team.") | lines }}</p>
+          <h3 class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get a printable summary" }}</h3>
+          <p class="text-gray-600 mt-2 mb-6">{{ (calc.captureText or "Download a one-page summary of your estimate to share with your manager, leadership team or board.") | lines }}</p>
 
           <form class="space-y-5" data-calc-form action="{{ content.site.formspreeEndpoint }}" method="POST" novalidate>
             <input type="hidden" name="_subject" value="Cost calculator lead" />
@@ -272,7 +287,7 @@
               <label class="flex items-start gap-3 cursor-pointer">
                 <input id="calc-consent" type="checkbox" name="consent" value="Yes" required aria-describedby="calc-consent-error" class="mt-1 w-4 h-4 accent-forest flex-shrink-0" data-calc-consent />
                 <span class="text-sm text-gray-700">
-                  I agree to {{ calcConfig.orgName }} storing my details and the figures above so they can send my breakdown and, if I've asked, get in touch about training.
+                  I agree to {{ calcConfig.orgName }} storing my details and the figures above so they can provide my summary and, if I've asked, get in touch about training.
                   See our <a href="/privacy/" class="text-forest font-medium underline underline-offset-2 hover:text-sage" target="_blank">privacy policy</a>.
                   <span class="text-red-700" aria-hidden="true">*</span>
                 </span>
@@ -282,27 +297,15 @@
 
             <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors disabled:opacity-60" data-calc-submit>
               <i data-lucide="file-text" class="w-4 h-4"></i>
-              <span data-calc-submit-label>Show my full breakdown</span>
+              <span data-calc-submit-label>Get my summary</span>
             </button>
             <p class="hidden text-sm text-red-700" role="alert" data-calc-form-error></p>
           </form>
         </div>
 
         <div class="hidden" data-calc-unlocked>
-          <h3 class="font-serif text-forest text-2xl">Your full breakdown</h3>
-          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you. Here are the workings behind each figure.</p>
-          <div class="mt-6 overflow-x-auto">
-            <table class="w-full text-sm text-left">
-              <thead>
-                <tr class="border-b border-gray-200 text-gray-700">
-                  <th scope="col" class="py-2 pr-4 font-semibold">Cost</th>
-                  <th scope="col" class="py-2 pr-4 font-semibold">How it's worked out</th>
-                  <th scope="col" class="py-2 font-semibold text-right">Per year</th>
-                </tr>
-              </thead>
-              <tbody data-calc-workings></tbody>
-            </table>
-          </div>
+          <h3 class="font-serif text-forest text-2xl">Your summary is ready</h3>
+          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you. Download it below; it reflects the figures currently entered above.</p>
           <div class="flex flex-wrap gap-4 mt-6">
             <button type="button" class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors" data-calc-download>
               <i data-lucide="download" class="w-4 h-4"></i>
