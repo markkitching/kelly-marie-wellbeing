@@ -698,12 +698,11 @@ npm run build      # one-off build into _site/
 The form posts to the Formspree endpoint stored in `src/content/site.json` → `formspreeEndpoint`
 (currently `https://formspree.io/f/mwvjrpyo`).
 
-> ⚠️ **The delivery address lives at Formspree, not in this repo.** It was set to
-> kelly@**kellymariecounselling**.com before the domain moved. If that mailbox has gone,
-> enquiries submitted through the form go nowhere and nobody is told. Worth confirming in
-> the Formspree dashboard that it now delivers to kelly@kellymariewellbeing.com — and
-> worth sending a test enquiry through the live form either way, since this is the one
-> failure on the site that is completely silent.
+> **The delivery address lives at Formspree, not in this repo.** It is
+> contactus@kellymariewellbeing.com (confirmed October 2026). The cost calculator's summary
+> form uses the same endpoint, so its leads arrive there too, with the subject
+> "Cost calculator lead". If that mailbox ever changes, update it in the Formspree
+> dashboard, then send a test enquiry, since a wrong address fails silently.
 
 ---
 
