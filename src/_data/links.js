@@ -4,4 +4,8 @@
 module.exports = () => ({
   contact: "/contact/",
   services: "/counselling/#services",
+  // The calculator's own page — the address to share. It also sits on the Training page.
+  calculator: "/cost-calculator/",
+  // Link previews on social media need a full address, not just a path.
+  site: "https://kellymariewellbeing.com",
 });

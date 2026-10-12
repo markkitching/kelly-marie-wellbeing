@@ -1,0 +1,15 @@
+---
+permalink: "/cost-calculator/"
+eleventyComputed:
+  pageTitle: "{{ content.calculator.heading or 'Cost Calculator' }}"
+  pageDescription: "{{ content.calculator.shareDescription }}"
+---
+{#- The calculator on a page of its own: the address to share on social media, so the
+    link preview describes the calculator rather than the whole Training page. The same
+    calculator also sits on the Training page. Not in the menu. -#}
+{% include "site-header.njk" %}
+{%- set bg = "bg-stone" -%}
+{%- set calcHeadingTag = "h1" -%}
+{% include "blocks/calculator.njk" %}
+
+{% include "site-footer.njk" %}

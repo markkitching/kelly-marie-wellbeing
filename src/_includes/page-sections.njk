@@ -30,8 +30,8 @@
           {{ sections.hero.paragraph2 | lines }}
         </p>
 {#- Each button is its own field: clear the label in the editor and the button goes.
-    Clear both and the row goes with them. -#}
-{%- if sections.hero.primaryButton or sections.hero.secondaryButton %}
+    Clear them all and the row goes with them. -#}
+{%- if sections.hero.primaryButton or sections.hero.secondaryButton or sections.hero.calculatorButton %}
         <div class="flex flex-wrap gap-4">
           {%- if sections.hero.primaryButton %}
           <a href="{{ contactHref or links.contact }}" class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors">
@@ -45,6 +45,12 @@
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </a>
           {%- endif %}
+          {%- if sections.hero.calculatorButton %}
+          <a href="{{ links.calculator }}" class="inline-flex items-center gap-2 border border-forest text-forest font-medium px-6 py-3 rounded hover:bg-forest hover:text-white transition-colors">
+            <i data-lucide="calculator" class="w-4 h-4"></i>
+            {{ sections.hero.calculatorButton }}
+          </a>
+          {%- endif %}
         </div>
 {%- endif %}
       </div>
@@ -56,7 +62,7 @@
           <div class="aspect-[3/4] rounded-lg overflow-hidden bg-sage/10 photo-placeholder flex items-center justify-center relative">
             <img
               src="{{ sections.hero.image }}"
-              alt="Kelly Marie — Leeds Psychotherapist"
+              alt="{{ sections.hero.imageAlt or 'Kelly Marie, Leeds Psychotherapist' }}"
               class="w-full h-full object-cover object-top"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
             />
@@ -231,10 +237,10 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="mb-16">
-        <span class="text-sage text-sm font-semibold uppercase tracking-widest">{{ sections.approach.eyebrow }}</span>
+        <span class="text-sage-light text-sm font-semibold uppercase tracking-widest">{{ sections.approach.eyebrow }}</span>
         <h2 class="font-serif text-white text-4xl mt-2">{{ sections.approach.heading }}</h2>
         <div class="divider mt-4 mb-4" style="background: {{ colors.accent }};"></div>
-        <p class="text-white/60 max-w-xl leading-relaxed">
+        <p class="text-mist max-w-xl leading-relaxed">
           {{ sections.approach.intro | lines }}
         </p>
       </div>
@@ -243,10 +249,10 @@
         {% for item in sections.approach.items %}
         <div class="bg-white/5 rounded-lg p-8 border border-white/10">
           <div class="w-12 h-12 bg-white/10 rounded flex items-center justify-center mb-6">
-            <i data-lucide="{{ item.icon }}" class="w-6 h-6 text-sage"></i>
+            <i data-lucide="{{ item.icon }}" class="w-6 h-6 text-sage-light"></i>
           </div>
           <h3 class="font-serif text-white text-xl mb-3">{{ item.title }}</h3>
-          <p class="text-white/60 text-sm leading-relaxed">
+          <p class="text-mist text-sm leading-relaxed">
             {{ item.description | lines }}
           </p>
         </div>
@@ -255,10 +261,10 @@
 
       <!-- Quote -->
       <div class="mt-16 pt-12 border-t border-white/10 text-center">
-        <blockquote class="font-serif italic text-white/70 text-xl max-w-2xl mx-auto leading-relaxed">
+        <blockquote class="font-serif italic text-mist text-xl max-w-2xl mx-auto leading-relaxed">
           {{ sections.approach.quote | lines }}
         </blockquote>
-        <cite class="text-sage text-sm mt-3 block not-italic">{{ sections.approach.quoteAuthor }}</cite>
+        <cite class="text-sage-light text-sm mt-3 block not-italic">{{ sections.approach.quoteAuthor }}</cite>
       </div>
 
     </div>
@@ -314,7 +320,9 @@
 
       <div class="mb-16">
         <span class="text-sage text-sm font-semibold uppercase tracking-widest">{{ sections.contact.eyebrow }}</span>
-        <h2 class="font-serif text-forest text-4xl mt-2">{{ sections.contact.heading }}</h2>
+        {#- The page's main heading when the contact section is the page (/contact/). -#}
+        {%- set contactTag = contactHeadingTag or "h2" %}
+        <{{ contactTag }} class="font-serif text-forest text-4xl mt-2">{{ sections.contact.heading }}</{{ contactTag }}>
         <div class="divider mt-4 mb-4"></div>
         <p class="text-gray-600 max-w-xl leading-relaxed">
           {{ sections.contact.intro | lines }}
@@ -381,7 +389,7 @@
           </div>
 
           <div>
-            <label for="phone" class="block text-sm font-semibold text-forest mb-1.5">Phone <span class="text-gray-400 font-normal">(optional)</span></label>
+            <label for="phone" class="block text-sm font-semibold text-forest mb-1.5">Phone <span class="text-gray-500 font-normal">(optional)</span></label>
             <input type="tel" id="phone" name="phone"
               class="w-full border border-gray-200 rounded px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-sage/40 focus:border-sage transition-colors"
               placeholder="07700 000 000" />
@@ -400,9 +408,10 @@
 
           <div>
             <label for="message" class="block text-sm font-semibold text-forest mb-1.5">Message <span class="text-sage">*</span></label>
-            <textarea id="message" name="message" rows="5" required
+            <p id="message-hint" class="text-xs text-gray-500 mb-1.5">For example, the size of your team and the kind of training or support you're interested in. Please don't include anyone's personal health information.</p>
+            <textarea id="message" name="message" rows="5" required aria-describedby="message-hint"
               class="w-full border border-gray-200 rounded px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-sage/40 focus:border-sage transition-colors resize-none"
-              placeholder="Briefly describe what has prompted you to seek support, or simply introduce yourself."></textarea>
+              placeholder="Tell us a little about your organisation and what you're looking for."></textarea>
           </div>
 
           <div>
@@ -425,7 +434,7 @@
             <input type="checkbox" name="consent" required
               class="mt-0.5 w-4 h-4 accent-forest rounded flex-shrink-0" />
             <span class="text-xs text-gray-500 leading-relaxed">
-              I consent to Kelly Marie Wellbeing storing my details to respond to my enquiry. Your information will never be shared with third parties and will be held in line with GDPR.
+              I consent to Kelly Marie Wellbeing storing my details to respond to my enquiry. Your details will never be sold or shared for marketing, and are handled in line with UK data protection law. See our <a href="/privacy/" target="_blank" class="underline underline-offset-2 hover:text-sage">privacy policy</a>.
             </span>
           </label>
 
@@ -437,8 +446,8 @@
 
           <!-- Status messages -->
           <div id="form-success" class="hidden text-center py-3 px-4 bg-sage/10 border border-sage/20 rounded">
-            <p class="text-forest text-sm font-semibold">Enquiry received — thank you.</p>
-            <p class="text-gray-600 text-xs mt-1">I will be in touch within one working day.</p>
+            <p class="text-forest text-sm font-semibold">Enquiry received. Thank you.</p>
+            <p class="text-gray-600 text-xs mt-1">We'll be in touch as soon as we can.</p>
           </div>
           <div id="form-error" class="hidden text-center py-3 px-4 bg-red-50 border border-red-100 rounded">
             <p class="text-red-700 text-sm font-semibold">Submission failed.</p>

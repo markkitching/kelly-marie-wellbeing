@@ -1,0 +1,139 @@
+---
+permalink: "/privacy/"
+pageTitle: "Privacy Policy"
+pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal information on this website."
+---
+{#- Covers the website only: the contact form, the cost calculator's summary form and
+    the outside services the pages load. Counselling client records are governed
+    separately, under BACP guidelines. Not in the CMS; linked from the footer and from
+    both forms' consent boxes. -#}
+{%- set orgName = content.header.logoLine1 + " " + content.header.logoLine2 -%}
+{% include "site-header.njk" %}
+
+<section class="bg-stone py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="font-serif text-forest text-4xl lg:text-5xl leading-tight">Privacy Policy</h1>
+    <div class="divider mt-6 mb-6 mx-auto"></div>
+    <p class="text-gray-600">Last updated: October 2026</p>
+  </div>
+</section>
+
+<section class="bg-white py-16">
+  <div class="privacy max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-gray-700 leading-relaxed">
+
+    <p>
+      This policy explains how {{ orgName }} ("we", "us") collects and uses personal information through this
+      website, and your rights over it. It covers the website only. Information shared in counselling sessions
+      is handled separately and in strict confidence, in line with BACP ethical guidelines.
+    </p>
+
+    <h2>Who we are</h2>
+    <p>
+      {{ orgName }} is run by Kelly Marie as a sole trader. Kelly Marie is the data controller for information
+      collected through this website. You can contact us
+      about anything in this policy at <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>.
+    </p>
+
+    <h2>What we collect and why</h2>
+    <h3>Enquiry form</h3>
+    <p>
+      When you send an enquiry we collect your name, email address, your message, and anything else you choose
+      to give us (such as a phone number, the service you're interested in, or how you heard about us). We use it
+      only to reply to your enquiry and, if you go ahead, to arrange our services. The form is for enquiries about
+      our services, so please don't include anyone's personal health information in it.
+    </p>
+    <h3>Cost calculator</h3>
+    <p>
+      The calculator works entirely in your browser. The numbers you type into it are not sent to us or stored
+      anywhere unless you choose to request the printable summary.
+    </p>
+    <p>
+      If you request the printable summary, we collect your name, email address, organisation (if given), the
+      figures you entered and the resulting estimate, and whether you'd like to talk to us about training. We use
+      this to provide the summary and, if you've asked us to, to get in touch about training. We won't add you to
+      a mailing list.
+    </p>
+
+    <h3>Do you have to give us your details?</h3>
+    <p>
+      No. But we need at least your name and email address to reply to an enquiry or provide a summary. We don't
+      use your information for automated decision-making or profiling.
+    </p>
+
+    <h2>Our legal basis</h2>
+    <p>
+      We rely on your <strong>consent</strong>, which you give by ticking the box on each form. You can withdraw
+      it at any time by emailing us, and we will delete your details. Where you go on to use our services, we
+      also process your information to take steps at your request before entering into a contract with you.
+    </p>
+
+    <h2>Who we share it with</h2>
+    <p>
+      We never sell your information or share it with third parties for marketing. We use a small number of
+      service providers to run the website:
+    </p>
+    <ul>
+      <li><strong>Formspree</strong> receives form submissions, keeps a copy in our Formspree account and forwards them to us by email. Formspree is based in the United States, so your information is transferred to and stored there. Formspree protects these transfers using Standard Contractual Clauses, contract terms approved under data protection law for this purpose.</li>
+      <li><strong>Hostinger</strong>, our email provider, stores the emails we receive, including form submissions.</li>
+      <li><strong>Cloudflare</strong> hosts the website and, like any web host, processes technical information such as your IP address to deliver pages and protect the site.</li>
+      <li><strong>Tailwind CSS</strong> supplies the site's styling. Your browser requests it directly from Tailwind's servers, which shares your IP address with them. The site's fonts and icons are served from this website itself.</li>
+      <li><strong>YouTube</strong>: on the Podcast page, each episode's preview image is loaded from YouTube when the page opens, which shares your IP address with YouTube (Google). The video player itself loads only if you press play, using YouTube's privacy-enhanced mode.</li>
+    </ul>
+
+    <h2>How long we keep it</h2>
+    <p>
+      We keep enquiries and calculator requests, including the copies in our Formspree account and our email, for
+      up to 12 months from our last contact with you, then delete them. If we go on to work together, records relating to that work are kept as set
+      out in our agreement with you or your organisation.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>
+      This website doesn't set any cookies of its own, and doesn't use advertising or tracking cookies.
+    </p>
+    <ul>
+      <li>If you request the cost calculator's printable summary, your browser's session storage remembers that you've done so, so you aren't asked again during your visit. Nothing else is stored, and it's cleared when you close the tab.</li>
+      <li>If you press play on a podcast video, YouTube may store information on your device, as described in <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</li>
+    </ul>
+    <p>
+      Because nothing is stored on your device except what's needed for something you've asked for, we don't
+      show a cookie banner.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>Under UK data protection law you have the right to:</p>
+    <ul>
+      <li>ask for a copy of the information we hold about you;</li>
+      <li>ask us to correct or delete it;</li>
+      <li>ask for the information you gave us in a format you can take elsewhere (data portability);</li>
+      <li>object to or ask us to restrict how we use it;</li>
+      <li>withdraw your consent at any time.</li>
+    </ul>
+    <p>
+      To use any of these rights, email <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>.
+      We'll respond within one month.
+    </p>
+
+    <h2>Complaints</h2>
+    <p>
+      If you're unhappy with how we've handled your information, please tell us first so we can put it right.
+      You also have the right to complain to the Information Commissioner's Office (ICO) at
+      <a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener">ico.org.uk</a> or on 0303 123 1113.
+    </p>
+
+    <h2>Changes to this policy</h2>
+    <p>We may update this policy from time to time. The date at the top shows when it last changed.</p>
+  </div>
+</section>
+
+<style>
+  .privacy > * + * { margin-top: 1rem; }
+  .privacy h2 { font-family: 'Playfair Display', Georgia, serif; color: {{ colors.dark }}; font-size: 1.5rem; margin-top: 2.5rem; }
+  .privacy h3 { font-weight: 600; color: {{ colors.dark }}; margin-top: 1.5rem; }
+  .privacy ul { list-style: disc; padding-left: 1.25rem; }
+  .privacy li + li { margin-top: 0.5rem; }
+  .privacy a { color: {{ colors.dark }}; font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
+  .privacy a:hover { color: {{ colors.accent }}; }
+</style>
+
+{% include "site-footer.njk" %}

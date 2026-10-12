@@ -28,6 +28,7 @@ photos are editable. If something doesn't look right, you can always change it b
 1. In the editor, open **Colours / theme**.
 2. Pick a ready-made **Colour scheme** (Navy, Forest green, Terracotta, Plum, or Charcoal & gold) and **Save** — the whole site re-colours itself, and text stays readable.
 3. *(Advanced, optional)* To use an exact brand colour, type a hex code (e.g. `#1c3553`) into one of the **Advanced** boxes. Leaving a box blank just uses the chosen scheme. Note: picking a very light "main dark colour" can make white text hard to read.
+4. You don't need to worry about readability: wherever the accent colour is used for small text, the site automatically uses a slightly darker (or, on dark backgrounds, lighter) version of it that passes the accessibility contrast standard (WCAG AA). This is worked out in `src/_data/colors.js`.
 
 
 ---
@@ -574,6 +575,45 @@ It parses the YAML, compares each form against its JSON file (including the sub-
 of every list block), then simulates a save — writing each file back with only the keys
 the form knows — and confirms the built site is byte-for-byte unchanged.
 
+### Cost calculator
+
+"What is poor mental health costing your business?" lives at `/cost-calculator/` (the
+address to share; not in the menu) and also on the Training & Coaching page. The homepage
+links to it with the **Cost calculator button text** field under *Top section (hero)*;
+empty that field to remove the button. Its wording,
+and the default figures, are under **Cost calculator** in the editor.
+
+| File | Role |
+|---|---|
+| `src/js/cost-calculator.js` | The arithmetic only — no page code, so it can be tested |
+| `src/js/cost-calculator-page.js` | Reads the fields, draws the results, sends the form, builds the printable summary |
+| `src/_includes/blocks/calculator.njk` | The markup, used by both pages |
+| `src/content/calculator.json` | Wording and default figures (CMS) |
+| `scripts/test-calculator.js` | Worked examples — `npm run test:calc` |
+| `src/privacy.njk` | The privacy policy both forms link to |
+
+- **Headcount estimate:** staff × a per-employee cost per category (Deloitte 2024 UK
+  totals ÷ ~30 million employees — that division is our approximation). Always free.
+- **Your figures:** optional salary and staff counts, run through assumptions the visitor
+  can see and edit. A blank category keeps its headcount figure. Counts need a salary.
+- **The printable (PDF) summary** sits behind a short form that posts to the same
+  Formspree endpoint as the contact form, with the subject "Cost calculator lead" and the
+  visitor's figures attached. Nothing they type is sent anywhere until they submit it.
+- Everything is worked out in the browser; there is no server code.
+
+### Fonts, icons and the share image
+
+- **Fonts** (Playfair Display, Inter) are served from `src/fonts/`, not Google, so visitors'
+  details aren't sent to a third party. Both are SIL Open Font License; the licence files sit
+  beside them. The `@font-face` rules are in `site-header.njk`.
+- **Icons** come from a fixed copy of Lucide in `src/js/vendor/` (ISC licence alongside).
+  To upgrade, replace the file, update the path in `site-header.njk`, and check every name in
+  `ICONS` (`scripts/gen-pages-yml.py`) still exists in the new version.
+- **Share image**: `src/images/share-image.jpg` (1200×630, the logo in brand colours) is what
+  LinkedIn, Facebook and others show when a link to any page is shared.
+- The only outside script left is Tailwind's Play CDN. Building the CSS at deploy time instead
+  is a planned follow-up.
+
 ### Optional extras for later
 
 - **Per-page SEO** — `metaTitle` / `metaDescription` fields. Titles are currently derived
@@ -672,12 +712,11 @@ npm run build      # one-off build into _site/
 The form posts to the Formspree endpoint stored in `src/content/site.json` → `formspreeEndpoint`
 (currently `https://formspree.io/f/mwvjrpyo`).
 
-> ⚠️ **The delivery address lives at Formspree, not in this repo.** It was set to
-> kelly@**kellymariecounselling**.com before the domain moved. If that mailbox has gone,
-> enquiries submitted through the form go nowhere and nobody is told. Worth confirming in
-> the Formspree dashboard that it now delivers to kelly@kellymariewellbeing.com — and
-> worth sending a test enquiry through the live form either way, since this is the one
-> failure on the site that is completely silent.
+> **The delivery address lives at Formspree, not in this repo.** It is
+> contactus@kellymariewellbeing.com (confirmed October 2026). The cost calculator's summary
+> form uses the same endpoint, so its leads arrive there too, with the subject
+> "Cost calculator lead". If that mailbox ever changes, update it in the Formspree
+> dashboard, then send a test enquiry, since a wrong address fails silently.
 
 ---
 

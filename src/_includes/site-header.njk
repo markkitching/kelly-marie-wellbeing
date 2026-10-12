@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en-GB" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% if pageTitle %}{{ pageTitle }} | {{ content.header.logoLine1 }} {{ content.header.logoLine2 }}{% else %}{{ content.site.title }}{% endif %}</title>
-  <meta name="description" content="{{ content.site.description }}" />
+  <meta name="description" content="{{ pageDescription or content.site.description }}" />
+
+  <!-- Link previews on social media. A page can set pageDescription to be described in
+       its own words; the rest use the site-wide description. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{ content.header.logoLine1 }} {{ content.header.logoLine2 }}" />
+  <meta property="og:title" content="{% if pageTitle %}{{ pageTitle }}{% else %}{{ content.site.title }}{% endif %}" />
+  <meta property="og:description" content="{{ pageDescription or content.site.description }}" />
+  <meta property="og:url" content="{{ links.site }}{{ page.url }}" />
+  {# The logo card (src/images/share-image.jpg, 1200×630) shown when a link is shared. #}
+  <meta property="og:image" content="{{ links.site }}/images/share-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="{{ content.header.logoLine1 }} {{ content.header.logoLine2 }} logo" />
+  <meta name="twitter:card" content="summary_large_image" />
   {%- if noindex %}
   <meta name="robots" content="noindex" />
   {%- endif %}
@@ -12,10 +26,20 @@
   <!-- Favicon -->
   <link rel="icon" href="/images/favicon.ico" sizes="any" />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Fonts: Playfair Display and Inter (SIL Open Font License), served from this site
+       rather than Google so visitors' details aren't sent to a third party. Latin set only;
+       see src/fonts/ for the files and licences. -->
+  <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/playfair-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <style>
+    @font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/playfair-display-latin-400-normal.woff2') format('woff2'); }
+    @font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/playfair-display-latin-400-italic.woff2') format('woff2'); }
+    @font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/playfair-display-latin-600-normal.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 300; font-display: swap; src: url('/fonts/inter-latin-300-normal.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/inter-latin-400-normal.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/inter-latin-500-normal.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-latin-600-normal.woff2') format('woff2'); }
+  </style>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -29,7 +53,11 @@
           },
           colors: {
             forest: '{{ colors.dark }}',
-            sage:   '{{ colors.accent }}',
+            // Text-safe versions of the accent, worked out in _data/colors.js so every
+            // colour scheme meets WCAG AA contrast.
+            sage:   '{{ colors.accentText }}',
+            'sage-light': '{{ colors.accentOnDark }}',
+            mist:   '{{ colors.mutedOnDark }}',
             stone:  '{{ colors.light }}',
             cream:  '{{ colors.cream }}',
           },
@@ -39,7 +67,10 @@
   </script>
 
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  {#- A fixed version, served from this site, so an upstream change can't alter or break
+      the icons. To upgrade: replace the file, update this path, and check every icon in
+      scripts/gen-pages-yml.py's ICONS list still exists in the new version. -#}
+  <script src="/js/vendor/lucide-1.55.0.min.js"></script>
 
   <style>
     html { scroll-padding-top: 72px; }
@@ -148,10 +179,16 @@
     @media (prefers-reduced-motion: reduce) { .faq-icon { transition: none; } }
 
     .divider { width: 48px; height: 3px; background: {{ colors.accent }}; }
+    /* A clear focus ring for keyboard users, everywhere. Inputs keep their own ring. */
+    :focus-visible { outline: 3px solid {{ colors.accentText }}; outline-offset: 2px; }
+    footer :focus-visible, .bg-forest :focus-visible { outline-color: #ffffff; }
   </style>
 </head>
 
 <body class="font-sans bg-white text-gray-800 antialiased">
+
+  <!-- Lets keyboard and screen-reader users jump past the menu. Hidden until focused. -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-white focus:text-forest focus:font-medium focus:px-4 focus:py-2 focus:rounded focus:shadow">Skip to content</a>
 
   <!-- ═══════════════════════════════════════════════
        STICKY NAVIGATION
@@ -166,7 +203,7 @@
           <img src="{{ content.header.logoImage }}" alt="" width="40" height="40" class="w-10 h-10 object-contain flex-shrink-0" />
           {% else %}
           <span class="w-8 h-8 rounded-full bg-forest flex items-center justify-center flex-shrink-0">
-            <i data-lucide="{{ content.header.logoIcon }}" class="text-sage w-4 h-4"></i>
+            <i data-lucide="{{ content.header.logoIcon }}" class="text-sage-light w-4 h-4"></i>
           </span>
           {% endif %}
           <span class="font-serif text-forest text-lg font-semibold leading-tight">
@@ -210,3 +247,5 @@
       </div>
     </nav>
   </header>
+
+  <main id="main" tabindex="-1" class="focus:outline-none">

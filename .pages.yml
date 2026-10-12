@@ -219,6 +219,79 @@ content:
             label: Address
             description: The full https:// address of the profile.
             type: string
+  - name: calculator
+    label: Cost calculator
+    type: file
+    path: src/content/calculator.json
+    format: json
+    fields:
+      - name: eyebrow
+        label: Small heading
+        type: string
+      - name: heading
+        label: Heading
+        description: Also the title of the shareable page, kellymariewellbeing.com/cost-calculator/
+        type: string
+      - name: intro
+        label: Intro paragraph
+        type: text
+      - name: shareDescription
+        label: Social media preview text
+        description: The short description shown under the title when the calculator's link is shared on Facebook, LinkedIn and so on.
+        type: text
+      - name: staffLabel
+        label: Question above the number box
+        type: string
+      - name: resultLabel
+        label: Text above the result
+        type: string
+      - name: captureHeading
+        label: Printable summary — heading
+        description: Above the short form people fill in to download a printable (PDF) summary.
+        type: string
+      - name: captureText
+        label: Printable summary — text
+        type: text
+      - name: sourceNote
+        label: Small print (source of the figures)
+        description: Keep the line saying this is an estimate based on UK averages.
+        type: text
+      - name: ctaText
+        label: Closing text (above the buttons)
+        description: If you mention Deloitte's £4.70 per £1, keep it clear that it's an average across workplace mental health support in general, not a result of our training.
+        type: text
+      - name: ctaButtonLabel
+        label: Button text
+        description: Opens the summary form with "talk about training" ticked. Leave empty to remove the button.
+        type: string
+      - name: presenteeismCost
+        label: Advanced — headcount estimate, working while unwell, £ per employee per year
+        description: Leave blank to use the default (£793). Update the small print if you change any of these.
+        type: number
+      - name: turnoverCost
+        label: Advanced — headcount estimate, staff leaving, £ per employee per year
+        description: Leave blank to use the default (£650).
+        type: number
+      - name: absenceCost
+        label: Advanced — headcount estimate, sickness absence, £ per employee per year
+        description: Leave blank to use the default (£243).
+        type: number
+      - name: daysPerAbsence
+        label: Advanced — starting assumption, working days lost per absence
+        description: Visitors can change this on the page. Leave blank to use the default (23, rounded from HSE's 2024/25 average of 22.9 days per case).
+        type: number
+      - name: replacementPct
+        label: Advanced — starting assumption, cost of replacing a leaver (% of salary)
+        description: Leave blank to use the default (30).
+        type: number
+      - name: productivityLossPct
+        label: Advanced — starting assumption, productivity lost per struggling employee (%)
+        description: Leave blank to use the default (20).
+        type: number
+      - name: onCostPct
+        label: Advanced — starting assumption, employer on-costs (%)
+        description: Leave blank to use the default (15).
+        type: number
   - name: hero
     label: Top section (hero)
     type: file
@@ -292,9 +365,17 @@ content:
       - name: secondaryButton
         label: Secondary button text
         type: string
+      - name: calculatorButton
+        label: Cost calculator button text
+        description: A button to the cost calculator. Leave empty to remove it.
+        type: string
       - name: image
         label: Hero photo
         type: image
+      - name: imageAlt
+        label: Hero photo description
+        description: Read aloud to people using screen readers. Describe what the photo shows, e.g. "Two people talking at a desk".
+        type: string
   - name: contact
     label: Contact page
     type: file
@@ -1040,9 +1121,17 @@ content:
       - name: paragraph2
         label: Intro paragraph 2
         type: text
+      - name: calculatorButton
+        label: Cost calculator button text
+        description: A button to the cost calculator. Leave empty to remove it.
+        type: string
       - name: image
         label: Hero photo
         type: image
+      - name: imageAlt
+        label: Hero photo description
+        description: Read aloud to people using screen readers. Describe what the photo shows, e.g. "Two people talking at a desk".
+        type: string
   - name: counselling-about
     label: 'Counselling: About Kelly'
     type: file
