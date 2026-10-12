@@ -1,0 +1,156 @@
+#!/usr/bin/env node
+/**
+ * The cost calculator page, driven in a real browser: the part between the sums
+ * (tested in test-calculator.js) and what the visitor sees.
+ *
+ * Needs the built site, so run `npm run build` first. Nothing leaves the machine: the
+ * site is served locally, Formspree is faked and every other host is blocked. The
+ * Tailwind CDN is swapped for the one rule these checks rely on, `.hidden`.
+ */
+const assert = require("assert");
+const fs = require("fs");
+const http = require("http");
+const path = require("path");
+const { chromium } = require("playwright");
+
+const SITE = path.join(__dirname, "..", "_site");
+const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml",
+  ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".woff2": "font/woff2", ".json": "application/json" };
+
+const TAILWIND_STUB = "window.tailwind = {};" +
+  "document.head.appendChild(Object.assign(document.createElement('style'), { textContent: '.hidden { display: none !important; }' }));";
+
+function serve() {
+  const server = http.createServer((req, res) => {
+    let file = path.join(SITE, decodeURIComponent(new URL(req.url, "http://x").pathname));
+    if (!file.startsWith(SITE)) { res.writeHead(403); return res.end(); }
+    if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
+    if (!fs.existsSync(file)) { res.writeHead(404); return res.end(); }
+    res.writeHead(200, { "Content-Type": TYPES[path.extname(file).toLowerCase()] || "application/octet-stream" });
+    fs.createReadStream(file).pipe(res);
+  });
+  return new Promise((resolve) => server.listen(0, "127.0.0.1", () => resolve(server)));
+}
+
+let passed = 0;
+let beforeEach = async () => {};
+const test = async (name, fn) => {
+  try { await beforeEach(); await fn(); console.log(`  ok    ${name}`); passed++; }
+  catch (error) { console.log(`  FAIL  ${name}\n        ${error.message.split("\n")[0]}`); process.exitCode = 1; }
+};
+
+(async () => {
+  if (!fs.existsSync(path.join(SITE, "cost-calculator", "index.html"))) {
+    console.error("No built site found. Run `npm run build` first.");
+    process.exit(1);
+  }
+  const server = await serve();
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const browser = await chromium.launch();
+  const errors = [];
+
+  async function openCalculator() {
+    const context = await browser.newContext();
+    await context.route("**/*", (route) => {
+      const url = route.request().url();
+      if (url.startsWith(base)) return route.continue();
+      if (url.startsWith("https://cdn.tailwindcss.com")) return route.fulfill({ contentType: "text/javascript", body: TAILWIND_STUB });
+      if (url.includes("formspree.io")) return route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' });
+      return route.abort();
+    });
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto(`${base}/cost-calculator/`);
+    // The optional fields and the workings sit in collapsed panels; open them all.
+    await page.evaluate(() => document.querySelectorAll("#calculator details").forEach((d) => { d.open = true; }));
+    return page;
+  }
+
+  const text = (page, sel) => page.locator(sel).first().innerText();
+  const workings = (page) => page.$$eval("[data-calc-workings] tr", (rows) => rows.map((r) => r.textContent));
+  const errorFor = (page, id) => page.locator(`#${id}-error`);
+  // Each check starts from 50 staff and blank optional fields, so one failure can't
+  // leave values behind that break the next.
+  const reset = (page) => page.evaluate(() => {
+    const fire = (el) => el.dispatchEvent(new Event("input", { bubbles: true }));
+    ["calc-salary", "calc-absent", "calc-leavers", "calc-struggling"].forEach((id) => {
+      const el = document.getElementById(id); el.value = ""; fire(el);
+    });
+    const staff = document.getElementById("calc-staff"); staff.value = "50"; fire(staff);
+  });
+
+  console.log("cost calculator page\n");
+  const page = await openCalculator();
+  beforeEach = () => reset(page);
+
+  await test("50 staff shows the £84,300 headcount estimate", async () => {
+    await page.fill("#calc-staff", "50");
+    assert.strictEqual(await text(page, "[data-calc-total]"), "£84,300");
+  });
+
+  await test("clearing the headcount clears the workings table too", async () => {
+    await page.fill("#calc-staff", "50");
+    assert.ok((await workings(page)).some((r) => r.includes("£84,300")), "workings should show the total first");
+    await page.fill("#calc-staff", "");
+    assert.strictEqual(await text(page, "[data-calc-total]"), "-");
+    const rows = await workings(page);
+    assert.ok(!rows.some((r) => r.includes("£")), `old figures still shown: ${rows.join(" | ")}`);
+  });
+
+  await test("a salary of 0 is rejected and the estimate falls back to headcount", async () => {
+    await page.fill("#calc-staff", "50");
+    await page.fill("#calc-salary", "0");
+    await page.fill("#calc-absent", "3");
+    assert.strictEqual(await page.getAttribute("#calc-salary", "aria-invalid"), "true");
+    assert.ok(await errorFor(page, "calc-salary").isVisible(), "salary error should show");
+    assert.ok(await page.locator("[data-calc-yours-summary]").isHidden(), "should not claim to use their figures");
+  });
+
+  await test("more leavers than staff warns and marks the field invalid", async () => {
+    await page.fill("#calc-staff", "50");
+    await page.fill("#calc-leavers", "120");
+    assert.match(await errorFor(page, "calc-leavers").innerText(), /more than the 50 people/);
+    assert.strictEqual(await page.getAttribute("#calc-leavers", "aria-invalid"), "true");
+    await page.fill("#calc-leavers", "2");
+    assert.ok(await errorFor(page, "calc-leavers").isHidden(), "warning should clear");
+    assert.strictEqual(await page.getAttribute("#calc-leavers", "aria-invalid"), "false");
+  });
+
+  await test("typing in one field doesn't rewrite the other fields' alerts", async () => {
+    await page.fill("#calc-staff", "50");
+    await page.fill("#calc-leavers", "120");
+    await page.evaluate(() => {
+      window.alertWrites = 0;
+      document.querySelectorAll("#calculator [role=alert]").forEach((el) =>
+        new MutationObserver(() => window.alertWrites++).observe(el, { childList: true, characterData: true, subtree: true }));
+    });
+    await page.locator("#calc-struggling").pressSequentially("123");
+    await page.locator("#calc-struggling").fill("");
+    // The struggling field's own warning appears and goes once each; nothing else is touched.
+    assert.ok(await page.evaluate(() => window.alertWrites) <= 2, "alerts were rewritten on every keystroke");
+  });
+
+  await test("the summary form unlocks the download, which opens the summary", async () => {
+    await page.fill("#calc-staff", "50");
+    await page.fill("#calc-name", "Test Person");
+    await page.fill("#calc-email", "test@example.com");
+    await page.check("#calc-consent");
+    await page.click("[data-calc-submit]");
+    await page.locator("[data-calc-download]").waitFor({ state: "visible" });
+    const [popup] = await Promise.all([
+      page.waitForEvent("popup"),
+      page.click("[data-calc-download]"),
+    ]);
+    await popup.waitForLoadState();
+    assert.match(await popup.content(), /£84,300 a year/);
+    await popup.close();
+  });
+
+  await test("no script errors on the page", async () => {
+    assert.deepStrictEqual(errors, [], errors.join("; "));
+  });
+
+  await browser.close();
+  server.close();
+  console.log(`\n${passed} passed${process.exitCode ? ", some FAILED" : ""}`);
+})().catch((e) => { console.error(e); process.exit(1); });

@@ -8,9 +8,11 @@
     "dev": "eleventy --serve",
     "sync:podcast": "node scripts/sync-podcast-episodes.js",
     "test:sync": "node scripts/test-sync-merge.js",
-    "test:calc": "node scripts/test-calculator.js"
+    "test:calc": "node scripts/test-calculator.js",
+    "test:page": "node scripts/test-calculator-page.js"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+    "@11ty/eleventy": "^2.0.1",
+    "playwright": "1.56.1"
   }
 }
