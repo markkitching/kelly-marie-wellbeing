@@ -347,7 +347,7 @@
   .calc-panel[open] .calc-panel-icon { transform: rotate(45deg); }
   .calc-panel-icon { transition: transform 0.2s ease; }
   .calc-panel summary::-webkit-details-marker { display: none; }
-  .calc-panel summary:focus-visible { outline: 3px solid {{ colors.accent }}; outline-offset: 2px; }
+  .calc-panel summary:focus-visible { outline: 3px solid {{ colors.accentText }}; outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { .calc-panel-icon { transition: none; } }
 </style>
 <script id="calc-config" type="application/json">{{ calcConfig | dump | replace("<", "\\u003c") | safe }}</script>

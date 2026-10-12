@@ -74,6 +74,7 @@ photos are editable. If something doesn't look right, you can always change it b
 | `scripts/check-pages-yml.py` | Verifies a CMS save can't drop any stored field. |
 | `scripts/sync-podcast-episodes.js` | Pulls recent episodes from YouTube (or Spotify) into the podcast page. |
 | `scripts/test-sync-merge.js` | Proves the sync can't undo the editor's order, edits or hidden episodes. |
+| `.github/workflows/checks.yml` | Runs every test and check above on each push and pull request. A failure shows as a red cross on GitHub but doesn't stop Cloudflare deploying. |
 | `src/_includes/site-header.njk` | Shared `<head>` + sticky nav. |
 | `src/_includes/site-footer.njk` | Shared footer + page scripts. |
 
@@ -590,6 +591,7 @@ and the default figures, are under **Cost calculator** in the editor.
 | `src/_includes/blocks/calculator.njk` | The markup, used by both pages |
 | `src/content/calculator.json` | Wording and default figures (CMS) |
 | `scripts/test-calculator.js` | Worked examples — `npm run test:calc` |
+| `scripts/test-calculator-page.js` | The page in a real browser (headcount, warnings, form, summary): `npm run build && npm run test:page` |
 | `src/privacy.njk` | The privacy policy both forms link to |
 
 - **Headcount estimate:** staff × a per-employee cost per category (Deloitte 2024 UK

@@ -25,7 +25,8 @@
 
   // Each optional field and how strictly it's checked.
   var FIELD_RULES = {
-    salary: { min: 0, max: 10000000 },
+    // A salary of 0 would price every cost the visitor fills in at £0.
+    salary: { min: 1, max: 10000000 },
     absentStaff: { integer: true, min: 0 },
     leavers: { integer: true, min: 0 },
     strugglingStaff: { integer: true, min: 0 },
@@ -37,19 +38,25 @@
   var fields = {};
   $$("[data-calc-field]").forEach(function (el) { fields[el.dataset.calcField] = el; });
 
+  // The error boxes are role=alert, so only touch them when the message changes.
+  // Rewriting the same text on every keystroke makes screen readers repeat it.
   function showError(input, message) {
     var box = document.getElementById(input.id + "-error");
+    message = message || "";
     input.setAttribute("aria-invalid", message ? "true" : "false");
-    if (box) {
-      box.textContent = message || "";
+    if (box && box.textContent !== message) {
+      box.textContent = message;
       box.classList.toggle("hidden", !message);
     }
   }
 
+  function parseNamed(name) {
+    return C.parseField(fields[name].value, FIELD_RULES[name]);
+  }
+
   function readField(name) {
-    var input = fields[name];
-    var result = C.parseField(input.value, FIELD_RULES[name]);
-    showError(input, result.error);
+    var result = parseNamed(name);
+    showError(fields[name], result.error);
     return result.value;
   }
 
@@ -79,24 +86,19 @@
 
   function compute() {
     var staff = readStaff();
-    var inputs = {
-      staff: staff,
-      salary: readField("salary"),
-      absentStaff: readField("absentStaff"),
-      leavers: readField("leavers"),
-      strugglingStaff: readField("strugglingStaff"),
-    };
-    var assumptions = readAssumptions();
-
-    // Counts bigger than the workforce are almost certainly a typo; say so, but still
-    // work it out — the visitor may simply not have updated the headcount yet.
-    ["absentStaff", "leavers", "strugglingStaff"].forEach(function (key) {
-      if (staff != null && inputs[key] != null && inputs[key] > staff) {
-        var el = document.getElementById(fields[key].id + "-error");
-        el.textContent = "That's more than the " + staff + " people you employ. Is the headcount right?";
-        el.classList.remove("hidden");
+    var inputs = { staff: staff };
+    ["salary", "absentStaff", "leavers", "strugglingStaff"].forEach(function (key) {
+      var result = parseNamed(key);
+      var error = result.error;
+      inputs[key] = result.value;
+      // Counts bigger than the workforce are almost certainly a typo; say so, but still
+      // work it out, as the visitor may simply not have updated the headcount yet.
+      if (key !== "salary" && !error && staff != null && result.value != null && result.value > staff) {
+        error = "That's more than the " + staff + " people you employ. Is the headcount right?";
       }
+      showError(fields[key], error);
     });
+    var assumptions = readAssumptions();
 
     return {
       staff: staff,
@@ -176,8 +178,16 @@
 
   function renderWorkings() {
     var body = $("[data-calc-workings]");
-    if (!body || !state.yours) return;
+    if (!body) return;
     body.innerHTML = "";
+    // No usable headcount: clear the old rows so they can't disagree with the "-" totals.
+    if (!state.yours) {
+      var empty = document.createElement("tr");
+      empty.innerHTML = '<td colspan="3" class="py-3 text-gray-700"></td>';
+      empty.firstChild.textContent = "Enter how many people you employ to see the workings.";
+      body.appendChild(empty);
+      return;
+    }
     C.CATEGORIES.forEach(function (key) {
       var tr = document.createElement("tr");
       tr.className = "border-b border-gray-100 align-top";
