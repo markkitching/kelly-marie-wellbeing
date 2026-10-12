@@ -591,6 +591,7 @@ and the default figures, are under **Cost calculator** in the editor.
 | `src/_includes/blocks/calculator.njk` | The markup, used by both pages |
 | `src/content/calculator.json` | Wording and default figures (CMS) |
 | `scripts/test-calculator.js` | Worked examples — `npm run test:calc` |
+| `scripts/test-page-titles.js` | Builds a copy of the site with an apostrophe and `&` in the calculator heading, and checks titles and link previews aren't escaped twice: `npm run test:titles` |
 | `scripts/test-calculator-page.js` | The page in a real browser (headcount, warnings, form, summary): `npm run build && npm run test:page` |
 | `src/privacy.njk` | The privacy policy both forms link to |
 
