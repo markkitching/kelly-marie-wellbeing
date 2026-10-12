@@ -724,6 +724,11 @@ The form posts to the Formspree endpoint stored in `src/content/site.json` → `
 > "Cost calculator lead". If that mailbox ever changes, update it in the Formspree
 > dashboard, then send a test enquiry, since a wrong address fails silently.
 
+**The message box is worded for organisations on purpose** ("Tell us a little about your
+organisation..."). The business doesn't take enquiries from individuals, so the wording
+isn't meant to suit someone looking for counselling for themselves (owner's decision,
+October 2026).
+
 ---
 
 ## Custom domain migration (Hostinger → Cloudflare) — reference
