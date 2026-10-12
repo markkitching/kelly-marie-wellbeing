@@ -376,6 +376,10 @@ content:
       - name: image
         label: Hero photo
         type: image
+      - name: imageAlt
+        label: Hero photo description
+        description: Read aloud to people using screen readers. Describe what the photo shows, e.g. "Two people talking at a desk".
+        type: string
   - name: contact
     label: Contact page
     type: file
@@ -1128,6 +1132,10 @@ content:
       - name: image
         label: Hero photo
         type: image
+      - name: imageAlt
+        label: Hero photo description
+        description: Read aloud to people using screen readers. Describe what the photo shows, e.g. "Two people talking at a desk".
+        type: string
   - name: counselling-about
     label: 'Counselling: About Kelly'
     type: file

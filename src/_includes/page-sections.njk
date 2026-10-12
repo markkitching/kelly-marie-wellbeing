@@ -62,7 +62,7 @@
           <div class="aspect-[3/4] rounded-lg overflow-hidden bg-sage/10 photo-placeholder flex items-center justify-center relative">
             <img
               src="{{ sections.hero.image }}"
-              alt="Kelly Marie, Leeds Psychotherapist"
+              alt="{{ sections.hero.imageAlt or 'Kelly Marie, Leeds Psychotherapist' }}"
               class="w-full h-full object-cover object-top"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
             />
