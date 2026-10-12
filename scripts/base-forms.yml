@@ -212,7 +212,7 @@ content:
         type: text
       - name: savingsNote
         label: Illustrative savings — small print
-        description: Shown after the 10% saving line under the result. Keep this saying the figure is illustrative and not a guarantee.
+        description: Shown after the 'if these costs fell by 10%' line under the result. Keep it clear that 10% is an example, not a predicted result or a guarantee.
         type: string
       - name: sourceNote
         label: Small print (source of the figures)
