@@ -130,6 +130,21 @@ const test = async (name, fn) => {
     assert.ok(await page.evaluate(() => window.alertWrites) <= 2, "alerts were rewritten on every keystroke");
   });
 
+  await test("before the script runs, the figures already have thousands separators", async () => {
+    const html = fs.readFileSync(path.join(SITE, "cost-calculator", "index.html"), "utf8");
+    assert.ok(html.includes("£84,300"), "the built page should show £84,300");
+    assert.ok(!/£\d{4,}/.test(html), `unformatted figure in the built page: ${html.match(/£\d{4,}/)}`);
+  });
+
+  await test("typing 22.5 days never shows an error on the way", async () => {
+    await page.fill("#calc-days", "");
+    await page.locator("#calc-days").pressSequentially("22.");
+    assert.strictEqual(await page.getAttribute("#calc-days", "aria-invalid"), "false");
+    await page.locator("#calc-days").pressSequentially("5");
+    assert.strictEqual(await page.getAttribute("#calc-days", "aria-invalid"), "false");
+    await page.click("[data-calc-reset]");
+  });
+
   await test("the summary form unlocks the download, which opens the summary", async () => {
     await page.fill("#calc-staff", "50");
     await page.fill("#calc-name", "Test Person");
@@ -144,6 +159,20 @@ const test = async (name, fn) => {
     await popup.waitForLoadState();
     assert.match(await popup.content(), /£84,300 a year/);
     await popup.close();
+  });
+
+  await test("download with no headcount says why instead of doing nothing", async () => {
+    // Follows the test above, so the summary is already unlocked.
+    await page.fill("#calc-staff", "");
+    let opened = false;
+    page.once("popup", () => { opened = true; });
+    await page.click("[data-calc-download]");
+    const message = page.locator("[data-calc-download-error]");
+    assert.ok(await message.isVisible(), "a message should explain why nothing opened");
+    assert.match(await message.innerText(), /how many people you employ/);
+    assert.ok(!opened, "no summary should open");
+    await page.fill("#calc-staff", "50");
+    assert.ok(await message.isHidden(), "the message should clear once there's a headcount");
   });
 
   await test("no script errors on the page", async () => {

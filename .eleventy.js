@@ -1,4 +1,5 @@
 const { runtime } = require("nunjucks");
+const { formatGBP } = require("./src/js/cost-calculator.js");
 
 // Escaping by hand rather than leaning on Nunjucks' own: this runs before the line
 // breaks go in, so the <br /> that follows must not be escaped along with the content.
@@ -29,6 +30,10 @@ module.exports = function (eleventyConfig) {
       text ? escapeHtml(text).replace(/\r\n|\r|\n/g, "<br />") : ""
     );
   });
+
+  // Pounds with thousands separators, to the pound: the same formatting the calculator
+  // script uses, so its figures don't change shape when the script takes over.
+  eleventyConfig.addFilter("gbp", (n) => formatGBP(Number(n) || 0));
 
   return {
     dir: {

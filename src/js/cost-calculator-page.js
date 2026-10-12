@@ -149,6 +149,8 @@
 
 
     renderWorkings();
+    // Once there's a headcount again, the "nothing to summarise" message no longer applies.
+    if (state.yours && downloadError) setDownloadError("");
   }
 
   // ── The workings (free, under "How we calculated this") ──
@@ -316,9 +318,21 @@
     });
   }
 
+  var downloadError = $("[data-calc-download-error]");
+  function setDownloadError(message) {
+    if (downloadError.textContent === message) return;
+    downloadError.textContent = message;
+    downloadError.classList.toggle("hidden", !message);
+  }
+
   $("[data-calc-download]").addEventListener("click", function () {
     var s = state;
-    if (!s || !s.yours) return;
+    if (!s || !s.yours) {
+      setDownloadError("Please enter how many people you employ first, so there's something to summarise.");
+      staffInput.focus();
+      return;
+    }
+    setDownloadError("");
     var org = form.elements.organisation.value.trim();
     var today = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     var rows = C.CATEGORIES.map(function (k) {

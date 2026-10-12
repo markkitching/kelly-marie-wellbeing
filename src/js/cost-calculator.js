@@ -47,7 +47,8 @@
     opts = opts || {};
     var text = String(raw == null ? "" : raw).replace(/[£,\s]/g, "");
     if (text === "") return { value: null, error: null };
-    if (!/^\d*\.?\d+$/.test(text)) {
+    // A trailing point is allowed, so "22." isn't an error halfway through typing "22.5".
+    if (!/^(\d+\.?\d*|\.\d+)$/.test(text)) {
       if (!/^-/.test(text)) return { value: null, error: "Please enter a number." };
       return { value: null, error: "Please enter a number of " + (opts.min || 0) + " or more." };
     }
