@@ -8,7 +8,8 @@
   What a visitor sees, in order:
     1. one question (headcount) and an instant answer, with an illustrative 10% saving —
        no sign-up, ever, for this;
-    2. "Make this estimate more accurate" — their own figures, compared side by side;
+    2. "Make this estimate more accurate" (optional, inside the calculator) — their own
+       figures, compared side by side;
     3. "How we calculated this" — every assumption stated, and editable;
     4. the full breakdown and a printable summary, behind a short form (Formspree,
        the same endpoint as the contact form).
@@ -95,7 +96,7 @@
     <!-- ── 1. The one question, and the answer ── -->
     <div class="max-w-4xl mx-auto bg-white rounded-lg border border-gray-100 border-t-4 border-t-sage shadow-sm grid md:grid-cols-5">
 
-      <div class="md:col-span-2 p-6 sm:p-8 bg-stone/60 md:rounded-bl-lg flex flex-col justify-center">
+      <div class="md:col-span-2 p-6 sm:p-8 bg-stone/60 md:rounded-bl-lg">
         <label for="calc-staff" class="block font-medium text-forest mb-3">
           {{ calc.staffLabel or "How many people does your organisation employ?" }}
         </label>
@@ -111,6 +112,32 @@
         <div class="flex justify-between text-xs text-gray-600 mt-1" aria-hidden="true">
           <span>1</span><span>500+</span>
         </div>
+
+        <!-- ── 2. Their own figures, optional, inside the calculator ── -->
+        <details class="calc-panel mt-6 border-t border-gray-200 pt-4" data-calc-more>
+          <summary class="flex items-center justify-between gap-3 cursor-pointer list-none rounded py-1">
+            <span>
+              <span class="flex items-center gap-2 font-medium text-forest">
+                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-sage"></i>
+                Make this estimate more accurate
+              </span>
+              <span class="inline-block mt-1 text-[11px] font-semibold uppercase tracking-wide text-gray-700 bg-white border border-gray-300 rounded px-1.5 py-0.5">Optional</span>
+            </span>
+            <i data-lucide="plus" class="calc-panel-icon w-4 h-4 text-sage flex-shrink-0"></i>
+          </summary>
+          <div class="pt-4">
+            <p class="text-sm text-gray-600 mb-4">
+              Fill in any you know. Blanks use the headcount estimate. Your figures stay in your browser.
+            </p>
+            <div class="grid gap-4">
+              {{ numberField("calc-salary", "salary", "Average annual salary per employee", "Before tax, in pounds.", "e.g. 32,000", "decimal", "£") }}
+              {{ numberField("calc-absent", "absentStaff", "Staff off sick with a mental health reason", "In the last 12 months.", "e.g. 3") }}
+              {{ numberField("calc-leavers", "leavers", "Staff who left where mental health was a factor", "In the last 12 months.", "e.g. 2") }}
+              {{ numberField("calc-struggling", "strugglingStaff", "Staff still working but struggling with performance", "Your best estimate, right now.", "e.g. 5") }}
+            </div>
+            <p class="hidden text-sm text-forest mt-4 rounded bg-white border border-gray-200 px-4 py-3" data-calc-more-status></p>
+          </div>
+        </details>
       </div>
 
       <div class="md:col-span-3 p-6 sm:p-8" aria-live="polite">
@@ -157,30 +184,6 @@
     </div>
 
     <div class="max-w-4xl mx-auto mt-6 space-y-4">
-
-      <!-- ── 2. Their own figures ── -->
-      <details class="calc-panel group bg-white rounded-lg border border-gray-200" data-calc-more>
-        <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5">
-          <span>
-            <span class="flex items-center gap-2 font-medium text-forest"><i data-lucide="sliders-horizontal" class="w-4 h-4 text-sage"></i> Make this estimate more accurate</span>
-            <span class="block text-sm text-gray-600 mt-0.5">Optional. Add your own figures and compare.</span>
-          </span>
-          <i data-lucide="plus" class="calc-panel-icon w-4 h-4 text-sage flex-shrink-0"></i>
-        </summary>
-        <div class="px-6 pb-6 border-t border-gray-100 pt-5">
-          <p class="text-sm text-gray-600 mb-5">
-            Fill in as many as you know. Anything left blank uses the headcount estimate for that cost.
-            Your figures stay in your browser. Nothing is sent anywhere unless you ask for the full breakdown below.
-          </p>
-          <div class="grid sm:grid-cols-2 gap-5">
-            {{ numberField("calc-salary", "salary", "Average annual salary per employee", "Before tax, in pounds.", "e.g. 32,000", "decimal", "£") }}
-            {{ numberField("calc-absent", "absentStaff", "Staff off sick with a mental health reason", "In the last 12 months.", "e.g. 3") }}
-            {{ numberField("calc-leavers", "leavers", "Staff who left where mental health was a factor", "In the last 12 months.", "e.g. 2") }}
-            {{ numberField("calc-struggling", "strugglingStaff", "Staff still working but struggling with performance", "Your best estimate, right now.", "e.g. 5") }}
-          </div>
-          <p class="hidden text-sm text-forest mt-5 rounded bg-stone px-4 py-3" data-calc-more-status></p>
-        </div>
-      </details>
 
       <!-- ── 3. The assumptions ── -->
       <details class="calc-panel group bg-white rounded-lg border border-gray-200">
