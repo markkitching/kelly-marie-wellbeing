@@ -1,27 +1,27 @@
 {
   "eyebrow": "Methodology",
   "heading": "Therapeutic Approach",
-  "intro": "Grounded in evidence-based practice, I draw from several clinical frameworks to provide the most effective support for every individual and their circumstances.",
+  "intro": "I draw on several evidence-based approaches and use whichever combination suits you and your situation.",
   "items": [
     {
       "icon": "brain",
       "title": "Psychodynamic",
-      "description": "Works with the understanding that present difficulties are influenced by unconscious processes and previous life experiences. Psychodynamic therapy creates space to explore your patterns, defence mechanisms and emotional history, and how these may impact you in the present."
+      "description": "Psychodynamic therapy works on the idea that unconscious processes and past experiences shape the difficulties we face now. Sessions give you space to explore your patterns and defences, and how they affect you today."
     },
     {
       "icon": "shield",
       "title": "Trauma-Informed",
-      "description": "This framework prioritises sensitivity and collaborative sessions to acknowledge and address trauma and its role in mental health. There is a focus on creating a therapeutic environment that is safe, honest and understanding. You are the priority, and have control over the pace and direction of sessions, so the therapeutic work can provide effective support and empowerment."
+      "description": "This approach recognises the part trauma can play in mental health and works with it carefully. Sessions are a safe, honest space, and you decide the pace and direction."
     },
     {
       "icon": "clock",
       "title": "Systemic ",
-      "description": "This technique is designed to support emotional and personal growth by identifying unconscious patterns of language and behaviour. The process aims to release limiting beliefs and emotional blocks to create lasting changes. The therapeutic work allows exploration of patterns by understanding the past, to begin implementing positive change in the present and future. This may also include genograms to look into family dynamics and relationships."
+      "description": "Systemic therapy looks at unconscious patterns in how we talk and behave, especially in families and relationships. Understanding where those patterns came from makes it easier to change them now. We might use a genogram, a kind of family tree, to map out family dynamics."
     },
     {
       "icon": "layers",
       "title": "Integrative",
-      "description": "Integrative practice draws upon elements from many therapeutic frameworks (such as the systemic and humanistic approaches) to provide support tailored to each individual. Mental health support is not \"one-size-fits-all\" so the integrative approach can adapt to everyone."
+      "description": "Integrative practice brings together parts of different approaches, such as systemic and humanistic therapy, so the support fits you. Everyone's different, and this lets me adapt as we go."
     }
   ]
 }

@@ -49,7 +49,7 @@
         {% for link in pageContent.links %}
           {% if link.href %}
           <a href="{{ link.href }}" target="_blank" rel="noopener"
-            class="inline-flex items-center gap-2 bg-white border border-gray-200 rounded px-5 py-3 text-sm font-medium text-forest hover:border-sage hover:shadow-sm transition-all">
+            class="inline-flex items-center gap-2 bg-white border border-gray-200 rounded px-5 py-3 text-sm font-medium text-forest hover:border-sage transition-all">
             {% if link.icon %}<i data-lucide="{{ link.icon }}" class="w-4 h-4 text-sage"></i>{% endif %}
             {{ link.label }}
           </a>
