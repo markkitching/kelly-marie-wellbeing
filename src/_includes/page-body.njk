@@ -162,7 +162,7 @@
         {#- Nothing is requested from YouTube until the visitor chooses to play. -#}
         <button type="button" class="yt-facade" data-youtube="{{ episode.youtube }}"
           aria-label="Play &ldquo;{{ episode.title }}&rdquo;">
-          <img src="https://i.ytimg.com/vi/{{ episode.youtube }}/hqdefault.jpg" alt="" loading="lazy"
+          <img src="https://i.ytimg.com/vi/{{ episode.youtube }}/hqdefault.jpg" alt="Thumbnail for {{ episode.title }}" loading="lazy"
             onerror="this.style.display='none'" />
           <span class="yt-play" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
@@ -174,7 +174,7 @@
           {%- if pageContent.audioArtwork %}
         <a href="{{ episode.spotify }}" target="_blank" rel="noopener" class="episode-art"
           aria-label="Listen to &ldquo;{{ episode.title }}&rdquo; on Spotify">
-          <img src="{{ pageContent.audioArtwork }}" alt="" loading="lazy" />
+          <img src="{{ pageContent.audioArtwork }}" alt="Thumbnail for {{ episode.title }}" loading="lazy" />
         </a>
           {%- else %}
         <div class="episode-media episode-audio">

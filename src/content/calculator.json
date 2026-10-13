@@ -1,7 +1,7 @@
 {
   "eyebrow": "For Employers",
   "heading": "What Is Poor Mental Health Costing Your Business?",
-  "intro": "Poor mental health costs UK employers around £51 billion a year, through sickness absence, people working while unwell, and staff leaving. Enter the size of your workforce to see an estimate for your organisation.",
+  "intro": "Poor mental health costs UK employers around £51 billion a year, through sickness absence, people working while unwell and staff leaving. Enter the size of your workforce to see an estimate for your organisation.",
   "shareDescription": "Poor mental health costs UK employers £51 billion a year. Find out what it could be costing your business in seconds.",
   "staffLabel": "How many people does your organisation employ?",
   "resultLabel": "Poor mental health could be costing your organisation around",
@@ -10,7 +10,7 @@
   "absenceCost": 243,
   "presenteeismCost": 793,
   "turnoverCost": 650,
-  "sourceNote": "This is an estimate based on UK averages, not a measurement of your organisation. The headcount estimate uses Deloitte's 2024 report \"Mental health and employers\", which puts the annual cost of poor mental health to UK employers at about £51bn: £23.8bn from presenteeism (working while unwell), £19.5bn from staff turnover and £7.3bn from sickness absence (rounded in the report's summary to £24bn, £20bn and £7bn). Dividing these by roughly 30 million UK employees to get a cost per employee is our own approximation. \"Your figures\" use the assumptions listed under \"How we calculated this\": days lost per absence is rounded from the Health and Safety Executive's 2024/25 statistics (22.9 days per case); the others are our own assumptions.",
+  "sourceNote": "This is an estimate based on UK averages, not a measurement of your organisation. The headcount estimate uses Deloitte's 2024 report \"Mental health and employers\", which puts the annual cost of poor mental health to UK employers at about £51 billion: £23.8bn from presenteeism (working while unwell), £19.5bn from staff turnover and £7.3bn from sickness absence (rounded in the report's summary to £24bn, £20bn and £7bn). Dividing these by roughly 30 million UK employees to get a cost per employee is our own approximation. \"Your figures\" use the assumptions listed under \"How we calculated this\": days lost per absence is rounded from the Health and Safety Executive's 2024/25 statistics (22.9 days per case); the others are our own assumptions.",
   "ctaText": "Deloitte found employers got back around £4.70 for every £1 spent on workplace mental health support on average. That's an average across many kinds of support, not a measured result of any particular training, including ours.",
   "ctaButtonLabel": "Talk to Us About Training",
   "daysPerAbsence": 23,
