@@ -1,25 +1,25 @@
 {
   "eyebrow": "For Organisations & Professionals",
   "heading": "Training & Coaching",
-  "intro": "We deliver bespoke, practical and meaningful training, that is derived from clinical mental health and wellbeing practices. Our mission is to empower leaders of people to support their teams proactively and effectively.",
-  "body": "Wellbeing in the workplace is about so much more than just awareness, and we aim to empower organisations to develop and improve the wellbeing services they offer. So our training and coaching courses have been designed to equip organisations and leaders with meaningful skills they can use to support their teams. From spotting the signs of mental health struggles to effective signposting, these courses cover the aspects of workplace wellbeing that matter to the workforce.\n\nSessions include case studies, personal reflection and collaboration, to help develop a realistic understanding of how and why people struggle at work, how leaders can be vital in supporting staff and what makes a workforce feel valued. But sessions are also adaptable, to ensure the training we deliver is suitable and relevant for your organisation and it's needs.\n\nWorkplace wellbeing services and leaders with mental health awareness training can both result in a happier, healthier and more productive workforce. It can reduce mental health related absences, improve employee retention rates and help with talent acquisition. When people work in a supportive environment, they feel valued and safe, and hold their organisation in higher regard.",
+  "intro": "We run practical training based on clinical mental health practice. Our mission is to empower managers to support their teams early, before problems build up.",
+  "body": "Our courses give managers skills they can use straight away, from spotting the signs that someone is struggling to pointing them towards the right support. We also help organisations look at the wellbeing services they already offer and make them work better.\n\nSessions mix case studies with group discussion and time for personal reflection. The focus is on why people struggle at work and what a manager can actually do about it. We adapt each course to your organisation and the people in it.\n\nGood wellbeing support and well-trained managers can mean fewer mental-health-related absences and better staff retention. It can help with recruitment, too. And people who feel supported tend to think more highly of the place they work.",
   "mainTextPosition": "After the checklist",
   "cardsTitle": "What We Deliver",
   "cards": [
     {
       "icon": "presentation",
       "title": "Wellbeing Services Training",
-      "description": "Foundational training for whole organisations and teams: what do effective and relevant workplace wellbeing services look like, how to understand the needs of your workforce, and how to encourage staff to access support. "
+      "description": "Foundational training for whole organisations and teams. We cover what good wellbeing services look like, and how to understand what your staff need and encourage them to use the support available."
     },
     {
       "icon": "briefcase",
       "title": "Training for Managers & HR",
-      "description": "For those who are responsible for supporting or leading people. We will focus on having supportive conversations, making reasonable adjustments, return-to-work procedures, signposting and the signs that someone is struggling at work."
+      "description": "For anyone who manages or supports people. We'll cover supportive conversations, reasonable adjustments, return-to-work procedures, signposting, and how to tell when someone is struggling at work."
     },
     {
       "icon": "message-circle",
       "title": "Reflective Practice & Coaching",
-      "description": "A regular facilitated space for teams or individuals to drop in to get advice, ask questions, reflect on difficult situations or unpack their own thoughts and feelings. This service can be useful as a follow up to other training too. "
+      "description": "A regular, facilitated session where teams or individuals can drop in for advice or talk through something difficult. It works well as a follow-up to other training, too."
     }
   ],
   "checklistTitle": "Sessions Can Cover",
@@ -49,7 +49,7 @@
       "text": "Preventing burnout in others and yourself "
     }
   ],
-  "quote": "\"In 2024/25, over 900,000 workers experienced work-related stress, anxiety or depression - resulting in the loss of 22.1 million working days.\"",
+  "quote": "\"In 2024/25, over 900,000 workers experienced work-related stress, anxiety or depression – resulting in the loss of 22.1 million working days.\"",
   "quoteAuthor": "Health and Safety Executive, 2025",
   "faqs": [
     {
@@ -58,19 +58,19 @@
     },
     {
       "question": "Is it delivered on-site or remotely?",
-      "answer": "Either. On-site training tends to work better for interactive sessions with smaller groups; but remote delivery makes it far easier to reach people spread across multiple locations."
+      "answer": "Either. On-site tends to work better for interactive sessions with smaller groups, but remote makes it much easier to reach people in different locations."
     },
     {
       "question": "Can training be combined with therapeutic support?",
-      "answer": "Yes, and it often is. Several organisations contract us to deliver training to managers, and to provide confidential counselling for employees. Both services stay separated and we don't share any of the content from therapy sessions with the organisation. "
+      "answer": "Yes, and it often is. Several organisations use us for both: training for managers and confidential counselling for staff. The two stay separate, and we never share anything from therapy sessions with the employer."
     },
     {
       "question": "How is it priced?",
-      "answer": "Per session or as a package, depending on scope. Get in touch with a rough idea of audience and format and we will send an outline of the training and a quote."
+      "answer": "Per session or as a package, depending on scope. Get in touch with a rough idea of audience and format and we'll send an outline of the training and a quote."
     }
   ],
   "ctaHeading": "Request a Training Outline",
-  "ctaText": "Tell us a bit about your organisation, who the training is for and how much time is available to deliver the training.\nWe will get back to you with a proposed outline and a quote, with no obligation.",
+  "ctaText": "Tell us a bit about your organisation, who the training is for and how much time you have.\nWe'll send you a suggested outline and a quote. There's no obligation.",
   "ctaButtonLabel": "Contact Us",
   "ctaButtonIcon": "message-circle"
 }

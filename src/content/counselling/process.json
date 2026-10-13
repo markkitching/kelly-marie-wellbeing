@@ -1,19 +1,19 @@
 {
   "eyebrow": "Getting Started",
   "heading": "The Process",
-  "intro": "A clear, accessible and confidential pathway from initial contact to beginning therapy.",
+  "intro": "What happens from your first message to your first session.",
   "steps": [
     {
       "title": "Initial Enquiry",
-      "description": "Submit the contact form or send an email. All enquiries are treated with full discretion and responded to within a timely manner."
+      "description": "Fill in the contact form or send me an email. Everything you send is kept confidential, and I'll get back to you as soon as I can."
     },
     {
-      "title": "Complimentary Consultation",
-      "description": "An initial consultation is a free 20-minute call for you to discuss your needs, ask me any questions, and establish whether I am the right clinician for you and your situation."
+      "title": "Free Consultation",
+      "description": "We'll start with a free 20-minute call, so you can ask questions and we can see whether I'm the right therapist for you."
     },
     {
       "title": "Begin Treatment",
-      "description": "Sessions are scheduled at a suitable time for you. We will work together to identify your goals in therapy, set sustainable targets and review progress regularly."
+      "description": "We'll book sessions at times that suit you. Together we'll agree what you want from therapy and check in regularly on how it's going."
     }
   ]
 }

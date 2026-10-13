@@ -1,22 +1,22 @@
 {
   "eyebrow": "Clinical Services",
   "heading": "How I Can Help",
-  "intro": "My mission is to prioritise mental health and wellbeing worldwide. I offer a safe space and empower individuals to take proactive and sustainable steps towards improved mental health.",
+  "intro": "I want more people to have access to good mental health support, starting with the individuals and organisations I work with. Therapy with me is a safe space to work out practical steps you can keep up.",
   "cards": [
     {
       "icon": "briefcase",
       "title": "Workplace Wellbeing",
-      "description": "Confidential therapeutic support and wellbeing consultancy for organisations. Employee assistance, stress management programmes and leadership resilience - delivered on-site or remotely. Workplace therapy aims to reduce staff absence due to psychological health, support the phased return of employees and implement a human-centered working culture. "
+      "description": "Confidential therapy and wellbeing consultancy for organisations, on site or remotely. This can include employee assistance, stress management programmes and resilience work with leaders. The aim is to cut absence linked to mental health and support people back to work gradually. Over time, it helps build a more human-centred culture."
     },
     {
       "icon": "users",
       "title": "Group Sessions",
-      "description": "Structured group therapy programmes harnessing the therapeutic value of shared experience. Facilitated groups for anxiety, grief and personal development run throughout the year."
+      "description": "Structured group therapy, where people with similar experiences support each other and I guide the sessions. I run groups for anxiety, grief and personal development throughout the year."
     },
     {
       "icon": "monitor",
       "title": "Remote Sessions",
-      "description": "Mental health support should work around you. Remote sessions offer confidential therapy on private video or telephone platforms. All service formats are available remotely, to provide full flexibility without compromising clinical quality. "
+      "description": "Therapy by private video or phone call, so you can fit sessions around work and home. Everything I offer is available remotely, with the same quality of care."
     }
   ]
 }

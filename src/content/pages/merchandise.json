@@ -2,13 +2,13 @@
   "eyebrow": "Shop",
   "heading": "Merchandise",
   "intro": "A small collection in the works: a few well-made things that support the everyday side of looking after yourself.",
-  "body": "This isn't a shop full of slogans. The plan is a short, deliberate range: things you would actually use, made properly, with the same thinking behind them as the rest of my work.\n\nNothing is on sale yet. The pieces below are what is in development. If there is something you would buy that isn't here, tell me, because the range is still being decided.",
+  "body": "We're planning a small range of things you'd actually use, made properly and with the same care as the rest of our work.\n\nNothing is on sale yet. The pieces below are in development, so if there's something you'd buy that isn't here, tell us. We're still deciding what to make.",
   "image": "",
   "productsTitle": "In Development",
   "products": [
     {
       "name": "Reflective Journal",
-      "description": "A guided journal built around the questions that come up most often in therapy, structured enough to be useful, open enough to be yours.",
+      "description": "A guided journal built around the questions that come up most often in therapy, with plenty of room for your own thoughts.",
       "image": "",
       "price": "",
       "meta": "Coming soon",
@@ -16,7 +16,7 @@
     },
     {
       "name": "Grounding Card Deck",
-      "description": "A pocket set of grounding and regulation exercises, for the moments when remembering any of them is the hard part.",
+      "description": "A pocket-sized set of grounding and regulation exercises to reach for when it's hard to think straight.",
       "image": "",
       "price": "",
       "meta": "Coming soon",
@@ -24,7 +24,7 @@
     },
     {
       "name": "Organic Cotton Tote",
-      "description": "Plain, sturdy and quietly branded. No affirmations printed down the side.",
+      "description": "A plain, sturdy tote with a small logo.",
       "image": "",
       "price": "",
       "meta": "Coming soon",
@@ -32,7 +32,7 @@
     },
     {
       "name": "Ceramic Mug",
-      "description": "For the cup of tea that marks the end of the working day, rather than the middle of it.",
+      "description": "A mug for the cup of tea at the end of your working day.",
       "image": "",
       "price": "",
       "meta": "Coming soon",
@@ -40,7 +40,7 @@
     }
   ],
   "ctaHeading": "Want to Know When It Launches?",
-  "ctaText": "Send me a message and I will let you know as soon as the range is available, and tell me what you would like to see in it.",
+  "ctaText": "Send us a message and we'll let you know when the range is available. Tell us what you'd like to see in it, too.",
   "ctaButtonLabel": "Get in Touch",
   "ctaButtonIcon": "mail",
   "ctaButtonHref": "",

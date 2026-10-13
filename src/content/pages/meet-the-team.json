@@ -1,27 +1,27 @@
 {
   "eyebrow": "The Practice",
   "heading": "Meet the Team",
-  "intro": "A small but dedicated team, we at Kelly Marie Wellbeing are passionate about delivering quality wellbeing support for businesses and workforces.",
+  "intro": "We're a small team. Between us, we deliver training and counselling, and we make the Kelly Marie Podcast.",
   "peopleTitle": "Who We Are",
   "people": [
     {
       "name": "Kelly Marie",
       "role": "Founder & Psychotherapist",
-      "credentials": "BACP Registered ",
-      "bio": "A psychotherapist with years of clinical experience working with individuals, couples, young people and organisations. Kelly's practice is grounded in psychodynamic theory alongside integrative and trauma-informed approaches. She specialises in workplace therapy and wellbeing, and has worked with organisations including LADBible and Genuit Group to provide in-house counselling for staff, and deliver mental health awareness training and coaching. ",
+      "credentials": "BACP-registered",
+      "bio": "A psychotherapist with years of clinical experience working with individuals, couples, young people and organisations. Kelly's practice is based on psychodynamic theory, alongside integrative and trauma-informed approaches. She specialises in workplace therapy and wellbeing, and has worked with organisations including LADBible and Genuit Group to provide in-house counselling for staff, and deliver mental health awareness training and coaching. ",
       "image": "/images/WhatsApp Image 2026-09-13 at 19.24.10-1.jpeg"
     },
     {
       "name": "Ella Kitching",
       "role": "Head of Media Production",
       "credentials": "BSc (Hons) - Psychology",
-      "bio": "Ella delivers mental health awareness training, hosts The Kelly Marie Podcast and runs our social media. She is a psychology graduate with a passion for wellbeing and hands on experience working as a key adult and coach for young people struggling with their mental health. Ella is trained at Level 1 & 2 in counselling concepts, and is currently undergoing mindfulness training.",
+      "bio": "Ella delivers mental health awareness training, hosts The Kelly Marie Podcast and runs our social media. She is a psychology graduate with a passion for wellbeing and hands-on experience working as a key adult and coach for young people struggling with their mental health. Ella is trained at Level 1 & 2 in counselling concepts, and is currently undergoing mindfulness training.",
       "image": "/images/WhatsApp Image 2026-09-16 at 20.50.31.jpeg"
     },
     {
       "name": "Will Ellis",
       "credentials": "BA (Hons) - Digital Marketing & Business",
-      "bio": "Will delivers mental health awareness training with his positive outlook and passion for empowering others to improve their wellbeing. He is also undergoing a course in mindfulness to broaden his knowledge."
+      "bio": "Will brings a positive outlook to the mental health awareness training he delivers, and enjoys helping people look after their own wellbeing. He's also doing a course in mindfulness."
     }
   ],
   "ctaButtonIcon": "mail"
