@@ -18,9 +18,6 @@ const SITE = path.join(__dirname, "..", "_site");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml",
   ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".woff2": "font/woff2", ".json": "application/json" };
 
-const TAILWIND_STUB = "window.tailwind = {};" +
-  "document.head.appendChild(Object.assign(document.createElement('style'), { textContent: '.hidden { display: none !important; }' }));";
-
 function serve() {
   const server = http.createServer((req, res) => {
     let file = path.join(SITE, decodeURIComponent(new URL(req.url, "http://x").pathname));
@@ -64,7 +61,6 @@ const test = async (name, fn) => {
     await context.route("**/*", (route) => {
       const url = route.request().url();
       if (url.startsWith(base)) return route.continue();
-      if (url.startsWith("https://cdn.tailwindcss.com")) return route.fulfill({ contentType: "text/javascript", body: TAILWIND_STUB });
       if (url.includes("formspree.io")) return route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' });
       return route.abort();
     });

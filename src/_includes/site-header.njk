@@ -41,30 +41,6 @@
     @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-latin-600-normal.woff2') format('woff2'); }
   </style>
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['Playfair Display', 'Georgia', 'serif'],
-            sans:  ['Inter', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            forest: '{{ colors.dark }}',
-            // Text-safe versions of the accent, worked out in _data/colors.js so every
-            // colour scheme meets WCAG AA contrast.
-            sage:   '{{ colors.accentText }}',
-            'sage-light': '{{ colors.accentOnDark }}',
-            mist:   '{{ colors.mutedOnDark }}',
-            stone:  '{{ colors.light }}',
-            cream:  '{{ colors.cream }}',
-          },
-        },
-      },
-    }
-  </script>
 
   <!-- Lucide Icons -->
   {#- A fixed version, served from this site, so an upstream change can't alter or break
@@ -185,6 +161,11 @@
     :focus-visible { outline: 3px solid {{ colors.accentText }}; outline-offset: 2px; }
     footer :focus-visible, .bg-forest :focus-visible { outline-color: #ffffff; }
   </style>
+  <!-- Site styles: built from styles/tailwind.css by `npm run build` (see tailwind.config.js),
+       so nothing is downloaded from Tailwind and no styling script runs in the browser.
+       Loaded after the <style> blocks above, where Tailwind's in-browser script used to put
+       its rules, so utility classes still win any tie (e.g. the step connector's mt-7). -->
+  <link rel="stylesheet" href="{{ '/css/site.css' | versioned }}" />
 </head>
 
 <body class="font-sans bg-white text-gray-800 antialiased">

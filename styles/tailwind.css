@@ -1,0 +1,5 @@
+/* Tailwind source for the site's stylesheet. Built into src/css/site.css by `npm run build`
+   (see tailwind.config.js). Page-specific styles stay in the templates' <style> blocks. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

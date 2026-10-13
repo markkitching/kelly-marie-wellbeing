@@ -617,8 +617,12 @@ there falls back to the default in `src/js/cost-calculator.js`.
   `ICONS` (`scripts/gen-pages-yml.py`) still exists in the new version.
 - **Share image**: `src/images/share-image.jpg` (1200×630, the logo in brand colours) is what
   LinkedIn, Facebook and others show when a link to any page is shared.
-- The only outside script left is Tailwind's Play CDN. Building the CSS at deploy time instead
-  is a planned follow-up.
+- **Styles** are built at deploy time: `npm run build` runs `npm run css` (Tailwind 3.4.17,
+  pinned, from `styles/tailwind.css` with `tailwind.config.js`) into `src/css/site.css`, which is
+  git-ignored and copied to `_site/css/`. The brand colours come from `src/_data/colors.js`,
+  so a scheme picked in the CMS reaches the stylesheet on the next deploy. Nothing is loaded
+  from Tailwind in the browser any more. While running `npm run dev`, re-run `npm run css`
+  after adding new class names to a template.
 
 ### Optional extras for later
 

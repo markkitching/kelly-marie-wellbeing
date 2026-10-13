@@ -18,6 +18,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/images": "images" });
   eleventyConfig.addPassthroughCopy({ "src/js": "js" });
   eleventyConfig.addPassthroughCopy({ "src/fonts": "fonts" });
+  // The stylesheet built by `npm run css` from styles/tailwind.css.
+  eleventyConfig.addPassthroughCopy({ "src/css": "css" });
 
   // Renders a multi-line CMS field with its line breaks intact.
   //

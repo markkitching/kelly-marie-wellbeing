@@ -82,20 +82,16 @@
 <section class="{{ bg }} py-20">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     {{ blockHeading(pageContent.cardsTitle) }}
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {#- A plain list: a thin line, a heading and its text. No boxes or icons. -#}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
       {% for card in pageContent.cards %}
-      <div class="service-card bg-white rounded-lg p-6 border-t-4 border-sage border border-gray-100">
-        {% if card.icon %}
-        <div class="w-10 h-10 bg-stone rounded flex items-center justify-center mb-4">
-          <i data-lucide="{{ card.icon }}" class="w-5 h-5 text-forest"></i>
-        </div>
-        {% endif %}
-        <h3 class="font-serif text-forest text-xl mb-2">{{ card.title }}</h3>
+      <div class="border-t-2 border-sage pt-6">
+        <h3 class="font-serif text-forest text-xl mb-3">{{ card.title }}</h3>
         {% if card.description %}
-        <p class="text-gray-600 text-sm leading-relaxed mb-4">{{ card.description | lines }}</p>
+        <p class="text-gray-600 leading-relaxed">{{ card.description | lines }}</p>
         {% endif %}
         {% if card.meta %}
-        <p class="text-xs text-sage font-semibold uppercase tracking-wide">{{ card.meta }}</p>
+        <p class="text-xs text-sage font-semibold uppercase tracking-wide mt-4">{{ card.meta }}</p>
         {% endif %}
       </div>
       {% endfor %}
