@@ -25,10 +25,11 @@ def f(name, label, ftype, indent=6, extra=""):
     out = f"{pad}- name: {name}\n{pad}  label: {label}\n{pad}  type: {ftype}\n"
     return out + extra
 
-def icon_field(indent):
+def icon_field(indent, description=None):
     pad = " " * indent
     vals = "\n".join(f"{pad}      - {i}" for i in ICONS)
-    return (f"{pad}- name: icon\n{pad}  label: Icon\n{pad}  type: select\n"
+    desc = f"{pad}  description: {description}\n" if description else ""
+    return (f"{pad}- name: icon\n{pad}  label: Icon\n{desc}{pad}  type: select\n"
             f"{pad}  options:\n{pad}    values:\n{vals}\n")
 
 def listblock(name, label, description, subfields, *, summary, indent=6):
@@ -89,8 +90,8 @@ def build(slug, title):
     if "cards" in blocks:
         body += f("cardsTitle", "Cards — section heading (optional)", "string")
         body += listblock("cards", "Cards",
-            "A row of cards. Drag to reorder. A card with no title is not shown.",
-            icon_field(10) + sub("title", "Title", "string")
+            "Each card is shown as a heading and text under a thin line. Drag to reorder. A card with no title is not shown.",
+            icon_field(10, "Not shown on the site at the moment.") + sub("title", "Title", "string")
             + sub("description", "Description", "text")
             + sub("meta", "Small label underneath (optional)", "string"), summary="{title}")
 

@@ -154,6 +154,7 @@ sections:
         fields:
           - name: icon
             label: Icon
+            description: Not shown on the site at the moment.
             type: select
             options:
               values:
@@ -308,6 +309,7 @@ sections:
         fields:
           - name: icon
             label: Icon
+            description: Not shown on the site at the moment.
             type: select
             options:
               values:

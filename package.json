@@ -2,10 +2,11 @@
   "name": "kelly-marie-wellbeing",
   "version": "1.0.0",
   "private": true,
-  "description": "Website for Kelly Marie Wellbeing \u2014 built with Eleventy, edited via Pages CMS.",
+  "description": "Website for Kelly Marie Wellbeing — built with Eleventy, edited via Pages CMS.",
   "scripts": {
-    "build": "eleventy",
-    "dev": "eleventy --serve",
+    "css": "tailwindcss -c tailwind.config.js -i styles/tailwind.css -o src/css/site.css --minify",
+    "build": "npm run css && eleventy",
+    "dev": "npm run css && eleventy --serve",
     "sync:podcast": "node scripts/sync-podcast-episodes.js",
     "test:sync": "node scripts/test-sync-merge.js",
     "test:calc": "node scripts/test-calculator.js",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "playwright": "1.56.1"
+    "playwright": "1.56.1",
+    "tailwindcss": "3.4.17"
   }
 }

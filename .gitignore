@@ -1,3 +1,5 @@
 node_modules/
 _site/
 .DS_Store
+# Built by `npm run css` (part of `npm run build`) from styles/tailwind.css
+src/css/site.css
