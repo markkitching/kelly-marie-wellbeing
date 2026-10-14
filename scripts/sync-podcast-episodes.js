@@ -60,8 +60,9 @@ const DESCRIPTION_LIMIT = 240;
 
 // ── Shaping Spotify's response ───────────────────────────────────────────────
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+// Full month names, matching how dates are written on the rest of the site.
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
 
 function formatDate(releaseDate) {
   const parts = String(releaseDate || "").split("-");
