@@ -61,7 +61,7 @@ test("an empty field is filled in from Spotify", () => {
   const { episodes } = mergeSpotify([local("AAA", { title: "", description: "", meta: "" })], [spotify("AAA", "From Spotify")]);
   assert.strictEqual(episodes[0].title, "From Spotify");
   assert.strictEqual(episodes[0].description, "Description of From Spotify");
-  assert.strictEqual(episodes[0].meta, "12 Sep 2026 · 34 min");
+  assert.strictEqual(episodes[0].meta, "12 September 2026 · 34 min");
 });
 
 test("a manually added YouTube link survives", () => {
@@ -98,8 +98,8 @@ test("a spotify: URI is recognised as the same episode", () => {
 console.log("\nformatting\n");
 
 test("dates read as a human would write them", () => {
-  assert.strictEqual(formatDate("2026-09-12"), "12 Sep 2026");
-  assert.strictEqual(formatDate("2026-01-01"), "1 Jan 2026");
+  assert.strictEqual(formatDate("2026-09-12"), "12 September 2026");
+  assert.strictEqual(formatDate("2026-01-01"), "1 January 2026");
   assert.strictEqual(formatDate("2026"), "2026");          // Spotify sometimes gives only a year
   assert.strictEqual(formatDate(undefined), "");
 });
@@ -143,7 +143,7 @@ test("the channel feed parses into episodes", () => {
   const episodes = parseYouTubeFeed(FEED);
   assert.strictEqual(episodes.length, 2);
   assert.strictEqual(episodes[0].id, "dQw4w9WgXcQ");
-  assert.strictEqual(episodes[0].meta, "12 Sep 2026");
+  assert.strictEqual(episodes[0].meta, "12 September 2026");
   assert.strictEqual(episodes[0].value, "dQw4w9WgXcQ");
 });
 
