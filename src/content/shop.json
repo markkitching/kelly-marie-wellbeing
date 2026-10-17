@@ -1,0 +1,53 @@
+{
+  "published": false,
+  "eyebrow": "Shop",
+  "heading": "Workplace Mental Health Sheets",
+  "intro": "Printed guides and quick tips for your staff room, HR desk or noticeboard. Written by Kelly, a BACP-registered psychotherapist, so your team gets clear, practical information they can trust.",
+  "image1": "",
+  "image1Alt": "Three printed mental health sheets from Kelly Marie Wellbeing",
+  "rangeTitle": "What's in the range",
+  "rangeItems": [
+    {
+      "text": "8 Understanding guides: ADHD, anxiety, panic attacks, depression, autism, mental health at work, self-esteem and sleep"
+    },
+    {
+      "text": "7 Quick Tips sheets for when someone's struggling: panic attacks, anger, low mood, workplace wellbeing, loneliness, stress and sleep"
+    },
+    {
+      "text": "Every Quick Tips sheet has a box for your own support contacts, so staff know exactly who to go to"
+    },
+    {
+      "text": "Samaritans and emergency numbers on every sheet"
+    },
+    {
+      "text": "A5 size, made to sit in a leaflet holder or pin to a board"
+    }
+  ],
+  "image2": "",
+  "image2Alt": "A Quick Tips sheet with a box for the company's own support contacts",
+  "orderHeading": "Order for your workplace",
+  "orderText": "Tell us which sheets you'd like and roughly how many copies, and we'll come back to you with a price.",
+  "buttonLabel": "Enquire to order",
+  "buttonLink": "/contact/",
+  "brandedHeading": "Want your logo on them?",
+  "brandedText": "We can print your logo and your support contacts on every sheet. Ask us about it when you enquire.",
+  "image3": "",
+  "image3Alt": "All 15 sheets in the Kelly Marie Wellbeing range",
+  "faqsTitle": "Questions",
+  "faqs": [
+    {
+      "question": "Can I order just some of the sheets?",
+      "answer": "Yes. Pick the topics that suit your team."
+    },
+    {
+      "question": "Can you add our logo and contacts?",
+      "answer": "Yes. Mention it in your enquiry."
+    },
+    {
+      "question": "Do you offer training too?",
+      "answer": "Yes. Kelly Marie Wellbeing runs mental health training for managers and HR teams.",
+      "linkLabel": "Find out about our training",
+      "linkHref": "/training-coaching/"
+    }
+  ]
+}

@@ -14,7 +14,7 @@ noindex: true
   "counselling": "heart-handshake",
   "training-coaching": "presentation",
   "podcast": "mic",
-  "merchandise": "shopping-bag",
+  "shop": "shopping-bag",
   "meet-the-team": "users"
 } -%}
 {% include "site-header.njk" %}
@@ -42,12 +42,15 @@ noindex: true
 
       <ul class="grid sm:grid-cols-2 gap-3 text-left mb-12">
         {% for item in newPages %}
+        {#- An unpublished Shop page isn't offered here. -#}
+        {% if item.slug != "shop" or shopPage.published %}
         <li>
           <a href="/{{ item.slug }}/" class="flex items-center gap-3 bg-white rounded px-4 py-3 border border-gray-200 hover:border-sage hover:text-forest transition-colors">
             <i data-lucide="{{ pageIcons[item.slug] or 'arrow-right' }}" class="w-4 h-4 text-sage flex-shrink-0"></i>
             <span class="text-gray-700">{{ item.title }}</span>
           </a>
         </li>
+        {% endif %}
         {% endfor %}
       </ul>
 

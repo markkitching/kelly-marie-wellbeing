@@ -138,8 +138,8 @@ content:
                   label: Training & Coaching
                 - value: podcast
                   label: Podcast
-                - value: merchandise
-                  label: Merchandise
+                - value: shop
+                  label: Shop
                 - value: meet-the-team
                   label: Meet the Team
                 - value: contact
@@ -250,3 +250,101 @@ content:
         label: Advanced — starting assumption, employer on-costs (%)
         description: Leave blank to use the default (15).
         type: number
+  - name: shop
+    label: 'Page: Shop'
+    type: file
+    path: src/content/shop.json
+    format: json
+    fields:
+      - name: published
+        label: Published
+        description: Leave off while the page is being prepared. Off, the page is only reachable by its link, search engines are asked not to list it, and it can't appear in the menu. Switch on to go live, then tick "Show in menu" for Shop under Main menu.
+        type: boolean
+      - name: eyebrow
+        label: Small heading
+        type: string
+      - name: heading
+        label: Page heading
+        type: string
+      - name: intro
+        label: Intro paragraph
+        type: text
+      - name: image1
+        label: Image 1 (next to the range list)
+        type: image
+      - name: image1Alt
+        label: Image 1 description
+        description: Read aloud to people using screen readers. Describe what the photo shows.
+        type: string
+      - name: rangeTitle
+        label: Range list heading
+        type: string
+      - name: rangeItems
+        label: Range list
+        description: Each row is one ticked line. Drag to reorder.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{text}'
+        fields:
+          - name: text
+            label: Text
+            type: string
+      - name: image2
+        label: Image 2 (next to the ordering box)
+        type: image
+      - name: image2Alt
+        label: Image 2 description
+        type: string
+      - name: orderHeading
+        label: Ordering box heading
+        type: string
+      - name: orderText
+        label: Ordering box text
+        type: text
+      - name: buttonLabel
+        label: Order button text
+        description: The page's only button. Leave empty to remove it.
+        type: string
+      - name: buttonLink
+        label: Order button link
+        description: Where the button goes. Blank sends it to the contact page. Change this when online ordering is ready.
+        type: string
+      - name: brandedHeading
+        label: Branded version heading
+        type: string
+      - name: brandedText
+        label: Branded version text
+        type: text
+      - name: image3
+        label: Image 3 (next to the branded version)
+        type: image
+      - name: image3Alt
+        label: Image 3 description
+        type: string
+      - name: faqsTitle
+        label: Questions heading
+        type: string
+      - name: faqs
+        label: Questions
+        description: Shown as an accordion. Drag to reorder.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{question}'
+        fields:
+          - name: question
+            label: Question
+            type: string
+          - name: answer
+            label: Answer
+            type: text
+          - name: linkLabel
+            label: Link text (optional)
+            description: A link shown after the answer, e.g. "Find out about our training".
+            type: string
+          - name: linkHref
+            label: Link address (optional)
+            type: string
