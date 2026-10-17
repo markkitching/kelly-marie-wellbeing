@@ -607,7 +607,7 @@ there falls back to the default in `src/js/cost-calculator.js`.
   visitor's figures attached. Nothing they type is sent anywhere until they submit it.
 - Everything is worked out in the browser; there is no server code.
 
-### Shop page (draft)
+### Shop page
 
 `/shop/` sells printed mental health sheets by enquiry: no basket, checkout or payment code.
 It replaced the old Merchandise page (the `/merchandise/` address no longer exists).
@@ -625,6 +625,14 @@ It replaced the old Merchandise page (the `/merchandise/` address no longer exis
 - **Order button**: its text and link are one field each, so proper online ordering can be
   wired in later with a single edit.
 - **Images**: until a file is chosen, each image slot shows a placeholder with its description.
+- **Pricing packs** (the cards after the range list) and all their wording are in Page: Shop.
+  *Total sheets* and *Price per set* are best left blank: `shopPage.js` works them out from
+  the sets and price. If typed in and they don't add up, the build log shows a warning.
+  The sets, detail and per-set lines take `{sets}`, `{sheets}` and `{perSet}`; the line
+  under the packs takes `{quickTips}` and `{understanding}` (the series name fields).
+  Each button links to `/contact/?enquiry=Shop enquiry: <Pack> pack`; the contact form
+  doesn't read that yet. Remove every pack to hide the section.
+- **Questions** are hidden unless *Show questions section* is ticked; they're kept either way.
 
 ### Fonts, icons and the share image
 
