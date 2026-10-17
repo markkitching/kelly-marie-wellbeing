@@ -23,13 +23,12 @@
       "text": "A5 size, made to sit in a leaflet holder or pin to a board"
     }
   ],
-  "pricingHeading": "Choose your pack",
+  "pricingHeading": "Choose your Pack",
   "packs": [
     {
       "name": "Small",
       "sets": 15,
       "price": 149,
-      "extra": "",
       "button": "Enquire about Small",
       "highlight": false
     },
@@ -37,7 +36,6 @@
       "name": "Medium",
       "sets": 30,
       "price": 279,
-      "extra": "",
       "button": "Enquire about Medium",
       "highlight": false
     },
@@ -53,7 +51,6 @@
   "setsText": "{sets} sets",
   "packDetailText": "{sets} copies of each sheet, {sheets} sheets",
   "perSetText": "{perSet} per set",
-  "vatLabel": "",
   "bestValueLabel": "Best value",
   "pricingFootnote": "Every pack: your own support contacts printed on each {quickTips} sheet, thick 225gsm matte card, free UK delivery.",
   "sheetsPerSet": 15,
