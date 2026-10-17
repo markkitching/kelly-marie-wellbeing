@@ -53,6 +53,7 @@
   ],
   "buyLabel": "Buy now",
   "invoiceLabel": "Or pay by invoice",
+  "sellerAddress": "104 Main Street",
   "setsText": "{sets} sets",
   "packDetailText": "{sets} copies of each sheet, {sheets} sheets",
   "perSetText": "{perSet} per set",
