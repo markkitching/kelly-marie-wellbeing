@@ -342,16 +342,52 @@ content:
       - name: orderHeading
         label: Ordering box heading
         type: string
+      - name: packsIntro
+        label: Packs intro
+        description: Shown above the packs, e.g. "Pay securely by card. You can add your own support contacts at checkout." Only appears when there are packs.
+        type: text
+      - name: packs
+        label: Packs for sale
+        description: Each pack gets its own button. Leave the list empty to show just the enquiry text and button. A pack's Buy button only works once it has a Stripe link AND the business address below is filled in; until then it goes to the enquiry link.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{name}'
+        fields:
+          - name: name
+            label: Pack name
+            type: string
+          - name: description
+            label: What's in it
+            type: string
+          - name: price
+            label: Price
+            description: Shown exactly as typed, e.g. "£25" or "£25 inc. postage". Make sure it matches the price in Stripe.
+            type: string
+          - name: buyLink
+            label: Stripe payment link
+            description: From Stripe > Payment Links, starting https://buy.stripe.com/. Leave blank until the pack is ready to sell.
+            type: string
+      - name: buyLabel
+        label: Buy button text
+        description: Used on every pack that's on sale. Blank shows "Buy now".
+        type: string
+      - name: sellerAddress
+        label: Business address
+        description: UK law requires a postal address to be shown when selling online. Shown on the Terms of sale page. No pack can be bought until this is filled in.
+        type: string
       - name: orderText
-        label: Ordering box text
+        label: Enquiry text
+        description: With packs, shown underneath them (e.g. "Need more copies or something different? Get in touch."). Without packs, it's the main ordering text.
         type: text
       - name: buttonLabel
-        label: Order button text
-        description: The page's only button. Leave empty to remove it.
+        label: Enquiry button text
+        description: Leave empty to remove the enquiry button.
         type: string
       - name: buttonLink
-        label: Order button link
-        description: Where the button goes. Blank sends it to the contact page. Change this when online ordering is ready.
+        label: Enquiry button link
+        description: Where the enquiry button goes. Blank sends it to the contact page.
         type: string
       - name: brandedHeading
         label: Branded version heading

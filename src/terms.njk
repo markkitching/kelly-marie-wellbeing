@@ -1,0 +1,123 @@
+---
+permalink: "/terms/"
+pageTitle: "Terms of Sale"
+pageDescription: "The terms that apply when you buy printed mental health sheets from Kelly Marie Wellbeing."
+eleventyComputed:
+  # Kept out of search engines, and out of the footer, until a pack is on sale.
+  noindex: "{{ '' if shopPage.selling else 'yes' }}"
+---
+{#- Terms for sheets bought through the Shop page's Stripe links. Not in the CMS (like the
+    privacy policy); the business address comes from "Page: Shop". Linked from the footer
+    and under the Buy buttons once any pack is on sale (shopPage.selling). -#}
+{%- set orgName = content.header.logoLine1 + " " + content.header.logoLine2 -%}
+{% include "site-header.njk" %}
+
+<section class="bg-stone py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="font-serif text-forest text-4xl lg:text-5xl leading-tight">Terms of Sale</h1>
+    <div class="divider mt-6 mb-6 mx-auto"></div>
+    <p class="text-gray-600">Last updated: October 2026</p>
+  </div>
+</section>
+
+<section class="bg-white py-16">
+  <div class="privacy max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-gray-700 leading-relaxed">
+
+    <p>
+      These terms apply when you buy printed sheets from our <a href="/shop/">shop</a>. Please read them before you
+      buy. If you're buying as a consumer, nothing in them affects your legal rights.
+    </p>
+
+    <h2>Who we are</h2>
+    <p>
+      {{ orgName }} is a partnership run by Kelly Marie and Ella Kitching.
+    </p>
+    <p>
+      Address: {% if shopPage.address %}{{ shopPage.address }}{% else %}<strong>[business address to be added]</strong>{% endif %}<br />
+      Email: <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>
+    </p>
+
+    <h2>Ordering and payment</h2>
+    <p>
+      You order and pay on a secure checkout page run by Stripe, our payment provider. We never see or store your
+      card details. The price you pay, including any postage, is shown at checkout before you pay. Your order is
+      accepted when your payment goes through and you receive a confirmation email.
+    </p>
+
+    <h2>Your support contacts</h2>
+    <p>
+      If you add your own support contacts at checkout, we print them on your Quick Tips sheets exactly as you give
+      them, so please check them carefully. If anything looks wrong or won't fit, we'll email you before printing.
+      Only include people's names and numbers if they've agreed to be listed.
+    </p>
+
+    <h2>Delivery</h2>
+    <p>
+      We post orders to the address you give at checkout. We'll send your order within 30 days of payment, and
+      usually much sooner. If we can't, we'll tell you and you can cancel for a full refund.
+    </p>
+
+    <h2>Cancelling and returns</h2>
+    <p>
+      If you're buying as a consumer, you can cancel within 14 days of receiving your order by emailing us. Please
+      post the sheets back unused within 14 days of cancelling; return postage is your cost. We'll refund the price and the original postage within
+      14 days of getting them back.
+    </p>
+    <p>
+      This doesn't apply to sheets printed with your own support contacts, because they're made for you. These can't
+      be returned unless they're faulty or we've made a mistake.
+    </p>
+    <p>
+      The legal right to cancel is for consumers. If you're buying for your organisation and need to change an order,
+      email us and we'll do our best to help.
+    </p>
+
+    <h2>Faulty or damaged sheets</h2>
+    <p>
+      If your sheets arrive damaged, misprinted or not as described, email us, ideally with a photo, and we'll
+      replace them or give you a refund.
+    </p>
+
+    <h2>About the content</h2>
+    <p>
+      The sheets give general information about mental health. They aren't medical advice, a diagnosis or a
+      replacement for professional support. Anyone who is struggling should speak to their GP or a qualified
+      professional. In an emergency, call 999.
+    </p>
+    <p>
+      The sheets are our copyright. Please don't copy, scan or reproduce them, in print or online, without our
+      permission.
+    </p>
+
+    <h2>Our responsibility to you</h2>
+    <p>
+      We're responsible for losses you suffer that are a foreseeable result of us breaking these terms. We're not
+      responsible for losses that weren't foreseeable, or for business losses such as lost profit. Nothing here limits
+      our responsibility where the law doesn't allow it to be limited.
+    </p>
+
+    <h2>Your information</h2>
+    <p>
+      How we use the details you give when you order is explained in our <a href="/privacy/">privacy policy</a>.
+    </p>
+
+    <h2>The law</h2>
+    <p>
+      These terms are governed by UK law. If you're a consumer, you can bring a claim in the courts of the part of the
+      UK where you live. If there's a problem, please email us first and we'll try to put it right.
+    </p>
+
+    <h2>Changes to these terms</h2>
+    <p>We may update these terms from time to time. The terms in place when you placed your order apply to it.</p>
+  </div>
+</section>
+
+<style>
+  .privacy > * + * { margin-top: 1rem; }
+  .privacy h2 { font-family: 'Playfair Display', Georgia, serif; color: {{ colors.dark }}; font-size: 1.5rem; margin-top: 2.5rem; }
+  .privacy ul { list-style: disc; padding-left: 1.25rem; }
+  .privacy a { color: {{ colors.dark }}; font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
+  .privacy a:hover { color: {{ colors.accent }}; }
+</style>
+
+{% include "site-footer.njk" %}

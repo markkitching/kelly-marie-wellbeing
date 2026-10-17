@@ -607,24 +607,55 @@ there falls back to the default in `src/js/cost-calculator.js`.
   visitor's figures attached. Nothing they type is sent anywhere until they submit it.
 - Everything is worked out in the browser; there is no server code.
 
-### Shop page (draft)
+### Shop page and payments
 
-`/shop/` sells printed mental health sheets by enquiry: no basket, checkout or payment code.
-It replaced the old Merchandise page (the `/merchandise/` address no longer exists).
+`/shop/` sells printed mental health sheets. Packs are paid for through **Stripe Payment
+Links**: each pack's *Buy now* button goes to a checkout page run by Stripe, so there's no
+basket and no card details ever touch this site. Anything else goes through the enquiry
+button. It replaced the old Merchandise page (the `/merchandise/` address no longer exists).
 
 | File | Role |
 |---|---|
-| `src/shop.njk` | The page's own layout (heading, range list, ordering box, branded version, questions) |
-| `src/content/shop.json` | Its wording and images — **Page: Shop** in the editor |
-| `src/_data/shopPage.js` | Loads it; a blank button link falls back to the contact page |
+| `src/shop.njk` | The page's own layout (heading, range list, ordering box with packs, branded version, questions) |
+| `src/content/shop.json` | Its wording, images, packs, Stripe links and business address — **Page: Shop** in the editor |
+| `src/_data/shopPage.js` | Loads it, and decides which packs are on sale (`selling`) |
+| `src/terms.njk` | The Terms of sale page at `/terms/` (not in the editor; address comes from Page: Shop) |
 
-- **Published** (a switch on the form) is off while the page is prepared. Off, the page is
-  still built at `/shop/` for review but is marked `noindex`, left off the "page not found"
-  list, and kept out of the menu even if *Show in menu* is ticked for Shop. To go live,
-  switch it on, then tick *Show in menu* under **Main menu**.
-- **Order button**: its text and link are one field each, so proper online ordering can be
-  wired in later with a single edit.
+- **Published** (a switch on the form): off, the page is still built at `/shop/` for review
+  but is marked `noindex`, left off the "page not found" list, and kept out of the menu even
+  if *Show in menu* is ticked. To go live, switch it on, then tick *Show in menu* under
+  **Main menu**.
+- **Packs for sale**: name, what's in it, price (shown exactly as typed) and Stripe payment
+  link. With no packs, the ordering box shows just the enquiry text and button.
+- **A pack is only on sale when it has a Stripe link starting `https://` AND *Business
+  address* is filled in**, because UK law requires a postal address to be shown before anyone buys.
+  Until then its button goes to the enquiry link, and the build prints a warning.
+- **Once any pack is on sale**, the site automatically: adds *Terms of sale* to the footer and
+  under the Buy buttons, lets search engines list `/terms/`, and adds the shop sections
+  (Stripe, delivery, six-year order records) to the privacy policy. Before that, `/terms/`
+  exists for review but is hidden, and the privacy policy doesn't mention the shop.
 - **Images**: until a file is chosen, each image slot shows a placeholder with its description.
+
+**Setting up a pack in Stripe** (in your own Stripe account):
+
+1. *Product catalogue* > add a product for the pack, with its price.
+2. *Payment Links* > create a link for that product, and in its options:
+   - turn on **Collect customers' addresses** > shipping addresses (pick the countries you
+     post to), and add a shipping rate if postage is charged separately;
+   - add a **custom field** (text, optional) called e.g. "Support contacts to print", for
+     the free personalised contacts. Stripe allows up to 255 characters per field, so add a
+     second field if needed;
+   - under *After payment*, keep Stripe's confirmation page or point it back to the site.
+3. Copy the link (`https://buy.stripe.com/...`) into the pack's *Stripe payment link* in
+   **Page: Shop**, and check the price on the page matches Stripe's.
+4. Stripe emails you each order (turn this on under *Settings > Notifications*); the order
+   details, address and support contacts are under *Payments* in Stripe.
+
+Test first with Stripe's **test mode** links (`https://buy.stripe.com/test_...`) and the
+card number 4242 4242 4242 4242, then swap in the live links.
+
+When packs go on sale, also update the wording that still talks about enquiring:
+*Enquiry text*, *Branded version text* and the questions.
 
 ### Fonts, icons and the share image
 

@@ -7,9 +7,10 @@ eleventyComputed:
   # | safe so the text is escaped once, by site-header, not twice.
   pageDescription: "{{ shopPage.intro | safe }}"
 ---
-{#- The Shop page: printed mental health sheets, ordered by enquiry. Content comes from
+{#- The Shop page: printed mental health sheets, bought through Stripe or by enquiry. Content comes from
     src/content/shop.json ("Page: Shop" in the CMS) via _data/shopPage.js. No basket or
-    payment code: the single order button's text and link are one field each.
+    card handling: packs link out to Stripe Payment Links, and with no packs the single
+    order button's text and link are one field each.
     Sections alternate light backgrounds like the site's other pages, and every two-column
     row stacks in reading order on a phone. -#}
 {%- set shop = shopPage -%}
@@ -76,6 +77,50 @@ eleventyComputed:
       {% if shop.orderHeading %}
       <h2 class="font-serif text-forest text-2xl sm:text-3xl">{{ shop.orderHeading }}</h2>
       {% endif %}
+      {% if shop.packs | length %}
+      {#- Packs: each Buy button goes to its Stripe checkout once it's on sale (see
+          _data/shopPage.js), otherwise to the order enquiry link. The enquiry text and
+          button then sit underneath, for anything the packs don't cover. -#}
+      {% if shop.packsIntro %}
+      <p class="text-gray-600 leading-relaxed mt-3">{{ shop.packsIntro | lines }}</p>
+      {% endif %}
+      <ul class="mt-6 divide-y divide-gray-200 border-t border-b border-gray-200">
+        {% for pack in shop.packs %}
+        <li class="py-5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div class="flex-1">
+            <h3 class="font-medium text-forest">{{ pack.name }}</h3>
+            {% if pack.description %}<p class="text-gray-600 text-sm leading-relaxed mt-1">{{ pack.description }}</p>{% endif %}
+          </div>
+          <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-2 flex-shrink-0">
+            {% if pack.price %}<span class="font-serif text-forest text-xl">{{ pack.price }}</span>{% endif %}
+            {% if pack.onSale %}
+            <a href="{{ pack.href }}" aria-label="{{ shop.buyLabel }}: {{ pack.name }}" class="inline-flex items-center gap-2 bg-forest text-white text-sm font-medium px-5 py-2.5 rounded hover:bg-sage transition-colors">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              {{ shop.buyLabel }}
+            </a>
+            {% elif shop.buttonLabel %}
+            <a href="{{ pack.href }}" aria-label="{{ shop.buttonLabel }}: {{ pack.name }}" class="inline-flex items-center gap-2 bg-forest text-white text-sm font-medium px-5 py-2.5 rounded hover:bg-sage transition-colors">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+              {{ shop.buttonLabel }}
+            </a>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% if shop.selling %}
+      <p class="text-gray-500 text-xs leading-relaxed mt-3">Payment is taken securely by Stripe. By buying you agree to our <a href="/terms/" class="underline underline-offset-2 hover:text-sage">Terms of sale</a>.</p>
+      {% endif %}
+      {% if shop.orderText %}
+      <p class="text-gray-600 leading-relaxed mt-6">{{ shop.orderText | lines }}</p>
+      {% endif %}
+      {% if shop.buttonLabel %}
+      <a href="{{ shop.buttonLink }}" class="mt-4 inline-flex items-center gap-2 border border-forest text-forest font-medium px-6 py-3 rounded hover:bg-forest hover:text-white transition-colors">
+        <i data-lucide="mail" class="w-4 h-4"></i>
+        {{ shop.buttonLabel }}
+      </a>
+      {% endif %}
+      {% else %}
       {% if shop.orderText %}
       <p class="text-gray-600 leading-relaxed mt-3">{{ shop.orderText | lines }}</p>
       {% endif %}
@@ -84,6 +129,7 @@ eleventyComputed:
         <i data-lucide="mail" class="w-4 h-4"></i>
         {{ shop.buttonLabel }}
       </a>
+      {% endif %}
       {% endif %}
     </div>
   </div>
