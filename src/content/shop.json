@@ -29,8 +29,8 @@
   "orderText": "Tell us which sheets you'd like and roughly how many copies, and we'll come back to you with a price.",
   "buttonLabel": "Enquire to order",
   "buttonLink": "/contact/",
-  "brandedHeading": "Want your logo on them?",
-  "brandedText": "We can print your logo and your support contacts on every sheet. Ask us about it when you enquire.",
+  "brandedHeading": "Want your own support contacts on them?",
+  "brandedText": "We can print your support contacts on every Quick Tips sheet, so staff know exactly who to go to. Ask us about it when you enquire.",
   "image3": "/images/shop-whats-inside.jpg",
   "image3Alt": "All 15 sheets in the Kelly Marie Wellbeing range",
   "faqsTitle": "Questions",
@@ -40,7 +40,7 @@
       "answer": "Yes. Pick the topics that suit your team."
     },
     {
-      "question": "Can you add our logo and contacts?",
+      "question": "Can you add our support contacts?",
       "answer": "Yes. Mention it in your enquiry."
     },
     {
