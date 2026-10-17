@@ -382,7 +382,8 @@ content:
         label: Series name (Understanding guides)
         type: string
       - name: seriesQuickTips
-        label: Series name (Quick Tips sheets)
+        label: Series name (What Helps sheets)
+        description: The tips sheets with the support contacts box, shown wherever {quickTips} is used.
         type: string
       - name: image2
         label: Image 2 (next to the ordering box)
