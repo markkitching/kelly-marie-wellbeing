@@ -48,6 +48,9 @@
       "highlight": true
     }
   ],
+  "buyLabel": "Buy now",
+  "invoiceLabel": "Or pay by invoice",
+  "sellerAddress": "",
   "setsText": "{sets} sets",
   "packDetailText": "{sets} copies of each sheet, {sheets} sheets",
   "perSetText": "{perSet} per set",

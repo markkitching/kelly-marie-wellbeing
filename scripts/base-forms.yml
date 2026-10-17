@@ -330,10 +330,26 @@ content:
             label: Button text
             description: The button goes to the contact page. Blank shows "Enquire about" and the pack name.
             type: string
+          - name: buyLink
+            label: Stripe payment link
+            description: From Stripe > Payment links, starting https://buy.stripe.com/. When filled in (and the business address below is too), this card's button becomes the Buy button. Blank keeps it as an enquiry.
+            type: string
           - name: highlight
             label: Highlight as best value
             description: Gives this card a stronger border, the label below, and puts it first on phones. Tick one pack only.
             type: boolean
+      - name: buyLabel
+        label: Buy button text
+        description: Used on every pack with a Stripe link. Blank shows "Buy now".
+        type: string
+      - name: invoiceLabel
+        label: Enquiry link under the Buy button
+        description: Small link to the contact form under each Buy button, e.g. "Or pay by invoice". Leave blank to hide it.
+        type: string
+      - name: sellerAddress
+        label: Business address
+        description: UK law requires a postal address to be shown when selling online. Shown on the Terms of sale page. No pack can be bought until this is filled in.
+        type: string
       - name: setsText
         label: Sets line
         description: Shown under each pack name. {sets} is replaced with the pack's number of sets.

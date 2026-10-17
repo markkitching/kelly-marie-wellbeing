@@ -73,7 +73,8 @@ eleventyComputed:
 {#- From the pricing fields in Page: Shop, via _data/shopPage.js (which fills in the
     {sets}/{sheets}/{perSet} wording and checks the sums). Cards sit side by side from lg
     up and stack below that, with the highlighted pack first. Each button goes to the
-    contact page with the pack named in the link (?enquiry=), ready for the form to read. -#}
+    contact page with the pack named in the link (?enquiry=), ready for the form to read,
+    or, once a pack has a Stripe link and the business address is set, to Stripe. -#}
 {%- set pricing = shop.pricing -%}
 {%- if pricing.packs | length %}
 <section class="bg-stone py-20" id="pricing">
@@ -98,16 +99,33 @@ eleventyComputed:
         <p class="mt-4 text-forest text-sm font-medium">{{ pack.extra }}</p>
         {% endif %}
         <div class="mt-auto pt-6">
-          <a href="{{ links.contact }}?enquiry={{ pack.enquiry | urlencode }}" class="w-full inline-flex items-center justify-center gap-2 font-medium px-6 py-3 rounded transition-colors {{ 'bg-forest text-white hover:bg-sage' if pack.highlight else 'border border-forest text-forest hover:bg-forest hover:text-white' }}">
+          {#- On sale: the main button goes to Stripe, with an optional small enquiry link
+              (e.g. "Or pay by invoice") underneath. Otherwise the main button is the enquiry. -#}
+          {%- set enquiryHref = links.contact + "?enquiry=" + (pack.enquiry | urlencode) %}
+          {%- set mainClass = 'bg-forest text-white hover:bg-sage' if pack.highlight else 'border border-forest text-forest hover:bg-forest hover:text-white' %}
+          {% if pack.onSale %}
+          <a href="{{ pack.buyLink }}" aria-label="{{ pricing.buyLabel }}: {{ pack.name }} pack" class="w-full inline-flex items-center justify-center gap-2 font-medium px-6 py-3 rounded transition-colors {{ mainClass }}">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            {{ pricing.buyLabel }}
+          </a>
+          {% if pricing.invoiceLabel %}
+          <a href="{{ enquiryHref }}" aria-label="{{ pricing.invoiceLabel }}: {{ pack.name }} pack" class="mt-3 inline-block text-sm text-forest underline underline-offset-2 hover:text-sage">{{ pricing.invoiceLabel }}</a>
+          {% endif %}
+          {% else %}
+          <a href="{{ enquiryHref }}" class="w-full inline-flex items-center justify-center gap-2 font-medium px-6 py-3 rounded transition-colors {{ mainClass }}">
             <i data-lucide="mail" class="w-4 h-4"></i>
             {{ pack.button }}
           </a>
+          {% endif %}
         </div>
       </div>
       {% endfor %}
     </div>
     {% if pricing.footnote %}
     <p class="mt-10 text-center text-gray-600 max-w-2xl mx-auto">{{ pricing.footnote }}</p>
+    {% endif %}
+    {% if shop.selling %}
+    <p class="mt-3 text-center text-gray-500 text-xs">Card payments are taken securely by Stripe. By buying you agree to our <a href="/terms/" class="underline underline-offset-2 hover:text-sage">Terms of sale</a>.</p>
     {% endif %}
   </div>
 </section>
