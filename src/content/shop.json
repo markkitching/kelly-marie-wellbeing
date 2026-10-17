@@ -26,7 +26,7 @@
   "image2": "/images/shop-support-box.jpg",
   "image2Alt": "A Quick Tips sheet with a box for the company's own support contacts",
   "orderHeading": "Order for your workplace",
-  "orderText": "Tell us which sheets you'd like and roughly how many copies, and we'll come back to you with a price.",
+  "orderText": "Need more than one pack, or something different? Get in touch.",
   "buttonLabel": "Enquire to order",
   "buttonLink": "/contact/",
   "brandedHeading": "Want your own support contacts on them?",
@@ -37,7 +37,7 @@
   "faqs": [
     {
       "question": "Can I order just some of the sheets?",
-      "answer": "Yes. Pick the topics that suit your team."
+      "answer": "Not at the moment. Every pack includes all 15 sheets."
     },
     {
       "question": "Can you add our support contacts?",
@@ -48,6 +48,14 @@
       "answer": "Yes. Kelly Marie Wellbeing runs mental health training for managers and HR teams.",
       "linkLabel": "Find out about our training",
       "linkHref": "/training-coaching/"
+    }
+  ],
+  "packs": [
+    {
+      "name": "Full pack",
+      "description": "All 15 sheets: the 8 Understanding guides and 7 Quick Tips sheets",
+      "price": "",
+      "buyLink": ""
     }
   ]
 }

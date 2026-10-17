@@ -337,7 +337,7 @@ content:
         type: string
       - name: orderText
         label: Enquiry text
-        description: With packs, shown underneath them (e.g. "Need more copies or something different? Get in touch."). Without packs, it's the main ordering text.
+        description: With packs, shown underneath them once a pack is on sale (e.g. "Need more copies or something different? Get in touch."). Without packs, it's the main ordering text.
         type: text
       - name: buttonLabel
         label: Enquiry button text

@@ -108,9 +108,10 @@ eleventyComputed:
         </li>
         {% endfor %}
       </ul>
+      {#- Until a pack is on sale its own button is the enquiry link, so the separate
+          enquiry text and button would only repeat it. -#}
       {% if shop.selling %}
       <p class="text-gray-500 text-xs leading-relaxed mt-3">Payment is taken securely by Stripe. By buying you agree to our <a href="/terms/" class="underline underline-offset-2 hover:text-sage">Terms of sale</a>.</p>
-      {% endif %}
       {% if shop.orderText %}
       <p class="text-gray-600 leading-relaxed mt-6">{{ shop.orderText | lines }}</p>
       {% endif %}
@@ -119,6 +120,7 @@ eleventyComputed:
         <i data-lucide="mail" class="w-4 h-4"></i>
         {{ shop.buttonLabel }}
       </a>
+      {% endif %}
       {% endif %}
       {% else %}
       {% if shop.orderText %}
