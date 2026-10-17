@@ -365,6 +365,10 @@ content:
       - name: image3Alt
         label: Image 3 description
         type: string
+      - name: showFaqs
+        label: Show questions section
+        description: Off hides the questions section from the page. The questions below are kept either way.
+        type: boolean
       - name: faqsTitle
         label: Questions heading
         type: string
