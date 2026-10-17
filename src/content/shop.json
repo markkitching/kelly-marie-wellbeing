@@ -36,7 +36,7 @@
     {
       "name": "Medium",
       "sets": 30,
-      "price": 279,
+      "price": 165,
       "button": "Enquire about Medium",
       "buyLink": "https://buy.stripe.com/bJeaEQascaJMgmO4cA8Zq01",
       "highlight": false
@@ -44,7 +44,7 @@
     {
       "name": "Large",
       "sets": 60,
-      "price": 349,
+      "price": 229,
       "extra": "Double the Medium pack for only £70 more!",
       "button": "Enquire about Large",
       "buyLink": "https://buy.stripe.com/fZu3co8k43hk2vY6kI8Zq00",
