@@ -633,6 +633,34 @@ It replaced the old Merchandise page (the `/merchandise/` address no longer exis
   Each button links to `/contact/?enquiry=Shop enquiry: <Pack> pack`; the contact form
   doesn't read that yet. Remove every pack to hide the section.
 - **Questions** are hidden unless *Show questions section* is ticked; they're kept either way.
+- **Card payments (Stripe Payment Links)**: each pricing pack has a *Stripe payment link*.
+  A pack is on sale only when that link starts `https://` **and** *Business address* is
+  filled in (UK law requires the address before anyone buys); otherwise its button stays an
+  enquiry and the build log warns. On sale, the button reads *Buy button text* ("Buy now")
+  and goes to Stripe, with *Enquiry link under the Buy button* ("Or pay by invoice") below.
+  Once any pack is on sale (`shopPage.selling`), the site automatically adds *Terms of sale*
+  to the footer and under the packs, lets search engines list `/terms/` (`src/terms.njk`),
+  and adds the shop sections to the privacy policy. Before that, `/terms/` exists for review
+  but is hidden and the privacy policy doesn't mention the shop.
+
+**Setting up a pack in Stripe** (in your own Stripe account, one link per pack):
+
+1. *Product catalogue* > *Add product*: the pack name (e.g. "Large pack, 60 sets") and its
+   price, one-off, in GBP. Make sure it matches the price in Page: Shop.
+2. *Payment links* > *New*, choose that product, then under its options:
+   - **Collect customers' addresses**: shipping addresses, United Kingdom only (delivery is free,
+     so no shipping rate);
+   - **Add custom fields**: three optional *Text* fields matching the box on the sheets,
+     "Manager or HR", "Employee helpline (EAP)" and "Mental health first aiders" (Stripe
+     allows up to 255 characters each);
+   - **Collect business name** (and tax ID if useful) under the customer options;
+   - **Allow customers to adjust quantity** only if a buyer can order more than one pack.
+3. Copy the link (`https://buy.stripe.com/...`) into that pack's *Stripe payment link*.
+4. *Settings* > *Notifications*: turn on emails for successful payments. Each order's
+   address and support contacts are under *Payments* in Stripe.
+
+Test first in Stripe's **test mode** (links start `https://buy.stripe.com/test_`) with the
+card 4242 4242 4242 4242, any future date and any CVC, then swap in the live links.
 
 ### Fonts, icons and the share image
 

@@ -35,6 +35,12 @@ module.exports = () => {
   const sheetsPerSet = num(raw.sheetsPerSet) || 15;
   const vatLabel = clean(raw.vatLabel);
   const withVat = (text) => (vatLabel ? `${text} ${vatLabel}` : text);
+  // A pack is on sale (its button goes to Stripe's checkout) only when it has a Stripe
+  // payment link AND the business address is filled in: UK law requires the address to be
+  // shown before anyone buys. Otherwise its button stays an enquiry. `selling` (any pack on
+  // sale) switches on the Terms of sale link in the footer, /terms/ for search engines, and
+  // the shop sections of the privacy policy.
+  const address = clean(raw.sellerAddress);
   const series = { understanding: clean(raw.seriesUnderstanding), quickTips: clean(raw.seriesQuickTips) };
   const packs = (Array.isArray(raw.packs) ? raw.packs : [])
     .filter((pack) => pack && clean(pack.name) && num(pack.price) !== null && num(pack.sets))
@@ -51,6 +57,11 @@ module.exports = () => {
         console.warn(`[content] shop.json: ${name} pack's ${sheets} sheets doesn't match ${sets} sets × ${sheetsPerSet}`);
       }
       const values = { sets, sheets, price: pounds(price), perSet: pounds(perSet), ...series };
+      const buyLink = clean(pack.buyLink);
+      const onSale = Boolean(address) && /^https:\/\//.test(buyLink);
+      if (buyLink && !onSale) {
+        console.warn(`[content] shop.json: ${name} pack has a Stripe link but ${address ? "it doesn't start https://" : "there's no business address"}, so it stays an enquiry`);
+      }
       return {
         name,
         highlight: pack.highlight === true,
@@ -60,6 +71,8 @@ module.exports = () => {
         perSetText: fill(raw.perSetText, values),
         extra: fill(pack.extra, values),
         button: clean(pack.button) || `Enquire about ${name}`,
+        onSale,
+        buyLink,
         enquiry: `Shop enquiry: ${name} pack`,
       };
     });
@@ -75,11 +88,16 @@ module.exports = () => {
     pricing: {
       heading: clean(raw.pricingHeading),
       packs,
+      buyLabel: clean(raw.buyLabel) || "Buy now",
+      invoiceLabel: clean(raw.invoiceLabel),
       vatLabel,
       perSetVat: withVat,
       bestValueLabel: clean(raw.bestValueLabel),
       footnote: fill(raw.pricingFootnote, series),
     },
+    selling: packs.some((pack) => pack.onSale),
+    series,
+    address,
     orderHeading: clean(raw.orderHeading),
     orderText: clean(raw.orderText),
     buttonLabel: clean(raw.buttonLabel),

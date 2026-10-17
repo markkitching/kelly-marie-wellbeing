@@ -6,7 +6,8 @@ pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal
 {#- Covers the website only: the contact form, the cost calculator's summary form and
     the outside services the pages load. Counselling client records are governed
     separately, under BACP guidelines. Not in the CMS; linked from the footer and from
-    both forms' consent boxes. -#}
+    both forms' consent boxes. The shop parts appear only once a pack is on sale through
+    Stripe (shopPage.selling), so the policy never describes a service that isn't running. -#}
 {%- set orgName = content.header.logoLine1 + " " + content.header.logoLine2 -%}
 {% include "site-header.njk" %}
 
@@ -23,7 +24,7 @@ pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal
 
     <p>
       This policy explains how {{ orgName }} ("we", "us") collects and uses personal information through this
-      website, and your rights over it. It covers the website only. Information shared in counselling sessions
+      website{% if shopPage.selling %} and our shop{% endif %}, and your rights over it. It covers the website only. Information shared in counselling sessions
       is handled separately and in strict confidence, in line with BACP ethical guidelines.
     </p>
 
@@ -54,9 +55,24 @@ pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal
       a mailing list.
     </p>
 
+    {%- if shopPage.selling %}
+    <h3>Shop orders</h3>
+    <p>
+      When you buy from our shop, you pay on a checkout page run by Stripe. We receive your name, email address,
+      delivery address, what you bought and how much you paid, plus any support contacts you add for printing. Stripe
+      handles your card details; we never see or store them. We use this information to print, post and support your
+      order, and to keep the business records the law requires.
+    </p>
+    <p>
+      Support contacts often include other people's names and phone numbers, so please only add people who have
+      agreed to be listed. We use them only to print your sheets.
+    </p>
+    {%- endif %}
+
     <h3>Do you have to give us your details?</h3>
     <p>
-      No. But we need at least your name and email address to reply to an enquiry or provide a summary. We don't
+      No. But we need at least your name and email address to reply to an enquiry or provide a summary{% if shopPage.selling %}, and
+      your delivery details to send an order{% endif %}. We don't
       use your information for automated decision-making or profiling.
     </p>
 
@@ -66,6 +82,12 @@ pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal
       it at any time by emailing us, and we will delete your details. Where you go on to use our services, we
       also process your information to take steps at your request before entering into a contract with you.
     </p>
+    {%- if shopPage.selling %}
+    <p>
+      For shop orders, we use your information because we need it to fulfil our <strong>contract</strong> with you,
+      and we keep order records because the law requires us to (<strong>legal obligation</strong>).
+    </p>
+    {%- endif %}
 
     <h2>Who we share it with</h2>
     <p>
@@ -74,6 +96,10 @@ pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal
     </p>
     <ul>
       <li><strong>Formspree</strong> receives form submissions, keeps a copy in our Formspree account and forwards them to us by email. Formspree is based in the United States, so your information is transferred to and stored there. Formspree protects these transfers using Standard Contractual Clauses, contract terms approved under data protection law for this purpose.</li>
+      {%- if shopPage.selling %}
+      <li><strong>Stripe</strong> takes payments for shop orders and keeps a record of each order in our Stripe account. Stripe may transfer information to the United States, protected by Standard Contractual Clauses. Stripe's own use of your information is covered by <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener">Stripe's privacy policy</a>.</li>
+      <li><strong>Royal Mail</strong> or another delivery company receives your name and address to deliver your order.</li>
+      {%- endif %}
       <li><strong>Hostinger</strong>, our email provider, stores the emails we receive, including form submissions.</li>
       <li><strong>Cloudflare</strong> hosts the website and, like any web host, processes technical information such as your IP address to deliver pages and protect the site. The site's styling, fonts and icons are all served from this website itself.</li>
       <li><strong>YouTube</strong>: on the Podcast page, each episode's preview image is loaded from YouTube when the page opens, which shares your IP address with YouTube (Google). The video player itself loads only if you press play, using YouTube's privacy-enhanced mode.</li>
@@ -85,10 +111,18 @@ pageDescription: "How Kelly Marie Wellbeing collects, uses and protects personal
       up to 12 months from our last contact with you, then delete them. If we go on to work together, records relating to that work are kept as set
       out in our agreement with you or your organisation.
     </p>
+    {%- if shopPage.selling %}
+    <p>
+      We keep shop order records, in our Stripe account and our email, for six years, because tax law requires us to
+      keep business records. Then we delete them.
+    </p>
+    {%- endif %}
 
     <h2>Cookies</h2>
     <p>
-      This website doesn't set any cookies of its own, and doesn't use advertising or tracking cookies.
+      This website doesn't set any cookies of its own, and doesn't use advertising or tracking cookies.{% if shopPage.selling %}
+      Stripe's checkout page is on Stripe's own website, and the cookies it uses there are covered by Stripe's
+      privacy policy.{% endif %}
     </p>
     <ul>
       <li>If you request the cost calculator's printable summary, your browser's session storage remembers that you've done so, so you aren't asked again during your visit. Nothing else is stored, and it's cleared when you close the tab.</li>

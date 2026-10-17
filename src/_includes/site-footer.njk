@@ -53,7 +53,7 @@
 
       <!-- Bottom bar -->
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-mist">
-        <p>&copy; <span id="year"></span> {{ content.header.logoLine1 }} {{ content.header.logoLine2 }}. All rights reserved. <a href="/privacy/" class="underline underline-offset-2 hover:text-sage-light transition-colors">Privacy</a></p>
+        <p>&copy; <span id="year"></span> {{ content.header.logoLine1 }} {{ content.header.logoLine2 }}. All rights reserved. <a href="/privacy/" class="underline underline-offset-2 hover:text-sage-light transition-colors">Privacy</a>{% if shopPage.selling %} &middot; <a href="/terms/" class="underline underline-offset-2 hover:text-sage-light transition-colors">Terms of sale</a>{% endif %}</p>
         <p>All client information treated in strict confidence in accordance with BACP ethical guidelines.</p>
       </div>
       {#- The HSE statistics quoted on the site are published under the Open Government
