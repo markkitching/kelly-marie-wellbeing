@@ -23,7 +23,7 @@
       "text": "A5 size, made to sit in a leaflet holder or pin to a board"
     }
   ],
-  "pricingHeading": "Choose Your Pack",
+  "pricingHeading": "Choose your pack",
   "packs": [
     {
       "name": "Small",
@@ -63,7 +63,7 @@
   "seriesQuickTips": "What Helps",
   "image2": "/images/preview_2_support_box.jpg",
   "image2Alt": "A \"What Helps\" sheet with a box for the company's own support contacts",
-  "orderHeading": "Order for your Workplace",
+  "orderHeading": "Order for your workplace",
   "orderText": "Need a different quantity, or something else? Get in touch.",
   "buttonLabel": "Enquire to order",
   "buttonLink": "/contact/",
