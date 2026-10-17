@@ -121,7 +121,7 @@ Stored in `src/content/menu.json` as:
 
 ### ✅ 2. Page content — editable
 
-Each standalone page has its own editor entry (**Page: Podcast**, **Page: Merchandise**
+Each standalone page has its own editor entry (**Page: Podcast**, **Page: Shop**
 and so on). A page is assembled from **optional blocks** — fill in the ones that suit
 the page and leave the rest empty. Blocks render in the fixed order below, and their
 backgrounds alternate light/dark automatically, so the page keeps its rhythm whichever
@@ -135,7 +135,7 @@ combination is in use.
 | **Checklist** | `checklistTitle` + `checklistItems` rows of *text*, shown two-up with ticks | Counselling, Training |
 | **Listen links** | Section heading + rows of *label, icon, link* | Podcast |
 | **Episodes** | Section heading + rows of *number, title, description, meta, YouTube link, Spotify link* | Podcast |
-| **Products** | Section heading + rows of *name, price, description, photo, meta, link* | Merchandise |
+| **Products** | Section heading + rows of *name, price, description, photo, meta, link* | (not used at present) |
 | **People** | Section heading + rows of *name, role, credentials, bio, photo* | Meet the Team |
 | **Quote** | Quote + attribution, on the dark band | Counselling, Training |
 | **FAQs** | Section heading + rows of *question, answer*, as an accordion | Counselling, Training, Meet the Team |
@@ -606,6 +606,25 @@ there falls back to the default in `src/js/cost-calculator.js`.
   Formspree endpoint as the contact form, with the subject "Cost calculator lead" and the
   visitor's figures attached. Nothing they type is sent anywhere until they submit it.
 - Everything is worked out in the browser; there is no server code.
+
+### Shop page (draft)
+
+`/shop/` sells printed mental health sheets by enquiry: no basket, checkout or payment code.
+It replaced the old Merchandise page (the `/merchandise/` address no longer exists).
+
+| File | Role |
+|---|---|
+| `src/shop.njk` | The page's own layout (heading, range list, ordering box, branded version, questions) |
+| `src/content/shop.json` | Its wording and images — **Page: Shop** in the editor |
+| `src/_data/shopPage.js` | Loads it; a blank button link falls back to the contact page |
+
+- **Published** (a switch on the form) is off while the page is prepared. Off, the page is
+  still built at `/shop/` for review but is marked `noindex`, left off the "page not found"
+  list, and kept out of the menu even if *Show in menu* is ticked for Shop. To go live,
+  switch it on, then tick *Show in menu* under **Main menu**.
+- **Order button**: its text and link are one field each, so proper online ordering can be
+  wired in later with a single edit.
+- **Images**: until a file is chosen, each image slot shows a placeholder with its description.
 
 ### Fonts, icons and the share image
 

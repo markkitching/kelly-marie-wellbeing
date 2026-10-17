@@ -1,0 +1,138 @@
+---
+permalink: "/shop/"
+pageTitle: "Shop"
+eleventyComputed:
+  # Kept out of search engines until "Published" is switched on in the CMS.
+  noindex: "{{ '' if shopPage.published else 'yes' }}"
+  # | safe so the text is escaped once, by site-header, not twice.
+  pageDescription: "{{ shopPage.intro | safe }}"
+---
+{#- The Shop page: printed mental health sheets, ordered by enquiry. Content comes from
+    src/content/shop.json ("Page: Shop" in the CMS) via _data/shopPage.js. No basket or
+    payment code: the single order button's text and link are one field each.
+    Sections alternate light backgrounds like the site's other pages, and every two-column
+    row stacks in reading order on a phone. -#}
+{%- set shop = shopPage -%}
+{% include "site-header.njk" %}
+
+{#- An image, or a placeholder carrying its description until the file is uploaded. -#}
+{%- macro shopImage(image) -%}
+{% if image.src %}
+<img src="{{ image.src }}" alt="{{ image.alt }}" loading="lazy" class="w-full h-auto rounded-lg border border-gray-100" />
+{% else %}
+<div class="aspect-[4/3] rounded-lg photo-placeholder flex flex-col items-center justify-center gap-3 text-center p-8" role="img" aria-label="{{ image.alt }}">
+  <i data-lucide="image" class="w-10 h-10 text-sage" aria-hidden="true"></i>
+  <span class="text-sm text-gray-600 max-w-xs" aria-hidden="true">Image to come: {{ image.alt }}</span>
+</div>
+{% endif %}
+{%- endmacro -%}
+
+<!-- ══════════════════════════ HEADING BAND ══════════════════════════ -->
+<section class="bg-stone py-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    {% if shop.eyebrow %}
+    <div class="flex items-center justify-center gap-2 mb-6">
+      <span class="w-px h-5 bg-sage"></span>
+      <span class="text-sage text-sm font-semibold uppercase tracking-widest">{{ shop.eyebrow }}</span>
+      <span class="w-px h-5 bg-sage"></span>
+    </div>
+    {% endif %}
+    <h1 class="font-serif text-forest text-4xl lg:text-5xl leading-tight">{{ shop.heading or "Shop" }}</h1>
+    <div class="divider mt-6 mb-8 mx-auto"></div>
+    {% if shop.intro %}
+    <p class="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto">{{ shop.intro | lines }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ══════════════════════════ THE RANGE ══════════════════════════ -->
+<section class="bg-white py-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+    <div>{{ shopImage(shop.images[0]) }}</div>
+    <div>
+      {% if shop.rangeTitle %}
+      <h2 class="font-serif text-forest text-3xl">{{ shop.rangeTitle }}</h2>
+      <div class="divider mt-4 mb-8"></div>
+      {% endif %}
+      <ul class="space-y-4">
+        {% for item in shop.rangeItems %}
+        <li class="flex items-start gap-3">
+          <span class="w-5 h-5 rounded-full bg-sage/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <i data-lucide="check" class="w-3 h-3 text-forest"></i>
+          </span>
+          <span class="text-gray-600 leading-relaxed">{{ item.text }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ ORDERING ══════════════════════════ -->
+<section class="bg-stone py-20" id="order">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+    <div>{{ shopImage(shop.images[1]) }}</div>
+    <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest p-6 sm:p-8">
+      {% if shop.orderHeading %}
+      <h2 class="font-serif text-forest text-2xl sm:text-3xl">{{ shop.orderHeading }}</h2>
+      {% endif %}
+      {% if shop.orderText %}
+      <p class="text-gray-600 leading-relaxed mt-3">{{ shop.orderText | lines }}</p>
+      {% endif %}
+      {% if shop.buttonLabel %}
+      <a href="{{ shop.buttonLink }}" class="mt-6 inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors">
+        <i data-lucide="mail" class="w-4 h-4"></i>
+        {{ shop.buttonLabel }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ BRANDED VERSION ══════════════════════════ -->
+{%- if shop.brandedHeading or shop.brandedText or shop.images[2].src or shop.images[2].alt %}
+<section class="bg-white py-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      {% if shop.brandedHeading %}
+      <h2 class="font-serif text-forest text-3xl">{{ shop.brandedHeading }}</h2>
+      <div class="divider mt-4 mb-6"></div>
+      {% endif %}
+      {% if shop.brandedText %}
+      <p class="text-gray-600 text-lg leading-relaxed">{{ shop.brandedText | lines }}</p>
+      {% endif %}
+    </div>
+    <div>{{ shopImage(shop.images[2]) }}</div>
+  </div>
+</section>
+{%- endif %}
+
+<!-- ══════════════════════════ QUESTIONS ══════════════════════════ -->
+{%- if shop.faqs | length %}
+<section class="bg-stone py-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="font-serif text-forest text-3xl text-center">{{ shop.faqsTitle or "Questions" }}</h2>
+    <div class="divider mt-4 mb-12 mx-auto"></div>
+    <div class="max-w-3xl mx-auto divide-y divide-gray-200 border-t border-b border-gray-200">
+      {% for faq in shop.faqs %}
+      <details class="faq group">
+        <summary class="flex items-center justify-between gap-4 cursor-pointer py-5 list-none">
+          <span class="font-medium text-forest">{{ faq.question }}</span>
+          <i data-lucide="plus" class="faq-icon w-4 h-4 text-sage flex-shrink-0"></i>
+        </summary>
+        {% if faq.answer or faq.linkLabel %}
+        <div class="text-gray-600 text-sm leading-relaxed pb-5 pr-8">
+          {{ faq.answer | lines }}
+          {% if faq.linkLabel and faq.linkHref %}
+          <a href="{{ faq.linkHref }}" class="text-forest font-medium underline underline-offset-2 hover:text-sage">{{ faq.linkLabel }}</a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{% include "site-footer.njk" %}

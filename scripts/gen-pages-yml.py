@@ -12,11 +12,12 @@ PAGES = json.loads((ROOT / "src/_data/newPages.json").read_text())
 # The Counselling page is built from the homepage's seven sections rather than from
 # blocks, so it gets no entry here — its forms are copied from the homepage ones below.
 SECTION_PAGES = {"counselling"}
+# Pages with a layout and form of their own (see base-forms.yml), so no block form here.
+OWN_FORM_PAGES = {"shop"}
 
 BLOCKS = {
     "training-coaching": ["cards", "checklist", "quote", "faqs"],
     "podcast":           ["links", "episodes"],
-    "merchandise":       ["products"],
     "meet-the-team":     ["people", "faqs"],
 }
 
@@ -266,7 +267,7 @@ def section_forms(slug, title, shown, *, prefixed=True):
 # untouched; everything else is prefixed with its page.
 entries = section_forms("index", "", SECTIONS_SHOWN["index"], prefixed=False)
 entries += section_forms("standalone", "", STANDALONE_FORMS, prefixed=False)
-entries += "".join(build(p["slug"], p["title"]) for p in PAGES if p["slug"] not in SECTION_PAGES)
+entries += "".join(build(p["slug"], p["title"]) for p in PAGES if p["slug"] not in SECTION_PAGES | OWN_FORM_PAGES)
 entries += section_forms("counselling", "Counselling", SECTIONS_SHOWN["counselling"])
 
 PREAMBLE = """# GENERATED FILE — do not edit.
@@ -287,5 +288,5 @@ if "__ICON_VALUES__" in new:
     raise SystemExit("an icon placeholder was left unexpanded")
 (ROOT / ".pages.yml").write_text(new)
 section_count = len(SECTION_LABELS) - len(SECTIONS_OMITTED.get("counselling", set()))
-print(f"rewrote {len(PAGES) - len(SECTION_PAGES)} block pages + {section_count} counselling sections"
+print(f"rewrote {len(PAGES) - len(SECTION_PAGES) - len(OWN_FORM_PAGES)} block pages + {section_count} counselling sections"
       f" — .pages.yml is now {len(new.splitlines())} lines")
