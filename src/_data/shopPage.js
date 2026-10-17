@@ -41,6 +41,7 @@ module.exports = () => {
     buttonLink: clean(raw.buttonLink) || CONTACT_URL,
     brandedHeading: clean(raw.brandedHeading),
     brandedText: clean(raw.brandedText),
+    showFaqs: raw.showFaqs === true,
     faqsTitle: clean(raw.faqsTitle),
     faqs: rows(raw.faqs, "question", ["question", "answer", "linkLabel", "linkHref"]),
   };

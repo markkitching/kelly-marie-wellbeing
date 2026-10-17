@@ -1,4 +1,42 @@
 ---
+# ── PRICING ── Every pack name, quantity, price and label shown in the pricing section
+# lives here, so they can change without touching the layout below.
+#   sets    = copies of each sheet; sheets = total printed sheets
+#   price   = in pounds; perSet = price per set, shown as typed (the build warns if it
+#             stops matching price ÷ sets, or if sheets stops matching sets × sheets in a set)
+#   extra   = optional line under the price; highlight = the "Best value" card
+#   vatLabel shows after every price when filled in, e.g. "+ VAT"
+pricing:
+  heading: "Choose your pack"
+  vatLabel: ""
+  bestValueLabel: "Best value"
+  series:
+    understanding: "Understanding"
+    quickTips: "Quick Tips"
+  sheetsPerSet: 15
+  footnote: "Every pack: your own support contacts printed on each {quickTips} sheet, thick 225gsm matte card, free UK delivery."
+  packs:
+    - name: "Small"
+      sets: 15
+      sheets: 225
+      price: 149
+      perSet: 9.93
+      button: "Enquire about Small"
+    - name: "Medium"
+      sets: 30
+      sheets: 450
+      price: 279
+      perSet: 9.30
+      button: "Enquire about Medium"
+    - name: "Large"
+      sets: 60
+      sheets: 900
+      price: 349
+      perSet: 5.82
+      extra: "Double the Medium pack for £70 more."
+      button: "Enquire about Large"
+      highlight: true
+# ─────────────────────────────────────────────────────────────────────────────────────
 permalink: "/shop/"
 pageTitle: "Shop"
 eleventyComputed:
@@ -10,6 +48,7 @@ eleventyComputed:
 {#- The Shop page: printed mental health sheets, ordered by enquiry. Content comes from
     src/content/shop.json ("Page: Shop" in the CMS) via _data/shopPage.js. No basket or
     payment code: the single order button's text and link are one field each.
+    Pack prices are in the `pricing` block in the front matter, not the CMS.
     Sections alternate light backgrounds like the site's other pages, and every two-column
     row stacks in reading order on a phone. -#}
 {%- set shop = shopPage -%}
@@ -68,8 +107,52 @@ eleventyComputed:
   </div>
 </section>
 
+<!-- ══════════════════════════ PRICING ══════════════════════════ -->
+{#- Driven entirely by `pricing` in the front matter above. Cards sit side by side from
+    lg up and stack below that, with the highlighted pack first. Each button goes to the
+    contact page with the pack named in the link (?enquiry=), ready for the form to read. -#}
+{%- macro money(amount) -%}£{{ amount if amount % 1 == 0 else amount.toFixed(2) }}{%- endmacro -%}
+{%- set quickTipsName = pricing.series.quickTips -%}
+<section class="bg-stone py-20" id="pricing">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if pricing.heading %}
+    <h2 class="font-serif text-forest text-3xl text-center">{{ pricing.heading }}</h2>
+    <div class="divider mt-4 mb-12 mx-auto"></div>
+    {% endif %}
+    <div class="grid lg:grid-cols-3 gap-8 max-w-sm mx-auto lg:max-w-none">
+      {% for pack in pricing.packs %}
+      {#- Build-time checks: a typo in a figure shows up as a warning, not on the page. -#}
+      {%- if ((pack.price / pack.sets) * 100) | round != (pack.perSet * 100) | round %}{% set _w = ("[shop] " + pack.name + ": per-set price " + pack.perSet + " doesn't match " + pack.price + " ÷ " + pack.sets) | log %}{% endif %}
+      {%- if pack.sheets != pack.sets * pricing.sheetsPerSet %}{% set _w = ("[shop] " + pack.name + ": " + pack.sheets + " sheets doesn't match " + pack.sets + " sets × " + pricing.sheetsPerSet) | log %}{% endif %}
+      <div class="relative bg-white rounded-lg p-6 sm:p-8 flex flex-col text-center {{ 'border-2 border-forest shadow-md order-first lg:order-none' if pack.highlight else 'border border-gray-200' }}">
+        {% if pack.highlight and pricing.bestValueLabel %}
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-forest text-white text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full">{{ pricing.bestValueLabel }}</span>
+        {% endif %}
+        <h3 class="font-serif text-forest text-2xl">{{ pack.name }}</h3>
+        <p class="mt-3 font-medium text-forest">{{ pack.sets }} sets</p>
+        <p class="text-gray-600 text-sm">{{ pack.sets }} copies of each sheet, {{ pack.sheets }} sheets</p>
+        <p class="mt-6 font-serif text-forest text-4xl">{{ money(pack.price) }}{% if pricing.vatLabel %} <span class="font-sans text-base text-gray-600">{{ pricing.vatLabel }}</span>{% endif %}</p>
+        <p class="mt-1 text-gray-600 text-sm">{{ money(pack.perSet) }} per set{% if pricing.vatLabel %} {{ pricing.vatLabel }}{% endif %}</p>
+        {% if pack.extra %}
+        <p class="mt-4 text-forest text-sm font-medium">{{ pack.extra }}</p>
+        {% endif %}
+        <div class="mt-auto pt-6">
+          <a href="{{ links.contact }}?enquiry={{ ('Shop enquiry: ' + pack.name + ' pack') | urlencode }}" class="w-full inline-flex items-center justify-center gap-2 font-medium px-6 py-3 rounded transition-colors {{ 'bg-forest text-white hover:bg-sage' if pack.highlight else 'border border-forest text-forest hover:bg-forest hover:text-white' }}">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            {{ pack.button }}
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if pricing.footnote %}
+    <p class="mt-10 text-center text-gray-600 max-w-2xl mx-auto">{{ pricing.footnote | replace("{quickTips}", quickTipsName) | replace("{understanding}", pricing.series.understanding) }}</p>
+    {% endif %}
+  </div>
+</section>
+
 <!-- ══════════════════════════ ORDERING ══════════════════════════ -->
-<section class="bg-stone py-20" id="order">
+<section class="bg-white py-20" id="order">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
     <div>{{ shopImage(shop.images[1]) }}</div>
     <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest p-6 sm:p-8">
@@ -91,7 +174,7 @@ eleventyComputed:
 
 <!-- ══════════════════════════ BRANDED VERSION ══════════════════════════ -->
 {%- if shop.brandedHeading or shop.brandedText or shop.images[2].src or shop.images[2].alt %}
-<section class="bg-white py-20">
+<section class="bg-stone py-20">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
     <div>
       {% if shop.brandedHeading %}
@@ -108,8 +191,10 @@ eleventyComputed:
 {%- endif %}
 
 <!-- ══════════════════════════ QUESTIONS ══════════════════════════ -->
-{%- if shop.faqs | length %}
-<section class="bg-stone py-20">
+{#- Hidden unless "Show questions section" is ticked in Page: Shop; the questions
+    themselves stay in the CMS either way. -#}
+{%- if shop.showFaqs and shop.faqs | length %}
+<section class="bg-white py-20">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="font-serif text-forest text-3xl text-center">{{ shop.faqsTitle or "Questions" }}</h2>
     <div class="divider mt-4 mb-12 mx-auto"></div>
