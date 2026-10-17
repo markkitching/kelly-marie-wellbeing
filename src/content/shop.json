@@ -52,7 +52,6 @@
     }
   ],
   "buyLabel": "Buy now",
-  "invoiceLabel": "Or pay by invoice",
   "sellerAddress": "104 Main Street, Leeds, LS25 5DU",
   "setsText": "{sets} sets",
   "packDetailText": "{sets} copies of each sheet, {sheets} sheets",
