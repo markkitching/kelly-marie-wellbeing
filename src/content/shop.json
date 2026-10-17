@@ -23,6 +23,42 @@
       "text": "A5 size, made to sit in a leaflet holder or pin to a board"
     }
   ],
+  "pricingHeading": "Choose your pack",
+  "packs": [
+    {
+      "name": "Small",
+      "sets": 15,
+      "price": 149,
+      "extra": "",
+      "button": "Enquire about Small",
+      "highlight": false
+    },
+    {
+      "name": "Medium",
+      "sets": 30,
+      "price": 279,
+      "extra": "",
+      "button": "Enquire about Medium",
+      "highlight": false
+    },
+    {
+      "name": "Large",
+      "sets": 60,
+      "price": 349,
+      "extra": "Double the Medium pack for £70 more.",
+      "button": "Enquire about Large",
+      "highlight": true
+    }
+  ],
+  "setsText": "{sets} sets",
+  "packDetailText": "{sets} copies of each sheet, {sheets} sheets",
+  "perSetText": "{perSet} per set",
+  "vatLabel": "",
+  "bestValueLabel": "Best value",
+  "pricingFootnote": "Every pack: your own support contacts printed on each {quickTips} sheet, thick 225gsm matte card, free UK delivery.",
+  "sheetsPerSet": 15,
+  "seriesUnderstanding": "Understanding",
+  "seriesQuickTips": "Quick Tips",
   "image2": "/images/shop-support-box.jpg",
   "image2Alt": "A Quick Tips sheet with a box for the company's own support contacts",
   "orderHeading": "Order for your Workplace",

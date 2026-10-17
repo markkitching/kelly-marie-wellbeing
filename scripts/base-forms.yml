@@ -291,6 +291,83 @@ content:
           - name: text
             label: Text
             type: string
+      - name: pricingHeading
+        label: Pricing heading
+        type: string
+      - name: packs
+        label: Pricing packs
+        description: One card each, in this order on a computer (the highlighted pack moves to the top on phones). Remove every pack to hide the pricing section.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{name}'
+        fields:
+          - name: name
+            label: Pack name
+            type: string
+          - name: sets
+            label: Sets
+            description: Copies of each sheet in the pack.
+            type: number
+          - name: sheets
+            label: Total sheets
+            description: Best left blank, so it is worked out from the sets (sets × sheets in a set) and stays right if they change.
+            type: number
+          - name: price
+            label: Price (£)
+            description: Numbers only, e.g. 149.
+            type: number
+          - name: perSet
+            label: Price per set (£)
+            description: Best left blank, so it is worked out from the price and sets and stays right if the price changes.
+            type: number
+          - name: extra
+            label: Extra line
+            description: Optional line under the price, e.g. "Double the Medium pack for £70 more." This is typed text, so update it if the prices change.
+            type: string
+          - name: button
+            label: Button text
+            description: The button goes to the contact page. Blank shows "Enquire about" and the pack name.
+            type: string
+          - name: highlight
+            label: Highlight as best value
+            description: Gives this card a stronger border, the label below, and puts it first on phones. Tick one pack only.
+            type: boolean
+      - name: setsText
+        label: Sets line
+        description: Shown under each pack name. {sets} is replaced with the pack's number of sets.
+        type: string
+      - name: packDetailText
+        label: Pack detail line
+        description: '{sets} and {sheets} are replaced with each pack''s figures.'
+        type: string
+      - name: perSetText
+        label: Price per set line
+        description: '{perSet} is replaced with each pack''s price per set, e.g. £9.93.'
+        type: string
+      - name: vatLabel
+        label: VAT label
+        description: Leave blank, or e.g. "+ VAT" to show it after every price.
+        type: string
+      - name: bestValueLabel
+        label: Highlight label
+        description: The small label on the highlighted pack, e.g. "Best value".
+        type: string
+      - name: pricingFootnote
+        label: Line under the packs
+        description: '{quickTips} and {understanding} are replaced with the sheet series names below.'
+        type: text
+      - name: sheetsPerSet
+        label: Sheets in a set
+        description: Used to work out total sheets. Currently 15.
+        type: number
+      - name: seriesUnderstanding
+        label: Series name (Understanding guides)
+        type: string
+      - name: seriesQuickTips
+        label: Series name (Quick Tips sheets)
+        type: string
       - name: image2
         label: Image 2 (next to the ordering box)
         type: image
