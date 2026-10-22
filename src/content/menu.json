@@ -26,7 +26,7 @@
     },
     {
       "item": "shop",
-      "visible": false
+      "visible": true
     },
     {
       "item": "meet-the-team",
