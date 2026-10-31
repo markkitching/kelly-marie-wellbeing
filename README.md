@@ -216,8 +216,8 @@ to show a playable still rather than just a link out.
 
 | Source | Setup | Reach |
 |---|---|---|
-| `youtube-rss` *(default)* | nothing at all | the 15 most recent videos |
-| `youtube-api` | a Google API key | the full back catalogue |
+| `youtube-rss` *(default)* | nothing at all | the 15 most recent full-length videos |
+| `youtube-api` | a Google API key | the full back catalogue, Shorts left out |
 | `spotify` | client id + secret | the show's episodes — kept working, but see above |
 
 **Setup: none.** The show's handle is committed in the sync script, and the `UC…` id
@@ -231,12 +231,22 @@ add it as the secret `YOUTUBE_API_KEY`, and set the variable `EPISODE_SOURCE` to
 `youtube-api`. It costs one quota unit per call against a free daily allowance of 10,000
 — the script uses `playlistItems.list` rather than `search.list`, which would cost 100.
 
+**Shorts are left out.** Both YouTube sources read the channel's long-form uploads
+playlist (`UULF…`, the channel id with `UC` swapped for `UULF`), which YouTube keeps
+without Shorts. It isn't officially documented, so the feed source also drops any video
+whose link is a `/shorts/` address; if the long-form feed ever disappears it falls back
+to the full channel feed and relies on that filter alone. The API source can't tell a
+Short from its listing, so without that playlist it stops rather than let Shorts in.
+Shorts pulled in before this change can be deleted in the CMS like any other episode.
+Live streams may sit outside the long-form playlist too, so if an episode is ever
+streamed live, check it arrived and add it by hand if not.
+
 > **If the lookup ever fails** — YouTube changes its page, or serves a consent page — the
 > sync stops with the reason and writes nothing. Setting `YOUTUBE_CHANNEL` to the `UC…`
 > id (YouTube Studio → Settings → Channel → Advanced) skips the lookup entirely.
 
 ```bash
-npm run test:sync                                       # the merge rules — 23 checks
+npm run test:sync                                       # the merge rules — 36 checks
 npm run sync:podcast                                    # no configuration needed
 node scripts/sync-podcast-episodes.js --dry-run         # show what would change
 node scripts/sync-podcast-episodes.js --fixture f.xml   # test against a saved feed
