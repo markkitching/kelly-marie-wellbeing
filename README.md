@@ -75,13 +75,31 @@ photos are editable. If something doesn't look right, you can always change it b
 | `scripts/sync-podcast-episodes.js` | Pulls recent episodes from YouTube (or Spotify) into the podcast page. |
 | `scripts/test-sync-merge.js` | Proves the sync can't undo the editor's order, edits or hidden episodes. |
 | `.github/workflows/checks.yml` | Runs every test and check above on each push and pull request. A failure shows as a red cross on GitHub but doesn't stop Cloudflare deploying. |
-| `src/_includes/site-header.njk` | Shared `<head>` + sticky nav. |
+| `src/_includes/site-header.njk` | Shared `<head>` + sticky nav. Defines the colour scheme as CSS variables (`--dark`, `--accent`, `--tint-soft` …) for hand-written styles. |
 | `src/_includes/site-footer.njk` | Shared footer + page scripts. |
+| `src/index.njk` | The homepage: the top section, then the tiles, calculator strip and closing box. |
+| `src/_includes/home-styles.njk` | The homepage's own styles, added to `<head>` only when a page sets `homePage: true`. |
+| `src/_data/homeTiles.js` | Which homepage tiles show (one per page in the menu), their links, and what they borrow from the pages they lead to. |
+| `src/content/home.json` | The homepage tiles' wording and optional pictures — **Homepage tiles** in the editor. |
+| `src/images/brand/tree-mask.png` | The tree logo as a white shape on transparent, used as a mask so the faint tree watermarks and the illustration take the scheme's colours. |
 
-**How the menu behaves:** the header shows the logo, a "Request a Consultation" button
-and a burger handle at every screen size. The handle opens one panel listing the links
-on a single level — no submenus, no separate desktop and mobile arrangements to keep in
-sync. It closes on link click, Escape, or a click outside.
+**How the menu behaves:** the header is a rounded bar floating at the top of every page,
+with the logo, the menu's links, and the header button. On wide screens (1024px and up)
+the links sit in the bar, leaving out Contact when the header button already goes there.
+Narrower than that, the links move into one panel behind a burger handle, which lists
+every link on a single level. If the editor switches on more than six bar links, the
+bar would get crowded, so the burger is used at every width instead. The panel closes on
+link click, Escape, or a click outside.
+
+**The homepage** is the top section (the **Top section (hero)** form) followed by a tile
+for each page, a cost calculator strip and a closing box (the **Homepage tiles** form).
+A tile shows only while its page is ticked under Main menu, so hiding a page, or leaving
+the shop unpublished, takes its tile away too; the rest close up to fill the row. Tile
+links come from the menu catalogue and can't be edited. To save typing things twice, the
+Training tile lists the Training & Coaching page's card titles, the Team tile shows the
+Meet the Team photos, and the Podcast and Shop tiles use those pages' artwork unless a
+picture is set. The Counselling tile shows a drawing of the tree on hills, coloured from
+the scheme, unless a photo is set.
 
 ### ✅ 1. Menu order and visibility — editable
 

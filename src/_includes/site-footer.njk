@@ -1,48 +1,50 @@
   </main>
 
   <!-- ═══════════════════════════════════════════════ FOOTER ═══════════════════════════════════════════════ -->
-  <footer class="bg-forest text-white py-12">
+  <footer class="site-footer pt-12 pb-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="grid md:grid-cols-3 gap-10 pb-10 border-b border-white/10">
+      <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pt-8 border-t border-gray-200">
 
         <!-- Brand -->
-        <div>
-          <div class="flex items-center gap-2 mb-4">
-            <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+        <div class="max-w-xs">
+          <a href="/" class="flex items-center gap-2.5 mb-3">
+            {% if content.header.logoImage %}
+            <img src="{{ content.header.logoImage }}" alt="" width="38" height="38" class="w-[38px] h-[38px] object-contain flex-shrink-0" />
+            {% else %}
+            <span class="w-8 h-8 rounded-full bg-forest flex items-center justify-center flex-shrink-0">
               <i data-lucide="{{ content.header.logoIcon }}" class="text-sage-light w-4 h-4"></i>
             </span>
-            <span class="font-serif text-white text-lg">{{ content.header.logoLine1 }} {{ content.header.logoLine2 }}</span>
-          </div>
-          <p class="text-mist text-sm leading-relaxed">
-            {{ content.footer.tagline | lines }}
-          </p>
+            {% endif %}
+            <span class="font-serif text-forest text-lg">{{ content.header.logoLine1 }} <em class="text-sage">{{ content.header.logoLine2 }}</em></span>
+          </a>
+          <p class="leading-relaxed">{{ content.footer.tagline | lines }}</p>
         </div>
 
         <!-- Quick links -->
-        <div>
-          <h2 class="font-serif text-white text-base mb-4">Quick Links</h2>
-          <ul class="space-y-2">
+        <nav aria-label="Footer">
+          <h2 class="sr-only">Quick Links</h2>
+          <ul class="flex flex-wrap gap-x-6 gap-y-2">
             {% for link in mainNav %}
-            <li><a href="{{ link.href }}" class="text-mist hover:text-sage-light text-sm transition-colors">{{ link.label }}</a></li>
+            <li><a href="{{ link.href }}">{{ link.label }}</a></li>
             {% endfor %}
           </ul>
-        </div>
+        </nav>
 
         <!-- Contact -->
         <div>
-          <h2 class="font-serif text-white text-base mb-4">Contact</h2>
-          <ul class="space-y-2.5">
-            <li class="flex items-center gap-2 text-mist text-sm">
-              <i data-lucide="mail" class="w-3.5 h-3.5 text-sage-light"></i>
-              <a href="mailto:{{ content.contact.email }}" class="hover:text-sage-light transition-colors">{{ content.contact.email }}</a>
+          <h2 class="sr-only">Contact</h2>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2">
+              <i data-lucide="mail" class="w-3.5 h-3.5 text-sage flex-shrink-0"></i>
+              <a href="mailto:{{ content.contact.email }}">{{ content.contact.email }}</a>
             </li>
             {%- for link in content.footer.socialLinks %}
             {%- set icon = socialIcons[link.platform] %}
             {%- if icon and link.href %}
-            <li class="flex items-center gap-2 text-mist text-sm">
-              <svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5 text-sage-light flex-shrink-0" aria-hidden="true"><path d="{{ icon.path }}"/></svg>
-              <a href="{{ link.href }}" target="_blank" rel="noopener" class="hover:text-sage-light transition-colors">{{ icon.label }}</a>
+            <li class="flex items-center gap-2">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5 text-sage flex-shrink-0" aria-hidden="true"><path d="{{ icon.path }}"/></svg>
+              <a href="{{ link.href }}" target="_blank" rel="noopener">{{ icon.label }}</a>
             </li>
             {%- endif %}
             {%- endfor %}
@@ -51,17 +53,17 @@
 
       </div>
 
-      <!-- Bottom bar -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-mist">
-        <p>&copy; <span id="year"></span> {{ content.header.logoLine1 }} {{ content.header.logoLine2 }}. All rights reserved. <a href="/privacy/" class="underline underline-offset-2 hover:text-sage-light transition-colors">Privacy</a>{% if shopPage.selling %} &middot; <a href="/terms/" class="underline underline-offset-2 hover:text-sage-light transition-colors">Terms of sale</a>{% endif %}</p>
+      <!-- Small print -->
+      <div class="small-print mt-8 space-y-2 text-xs text-gray-600">
+        <p>&copy; <span id="year"></span> {{ content.header.logoLine1 }} {{ content.header.logoLine2 }}. All rights reserved. <a href="/privacy/">Privacy</a>{% if shopPage.selling %} &middot; <a href="/terms/">Terms of sale</a>{% endif %}</p>
         <p>All client information treated in strict confidence in accordance with BACP ethical guidelines.</p>
+        {#- The HSE statistics quoted on the site are published under the Open Government
+            Licence, which asks for this credit. -#}
+        <p>
+          Contains public sector information licensed under the
+          <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>.
+        </p>
       </div>
-      {#- The HSE statistics quoted on the site are published under the Open Government
-          Licence, which asks for this credit. -#}
-      <p class="pt-4 text-xs text-mist text-center sm:text-left">
-        Contains public sector information licensed under the
-        <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener" class="underline underline-offset-2 hover:text-sage-light transition-colors">Open Government Licence v3.0</a>.
-      </p>
 
     </div>
   </footer>

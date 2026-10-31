@@ -178,18 +178,18 @@ def build(slug, title):
 SECTION_LABELS = {
     "hero": "Top section (hero)", "about": "About Kelly", "services": "Services",
     "workplace": "Workplace Wellness", "approach": "Therapeutic approach",
-    "process": "The process", "contact": "Contact",
+    "process": "The process", "contact": "Contact", "home": "Homepage tiles",
 }
 
 # Sections a page doesn't render, so it gets no form for them either. The Counselling
 # page has no enquiry form — its hero button goes to the homepage's.
 SECTIONS_OMITTED = {"counselling": {"contact"}}
 
-# What each page actually renders, mirroring `sectionsShown` in the templates. The
-# homepage is its top section and nothing else; Contact keeps a form of its own because
-# the footer prints the email address and location on every page.
+# What each page actually renders. The homepage is its top section plus the tiles below
+# it (src/index.njk), which only the homepage has; Contact keeps a form of its own because
+# the footer prints the email address on every page.
 SECTIONS_SHOWN = {
-    "index": ["hero"],
+    "index": ["hero", "home"],
     "counselling": ["hero", "about", "services", "workplace", "approach", "process"],
 }
 # The contact section is no longer on any page's section list, but it has a page of its
@@ -287,6 +287,6 @@ new = expand_icons(PREAMBLE + base + entries)
 if "__ICON_VALUES__" in new:
     raise SystemExit("an icon placeholder was left unexpanded")
 (ROOT / ".pages.yml").write_text(new)
-section_count = len(SECTION_LABELS) - len(SECTIONS_OMITTED.get("counselling", set()))
+section_count = len(SECTIONS_SHOWN["counselling"])
 print(f"rewrote {len(PAGES) - len(SECTION_PAGES) - len(OWN_FORM_PAGES)} block pages + {section_count} counselling sections"
       f" — .pages.yml is now {len(new.splitlines())} lines")

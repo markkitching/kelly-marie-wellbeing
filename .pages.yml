@@ -572,6 +572,161 @@ content:
         label: Hero photo description
         description: Read aloud to people using screen readers. Describe what the photo shows, e.g. "Two people talking at a desk".
         type: string
+  - name: home
+    label: Homepage tiles
+    description: >-
+      Everything on the homepage under the top section. A page's tile shows only while that
+      page is ticked under Main menu, and its link can't be changed here. The Training tile
+      lists the card titles from the Training & Coaching page, and the Team tile shows the
+      photos from Meet the Team.
+    type: file
+    path: src/content/home.json
+    format: json
+    fields:
+      - name: tilesEyebrow
+        label: Tiles — small heading
+        type: string
+      - name: tilesHeadingLead
+        label: Tiles — heading, start
+        type: string
+      - name: tilesHeadingEmphasis
+        label: Tiles — heading, italic word(s)
+        type: string
+      - name: tilesHeadingEnd
+        label: Tiles — heading, end
+        type: string
+      - name: counsellingEyebrow
+        label: Counselling tile — small heading
+        type: string
+      - name: counsellingHeading
+        label: Counselling tile — heading
+        type: string
+      - name: counsellingText
+        label: Counselling tile — text
+        type: text
+      - name: counsellingImage
+        label: Counselling tile — photo (optional)
+        description: Leave empty to show the drawing of the tree on hills.
+        type: image
+      - name: counsellingImageAlt
+        label: Counselling tile — photo description
+        description: Read aloud to people using screen readers. Describe what the photo shows.
+        type: string
+      - name: counsellingLink
+        label: Counselling tile — link text
+        type: string
+      - name: trainingEyebrow
+        label: Training tile — small heading
+        type: string
+      - name: trainingHeading
+        label: Training tile — heading
+        type: string
+      - name: trainingLink
+        label: Training tile — link text
+        type: string
+      - name: podcastHeading
+        label: Podcast tile — heading
+        type: string
+      - name: podcastText
+        label: Podcast tile — text
+        type: text
+      - name: podcastImage
+        label: Podcast tile — picture (optional)
+        description: Leave empty to use the podcast artwork from the Podcast page.
+        type: image
+      - name: podcastLink
+        label: Podcast tile — link text
+        type: string
+      - name: shopHeading
+        label: Shop tile — heading
+        type: string
+      - name: shopText
+        label: Shop tile — text
+        type: text
+      - name: shopImage
+        label: Shop tile — picture (optional)
+        description: Leave empty to use the first image from the Shop page.
+        type: image
+      - name: shopLink
+        label: Shop tile — link text
+        type: string
+      - name: teamHeading
+        label: Team tile — heading
+        type: string
+      - name: teamText
+        label: Team tile — text
+        type: text
+      - name: teamLink
+        label: Team tile — link text
+        type: string
+      - name: calculatorHeading
+        label: Calculator strip — heading
+        type: string
+      - name: calculatorText
+        label: Calculator strip — text
+        type: text
+      - name: calculatorButton
+        label: Calculator strip — button text
+        description: Leave empty to remove the strip.
+        type: string
+      - name: ctaHeadingLead
+        label: Closing box — heading, start
+        type: string
+      - name: ctaHeadingEmphasis
+        label: Closing box — heading, italic end
+        type: string
+      - name: ctaText
+        label: Closing box — text
+        type: text
+      - name: ctaButton
+        label: Closing box — button text
+        description: Goes to the enquiry form. Clear every closing box field to remove the box.
+        type: string
+      - name: ctaButtonIcon
+        label: Closing box — button icon
+        type: select
+        options:
+          values:
+            - heart-handshake
+            - users
+            - megaphone
+            - user
+            - target
+            - infinity
+            - presentation
+            - briefcase
+            - message-circle
+            - brain
+            - shield
+            - clock
+            - layers
+            - monitor
+            - calendar
+            - mail
+            - award
+            - map-pin
+            - check
+            - leaf
+            - book-open
+            - mic
+            - music
+            - video
+            - headphones
+            - shopping-bag
+            - image
+            - activity
+            - compass
+            - sun
+            - graduation-cap
+            - handshake
+            - lightbulb
+            - sparkles
+            - phone
+            - quote
+            - gift
+            - package
+            - shirt
+            - coffee
   - name: contact
     label: Contact page
     type: file

@@ -66,6 +66,12 @@ module.exports = () => {
     // Secondary text on the dark background: a soft white, made just light enough to
     // read. (Fading white with opacity fails on the lighter dark colours, e.g. Terracotta.)
     mutedOnDark: readable(mix("#ffffff", dark, 0.45), "#ffffff", [dark, mix(dark, "#ffffff", 0.05)]),
+    // Soft tints of the accent, for the homepage's tile backgrounds and the hills in its
+    // illustration. Worked out from the scheme so they follow it when it changes. Only
+    // the softest carries text, and that text is dark grey or the main dark colour.
+    tintSoft: mix(accent, light, 0.86),
+    tintMid: mix(accent, light, 0.73),
+    tintDeep: mix(accent, light, 0.45),
   };
 };
 
