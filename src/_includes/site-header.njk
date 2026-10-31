@@ -49,7 +49,42 @@
   <script src="/js/vendor/lucide-1.55.0.min.js"></script>
 
   <style>
-    html { scroll-padding-top: 72px; }
+    /* The colour scheme (src/_data/colors.js) as variables, for the hand-written styles
+       below and on the homepage. Utility classes get the same colours from Tailwind. */
+    :root {
+      --dark: {{ colors.dark }};
+      --accent: {{ colors.accent }};
+      --accent-text: {{ colors.accentText }};
+      --accent-on-dark: {{ colors.accentOnDark }};
+      --muted-on-dark: {{ colors.mutedOnDark }};
+      --light: {{ colors.light }};
+      --cream: {{ colors.cream }};
+      --tint-soft: {{ colors.tintSoft }};
+      --tint-mid: {{ colors.tintMid }};
+      --tint-deep: {{ colors.tintDeep }};
+    }
+    html { scroll-padding-top: 96px; }
+
+    /* Header — a rounded bar floating over the top of the page */
+    .site-header { position: sticky; top: 0; z-index: 50; padding: 12px 16px 0; }
+    .site-header-in {
+      position: relative; max-width: 72rem; margin: 0 auto; height: 60px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 0 8px 0 18px; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9); border: 1px solid {{ colors.accent }}26;
+      box-shadow: 0 6px 24px {{ colors.dark }}0f;
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    }
+    .site-nav a { font-size: 14px; color: #374151; padding: 8px 13px; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: background-color 0.2s ease, color 0.2s ease; }
+    .site-nav a:hover { background: var(--cream); color: var(--dark); }
+    .site-nav a[aria-current="page"] { color: var(--dark); background: var(--cream); }
+    .pill-btn { border-radius: 999px; }
+
+    /* Footer — light, one row, with the small print underneath */
+    .site-footer { background: var(--light); color: #4b5563; font-size: 14px; }
+    .site-footer a { text-decoration: none; transition: color 0.2s ease; }
+    .site-footer a:hover { color: var(--dark); }
+    .site-footer .small-print a { text-decoration: underline; text-underline-offset: 2px; }
     /* Cards: a quiet border colour change on hover, no lift or shadow. The coloured top
        border some cards carry is left as it is. */
     .service-card { transition: border-color 0.2s ease; }
@@ -62,14 +97,14 @@
 
     /* Menu handle — three bars that fold into a cross */
     .nav-burger {
-      width: 44px; height: 44px; border-radius: 6px;
+      width: 44px; height: 44px; border-radius: 999px;
       display: inline-flex; align-items: center; justify-content: center;
       color: {{ colors.dark }};
-      border: 1px solid {{ colors.accent }}33;
-      background: transparent;
+      border: 1px solid transparent;
+      background: var(--cream);
       transition: background-color 0.2s ease, border-color 0.2s ease;
     }
-    .nav-burger:hover { background: {{ colors.accent }}14; border-color: {{ colors.accent }}66; }
+    .nav-burger:hover { border-color: {{ colors.accent }}66; }
     .nav-burger-bars { position: relative; width: 20px; height: 14px; }
     .nav-burger-bars span {
       position: absolute; left: 0; height: 2px; border-radius: 2px;
@@ -159,16 +194,19 @@
     .divider { width: 48px; height: 3px; background: {{ colors.accent }}; }
     /* A clear focus ring for keyboard users, everywhere. Inputs keep their own ring. */
     :focus-visible { outline: 3px solid {{ colors.accentText }}; outline-offset: 2px; }
-    footer :focus-visible, .bg-forest :focus-visible { outline-color: #ffffff; }
+    .bg-forest :focus-visible, .on-dark :focus-visible { outline-color: #ffffff; }
   </style>
   <!-- Site styles: built from styles/tailwind.css by `npm run build` (see tailwind.config.js),
        so nothing is downloaded from Tailwind and no styling script runs in the browser.
        Loaded after the <style> blocks above, where Tailwind's in-browser script used to put
        its rules, so utility classes still win any tie (e.g. the step connector's mt-7). -->
   <link rel="stylesheet" href="{{ '/css/site.css' | versioned }}" />
+  {%- if homePage %}
+  {% include "home-styles.njk" %}
+  {%- endif %}
 </head>
 
-<body class="font-sans bg-white text-gray-800 antialiased">
+<body class="font-sans bg-stone text-gray-800 antialiased">
 
   <!-- Lets keyboard and screen-reader users jump past the menu. Hidden until focused. -->
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-white focus:text-forest focus:font-medium focus:px-4 focus:py-2 focus:rounded focus:shadow">Skip to content</a>
@@ -176,34 +214,50 @@
   <!-- ═══════════════════════════════════════════════
        STICKY NAVIGATION
   ════════════════════════════════════════════════ -->
-  <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-    <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="relative flex items-center justify-between h-[72px]">
+  {#- On wide screens the menu's links sit in the bar itself; on narrower ones, or when
+      the editor has switched on more links than fit, they move into the panel behind the
+      burger. The panel always lists every link, so nothing depends on the bar.
+      Contact is left out of the bar when the button beside it already goes there. -#}
+  {%- set barLinks = [] -%}
+  {%- for link in mainNav -%}
+    {%- if not (link.id == "contact" and content.header.ctaLabel) -%}{%- set pushed = barLinks.push(link) -%}{%- endif -%}
+  {%- endfor -%}
+  {%- set linksInBar = barLinks.length and barLinks.length <= 6 -%}
+  <header class="site-header">
+    <nav class="site-header-in" aria-label="Main">
 
         <!-- Logo -->
-        <a href="/" class="flex items-center gap-2.5 group">
+        <a href="/" class="flex items-center gap-2.5 min-w-0">
           {% if content.header.logoImage %}
-          <img src="{{ content.header.logoImage }}" alt="" width="40" height="40" class="w-10 h-10 object-contain flex-shrink-0" />
+          <img src="{{ content.header.logoImage }}" alt="" width="38" height="38" class="w-[38px] h-[38px] object-contain flex-shrink-0" />
           {% else %}
           <span class="w-8 h-8 rounded-full bg-forest flex items-center justify-center flex-shrink-0">
             <i data-lucide="{{ content.header.logoIcon }}" class="text-sage-light w-4 h-4"></i>
           </span>
           {% endif %}
-          <span class="font-serif text-forest text-lg font-semibold leading-tight">
-            {{ content.header.logoLine1 }}<br><span class="font-normal text-sm text-sage">{{ content.header.logoLine2 }}</span>
+          <span class="font-serif text-forest text-lg leading-tight truncate">
+            {{ content.header.logoLine1 }} <em class="text-sage">{{ content.header.logoLine2 }}</em>
           </span>
         </a>
 
+        {%- if linksInBar %}
+        <div class="site-nav hidden lg:flex items-center gap-0.5">
+          {% for link in barLinks %}
+          <a href="{{ link.href }}"{% if link.href == page.url %} aria-current="page"{% endif %}>{{ link.label }}</a>
+          {% endfor %}
+        </div>
+        {%- endif %}
+
         <!-- Right-hand controls -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 flex-shrink-0">
           {%- if content.header.ctaLabel %}
-          <a href="{{ content.header.ctaHref or links.contact }}" class="hidden sm:inline-flex items-center gap-1.5 bg-forest text-white text-sm font-medium px-5 py-2 rounded hover:bg-sage transition-colors whitespace-nowrap">
+          <a href="{{ content.header.ctaHref or links.contact }}" class="pill-btn hidden sm:inline-flex items-center gap-1.5 bg-forest text-white text-sm font-medium px-5 py-2.5 hover:bg-sage transition-colors whitespace-nowrap">
             <i data-lucide="{{ content.header.ctaIcon or "calendar" }}" class="w-3.5 h-3.5"></i>
             {{ content.header.ctaLabel }}
           </a>
           {%- endif %}
 
-          <button id="nav-toggle" class="nav-burger"
+          <button id="nav-toggle" class="nav-burger{% if linksInBar %} lg:hidden{% endif %}"
             aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu" aria-haspopup="true">
             <span class="nav-burger-bars" aria-hidden="true">
               <span></span><span></span><span></span>
@@ -211,23 +265,22 @@
           </button>
         </div>
 
-        <!-- Menu panel — one flat list, same behaviour at every width -->
+        <!-- Menu panel — one flat list -->
         <div id="nav-menu"
-          class="hidden absolute right-0 top-full w-64 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-b rounded-tl shadow-md py-2">
+          class="hidden absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-2xl shadow-md py-2">
           {% for link in mainNav %}
           <a href="{{ link.href }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:text-forest hover:bg-stone transition-colors nav-link">{{ link.label }}</a>
           {% endfor %}
 
           {%- if content.header.ctaLabel %}
           <div class="sm:hidden px-3 pt-3 pb-1 mt-1 border-t border-gray-100">
-            <a href="{{ content.header.ctaHref or links.contact }}" class="flex w-full items-center justify-center gap-1.5 bg-forest text-white text-sm font-medium px-3 py-2.5 rounded nav-link">
+            <a href="{{ content.header.ctaHref or links.contact }}" class="pill-btn flex w-full items-center justify-center gap-1.5 bg-forest text-white text-sm font-medium px-3 py-2.5 nav-link">
               <i data-lucide="{{ content.header.ctaIcon or "calendar" }}" class="w-3.5 h-3.5 flex-shrink-0"></i>
               {{ content.header.ctaLabel }}
             </a>
           </div>
           {%- endif %}
         </div>
-      </div>
     </nav>
   </header>
 

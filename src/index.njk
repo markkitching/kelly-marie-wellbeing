@@ -1,12 +1,190 @@
 ---
 pageTitle: ""
+homePage: true
 ---
 {% include "site-header.njk" %}
-{%- set sections = content -%}
-{#- The homepage is its top section and nothing else; the rest of the site lives on its
-    own pages. -#}
-{%- set sectionsShown = ["hero"] -%}
-{% include "page-sections.njk" %}
+{#- The homepage: its top section (the "Top section (hero)" form), then a tile for each
+    page in the menu, the cost calculator and a closing card (the "Homepage tiles" form).
+    Styles are in home-styles.njk; which tiles show is worked out in homeTiles.js. -#}
+{%- set hero = content.hero -%}
+{%- set home = content.home or {} -%}
+
+  <!-- ═══════════════════════════════════════════════ HERO ═══════════════════════════════════════════════ -->
+  <section id="home" class="home-hero">
+    <div class="home-wrap home-hero-grid">
+      <div>
+        {%- if hero.eyebrow %}
+        <span class="home-chip">
+          {%- if content.header.logoImage %}<img src="{{ content.header.logoImage }}" alt="" />{% else %}<i data-lucide="{{ content.header.logoIcon }}" class="chip-icon text-sage"></i>{% endif %}
+          {{ hero.eyebrow }}
+        </span>
+        {%- endif %}
+        <h1>{{ hero.headingLead }} <em>{{ hero.headingEmphasis }}</em></h1>
+        {%- if hero.paragraph1 %}<p>{{ hero.paragraph1 | lines }}</p>{% endif %}
+        {%- if hero.paragraph2 %}<p>{{ hero.paragraph2 | lines }}</p>{% endif %}
+{#- Each button is its own field: clear the label in the editor and the button goes. -#}
+{%- if hero.primaryButton or hero.secondaryButton or hero.calculatorButton %}
+        <div class="actions">
+          {%- if hero.primaryButton %}
+          <a href="{{ links.contact }}" class="home-btn home-btn-dark">
+            <i data-lucide="{{ hero.primaryButtonIcon or "calendar" }}" class="w-4 h-4"></i>
+            {{ hero.primaryButton }}
+          </a>
+          {%- endif %}
+          {%- if hero.secondaryButton %}
+          <a href="{{ links.services }}" class="home-btn home-btn-soft">
+            {{ hero.secondaryButton }}
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          {%- endif %}
+          {%- if hero.calculatorButton %}
+          <a href="{{ links.calculator }}" class="home-btn home-btn-soft">
+            <i data-lucide="calculator" class="w-4 h-4"></i>
+            {{ hero.calculatorButton }}
+          </a>
+          {%- endif %}
+        </div>
+{%- endif %}
+      </div>
+
+      {%- if hero.image %}
+      <div class="home-arch-wrap">
+        <span class="home-blob a"></span><span class="home-blob b"></span>
+        <div class="home-arch">
+          <img src="{{ hero.image }}" alt="{{ hero.imageAlt }}" />
+        </div>
+        {#- A slowly turning badge: the logo, ringed by the main heading. -#}
+        <div class="home-seal" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><defs><path id="seal-ring" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text><textPath href="#seal-ring" textLength="282" lengthAdjust="spacing">{{ hero.headingLead }} {{ hero.headingEmphasis }} ·</textPath></text></svg>
+          {%- if content.header.logoImage %}<img src="{{ content.header.logoImage }}" alt="" />{% else %}<i data-lucide="{{ content.header.logoIcon }}" class="w-10 h-10 text-sage"></i>{% endif %}
+        </div>
+      </div>
+      {%- endif %}
+    </div>
+  </section>
+
+{%- if homeTiles.any %}
+  <!-- ═══════════════════════════════════════════════ TILES ═══════════════════════════════════════════════ -->
+  <section class="home-tiles" aria-labelledby="tiles-title">
+    <div class="home-wrap">
+      <div class="home-title">
+        {%- if home.tilesEyebrow %}<span class="home-kicker">{{ home.tilesEyebrow }}</span>{% endif %}
+        <h2 id="tiles-title">{{ home.tilesHeadingLead }} {% if home.tilesHeadingEmphasis %}<em>{{ home.tilesHeadingEmphasis }}</em>{% endif %} {{ home.tilesHeadingEnd }}</h2>
+      </div>
+
+      {%- if homeTiles.counselling or homeTiles.training %}
+      <div class="tile-row top">
+        {%- if homeTiles.counselling %}
+        <a class="tile tile-couns" href="{{ homeTiles.counselling.href }}">
+          <div class="tile-media">
+            {%- if homeTiles.counselling.image %}
+            <img src="{{ homeTiles.counselling.image }}" alt="{{ homeTiles.counselling.imageAlt }}" />
+            {%- else %}
+            {#- The default picture: the tree logo on rolling hills, drawn in the colour scheme. -#}
+            <svg viewBox="0 0 300 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+              <defs>
+                <linearGradient id="couns-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--tint-soft)"/><stop offset="1" style="stop-color: var(--light)"/></linearGradient>
+                <filter id="couns-tree"><feFlood style="flood-color: var(--dark)"/><feComposite in2="SourceAlpha" operator="in"/></filter>
+              </defs>
+              <rect width="300" height="420" fill="url(#couns-sky)"/>
+              <circle cx="214" cy="104" r="44" fill="#fff" opacity=".85"/>
+              <path d="M0 292 C70 248 160 268 300 226 V420 H0Z" style="fill: var(--tint-mid)"/>
+              <image href="/images/brand/tree-mask.png" x="78" y="150" width="150" height="150" filter="url(#couns-tree)"/>
+              <path d="M0 318 C90 286 200 314 300 286 V420 H0Z" style="fill: var(--tint-deep)"/>
+              <path d="M0 362 C100 334 220 366 300 342 V420 H0Z" style="fill: var(--accent)"/>
+              <path d="M0 396 C110 376 210 400 300 384 V420 H0Z" style="fill: var(--dark)"/>
+              <g style="fill: var(--accent)"><ellipse cx="60" cy="150" rx="5" ry="10" transform="rotate(-30 60 150)" opacity=".7"/><ellipse cx="250" cy="200" rx="4" ry="8" transform="rotate(40 250 200)" opacity=".6"/><ellipse cx="40" cy="230" rx="4" ry="8" transform="rotate(20 40 230)" opacity=".5"/><ellipse cx="270" cy="150" rx="3.5" ry="7" transform="rotate(-50 270 150)" opacity=".5"/></g>
+            </svg>
+            {%- endif %}
+          </div>
+          {%- if home.counsellingEyebrow %}<span class="home-kicker">{{ home.counsellingEyebrow }}</span>{% endif %}
+          <h3 class="mt-3">{{ home.counsellingHeading }}</h3>
+          {%- if home.counsellingText %}<p>{{ home.counsellingText | lines }}</p>{% endif %}
+          <span class="go"><span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>{{ home.counsellingLink or "Find out more" }}</span>
+        </a>
+        {%- endif %}
+
+        {%- if homeTiles.training %}
+        <a class="tile tile-train on-dark" href="{{ homeTiles.training.href }}">
+          <span class="tree-mark" aria-hidden="true"></span>
+          {%- if home.trainingEyebrow %}<span class="home-kicker">{{ home.trainingEyebrow }}</span>{% endif %}
+          <h3 class="mt-3">{{ home.trainingHeading }}</h3>
+          {%- if homeTiles.training.items.length %}
+          <ul>
+            {%- for item in homeTiles.training.items %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {%- endif %}
+          <span class="go"><span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>{{ home.trainingLink or "Find out more" }}</span>
+        </a>
+        {%- endif %}
+      </div>
+      {%- endif %}
+
+      {%- if homeTiles.smallCount %}
+      <div class="tile-row small">
+        {%- if homeTiles.podcast %}
+        <a class="tile tile-pod" href="{{ homeTiles.podcast.href }}">
+          {%- if homeTiles.podcast.image %}<img src="{{ homeTiles.podcast.image }}" alt="" />{% endif %}
+          <h3>{{ home.podcastHeading }}</h3>
+          {%- if home.podcastText %}<p>{{ home.podcastText | lines }}</p>{% endif %}
+          <span class="go"><span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>{{ home.podcastLink or "Find out more" }}</span>
+        </a>
+        {%- endif %}
+        {%- if homeTiles.shop %}
+        <a class="tile tile-shop" href="{{ homeTiles.shop.href }}">
+          {%- if homeTiles.shop.image %}<img src="{{ homeTiles.shop.image }}" alt="" />{% endif %}
+          <h3>{{ home.shopHeading }}</h3>
+          {%- if home.shopText %}<p>{{ home.shopText | lines }}</p>{% endif %}
+          <span class="go"><span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>{{ home.shopLink or "Find out more" }}</span>
+        </a>
+        {%- endif %}
+        {%- if homeTiles.team %}
+        <a class="tile tile-team" href="{{ homeTiles.team.href }}">
+          {%- if homeTiles.team.faces.length %}
+          <div class="tile-faces">{% for person in homeTiles.team.faces %}<img src="{{ person.image }}" alt="" />{% endfor %}</div>
+          {%- endif %}
+          <h3>{{ home.teamHeading }}</h3>
+          {%- if home.teamText %}<p>{{ home.teamText | lines }}</p>{% endif %}
+          <span class="go"><span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>{{ home.teamLink or "Find out more" }}</span>
+        </a>
+        {%- endif %}
+      </div>
+      {%- endif %}
+
+      {%- if home.calculatorButton %}
+      <a class="home-calc" href="{{ links.calculator }}">
+        <span class="ico"><i data-lucide="calculator" class="w-6 h-6"></i></span>
+        <div class="txt">
+          <h3>{{ home.calculatorHeading }}</h3>
+          {%- if home.calculatorText %}<p>{{ home.calculatorText | lines }}</p>{% endif %}
+        </div>
+        <span class="home-btn home-btn-dark">{{ home.calculatorButton }} <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+      </a>
+      {%- endif %}
+    </div>
+  </section>
+{%- endif %}
+
+{%- if home.ctaHeadingLead or home.ctaHeadingEmphasis or home.ctaText or home.ctaButton %}
+  <!-- ═══════════════════════════════════════════════ CLOSING CARD ═══════════════════════════════════════════════ -->
+  <section class="home-cta">
+    <div class="home-wrap">
+      <div class="home-cta-card on-dark">
+        <span class="tree-mark" aria-hidden="true"></span>
+        <div>
+          <h2>{{ home.ctaHeadingLead }} {% if home.ctaHeadingEmphasis %}<em>{{ home.ctaHeadingEmphasis }}</em>{% endif %}</h2>
+          {%- if home.ctaText %}<p>{{ home.ctaText | lines }}</p>{% endif %}
+        </div>
+        {%- if home.ctaButton %}
+        <a class="home-btn home-btn-white" href="{{ links.contact }}">
+          <i data-lucide="{{ home.ctaButtonIcon or "message-circle" }}" class="w-4 h-4"></i>
+          {{ home.ctaButton }}
+        </a>
+        {%- endif %}
+      </div>
+    </div>
+  </section>
+{%- endif %}
 
 
 {% include "site-footer.njk" %}
