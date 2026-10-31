@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 3 · Organic | Kelly Marie Wellbeing</title>
+<link rel="stylesheet" href="assets/base.css" />
+<style>
+  body { background: var(--light); }
+
+  /* ── Floating pill header ── */
+  .hdr { position: sticky; top: 12px; z-index: 10; padding: 0 16px; margin-top: 12px; }
+  .hdr-in { max-width: 1180px; margin: 0 auto; background: rgba(255,255,255,.88); backdrop-filter: blur(10px); border: 1px solid #e3e9f1; border-radius: 999px; display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 8px 18px; box-shadow: 0 6px 24px rgba(28,53,83,.06); }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo img { width: 38px; height: 38px; }
+  .logo span { font-family: var(--serif); font-size: 18px; color: var(--navy); }
+  .logo em { color: var(--accent-text); }
+  .hdr nav { display: flex; gap: 4px; }
+  .hdr nav a { text-decoration: none; font-size: 14px; color: var(--ink); padding: 9px 14px; border-radius: 999px; }
+  .hdr nav a:hover { background: var(--cream); color: var(--navy); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 13px 24px; font-weight: 500; font-size: 15px; text-decoration: none; transition: background .2s, color .2s; }
+  .btn-navy { background: var(--navy); color: #fff; }
+  .btn-navy:hover { background: var(--accent-text); }
+  .btn-soft { background: #fff; color: var(--navy); border: 1px solid #d7e1ec; }
+  .btn-soft:hover { background: var(--cream); }
+  .hdr .btn { padding: 10px 20px; font-size: 14px; }
+  .burger { display: none; width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--cream); color: var(--navy); align-items: center; justify-content: center; }
+
+  /* ── Hero with arch photo ── */
+  .hero { padding: 72px 0 96px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--cream); color: var(--navy); font-size: 13px; font-weight: 500; padding: 7px 14px 7px 8px; border-radius: 999px; }
+  .chip img { width: 22px; height: 22px; background: #fff; border-radius: 50%; padding: 2px; }
+  .hero h1 { font-size: clamp(44px, 6vw, 76px); margin: 22px 0 22px; }
+  .hero h1 em { color: var(--accent-text); }
+  .hero p { color: var(--muted); font-size: 18px; max-width: 520px; margin-bottom: 12px; }
+  .hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+  .arch-wrap { position: relative; justify-self: center; width: 100%; max-width: 420px; }
+  .arch { border-radius: 999px 999px 28px 28px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--cream); }
+  .arch img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .blob { position: absolute; z-index: -1; border-radius: 50%; }
+  .blob.a { width: 260px; height: 260px; background: var(--cream); right: -60px; top: -30px; }
+  .blob.b { width: 140px; height: 140px; background: #dbe6f0; left: -40px; bottom: 60px; }
+  .seal { position: absolute; left: -28px; bottom: -20px; width: 120px; height: 120px; border-radius: 50%; background: #fff; box-shadow: 0 12px 30px rgba(28,53,83,.12); display: flex; align-items: center; justify-content: center; }
+  .seal img { width: 70px; }
+  .seal svg { position: absolute; inset: 0; animation: spin 30s linear infinite; }
+  .seal text { font: 600 9.5px var(--sans); letter-spacing: .22em; fill: var(--accent-text); text-transform: uppercase; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .seal svg { animation: none; } }
+
+  /* ── Bento grid ── */
+  .bento-sec { padding: 24px 0 96px; }
+  .sec-title { text-align: center; margin-bottom: 44px; }
+  .sec-title h2 { font-size: clamp(32px, 4vw, 48px); margin-top: 10px; }
+  .sec-title h2 em { color: var(--accent-text); }
+  .kicker { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: minmax(200px, auto); gap: 18px; }
+  .tile { border-radius: 28px; padding: 32px; position: relative; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: transform .25s ease; }
+  .tile:hover { transform: translateY(-3px); }
+  @media (prefers-reduced-motion: reduce) { .tile { transition: none; } .tile:hover { transform: none; } }
+  .tile h3 { font-size: 28px; margin-bottom: 10px; }
+  .tile p { font-size: 15px; color: var(--muted); max-width: 380px; }
+  .tile .go { margin-top: auto; padding-top: 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--navy); }
+  .go i { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+  .t-couns { grid-column: span 4; grid-row: span 2; background: #fff; padding-right: 46%; }
+  .t-couns img { position: absolute; right: 18px; top: 18px; bottom: 18px; width: 42%; height: calc(100% - 36px); object-fit: cover; object-position: center; border-radius: 999px 999px 20px 20px; }
+  .t-train { grid-column: span 2; grid-row: span 2; background: var(--navy); }
+  .t-train h3 { color: #fff; }
+  .t-train p { color: #c9d6e3; }
+  .t-train .go { color: #fff; }
+  .t-train .go i { background: #fff; color: var(--navy); }
+  .t-train::after { content: ""; position: absolute; right: -70px; bottom: -70px; width: 260px; height: 260px; background: url(assets/tree-white.png) center/contain no-repeat; opacity: .09; }
+  .t-train ul { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+  .t-train li { color: #e2eaf2; font-size: 14.5px; padding: 10px 14px; background: rgba(255,255,255,.07); border-radius: 14px; }
+  .t-pod { grid-column: span 2; background: var(--cream); }
+  .t-pod img { width: 72px; height: 72px; border-radius: 18px; margin-bottom: 18px; object-fit: cover; }
+  .t-shop { grid-column: span 2; background: #fff; }
+  .t-shop img { width: 100%; height: 120px; object-fit: cover; border-radius: 18px; margin-bottom: 18px; }
+  .t-team { grid-column: span 2; background: #dbe6f0; }
+  .faces { display: flex; margin-bottom: 18px; }
+  .faces img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: top; border: 3px solid #dbe6f0; }
+  .faces img + img { margin-left: -14px; }
+  .t-calc { margin-top: 18px; background: #fff; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 32px; min-height: 0; }
+  .t-calc .ico { width: 56px; height: 56px; border-radius: 18px; background: var(--cream); color: var(--navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .t-calc .txt { flex: 1; }
+  .t-calc h3 { font-size: 24px; margin-bottom: 4px; }
+
+  /* ── Steps along a root line ── */
+  .steps-sec { background: #fff; border-radius: 40px; margin: 0 16px; padding: 96px 0; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; position: relative; }
+  .steps::before { content: ""; position: absolute; top: 32px; left: 12%; right: 12%; border-top: 2px dashed #c6d6e5; }
+  .s { text-align: center; position: relative; }
+  .s .n { width: 64px; height: 64px; border-radius: 50%; background: var(--cream); color: var(--navy); font-family: var(--serif); font-size: 26px; display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; border: 6px solid #fff; }
+  .s h3 { font-size: 23px; margin-bottom: 8px; }
+  .s p { color: var(--muted); font-size: 15px; max-width: 300px; margin: 0 auto; }
+
+  /* ── CTA card ── */
+  .cta { padding: 96px 0; }
+  .cta-card { background: var(--navy); border-radius: 40px; padding: 72px 56px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; position: relative; overflow: hidden; }
+  .cta-card::before { content: ""; position: absolute; left: -90px; top: 50%; transform: translateY(-50%); width: 380px; height: 380px; background: url(assets/tree-white.png) center/contain no-repeat; opacity: .07; }
+  .cta-card h2 { color: #fff; font-size: clamp(32px, 4vw, 50px); position: relative; }
+  .cta-card h2 em { color: var(--accent-on-dark); }
+  .cta-card p { color: #c9d6e3; margin-top: 12px; position: relative; max-width: 520px; }
+  .cta-card .btn { background: #fff; color: var(--navy); position: relative; }
+  .cta-card .btn:hover { background: var(--cream); }
+
+  footer { padding: 0 0 48px; font-size: 14px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; border-top: 1px solid #dfe6ef; padding-top: 32px; }
+  footer nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--navy); }
+  footer .legal { width: 100%; font-size: 12.5px; }
+
+  @media (max-width: 1000px) {
+    .hdr nav { display: none; }
+    .burger { display: inline-flex; }
+    .hdr .btn { display: none; }
+    .t-couns { grid-column: span 6; }
+    .t-train { grid-column: span 6; grid-row: span 1; }
+    .t-pod, .t-shop, .t-team { grid-column: span 3; }
+    .t-team { grid-column: span 6; }
+  }
+  @media (max-width: 700px) {
+    .hero { padding: 40px 0 72px; }
+    .hero .wrap { grid-template-columns: 1fr; gap: 56px; }
+    .arch-wrap { max-width: 340px; }
+    .seal { left: -8px; width: 100px; height: 100px; }
+    .seal img { width: 56px; }
+    .bento { grid-template-columns: 1fr; }
+    .tile, .t-couns, .t-train, .t-pod, .t-shop, .t-team, .t-calc { grid-column: auto; grid-row: auto; }
+    .t-couns { padding: 28px; }
+    .t-couns img { position: static; width: 100%; height: 280px; margin-bottom: 22px; order: -1; }
+    .t-calc { flex-direction: column; align-items: flex-start; }
+    .steps { grid-template-columns: 1fr; gap: 40px; }
+    .steps::before { display: none; }
+    .steps-sec { margin: 0 8px; padding: 64px 0; border-radius: 28px; }
+    .cta-card { grid-template-columns: 1fr; padding: 48px 28px; border-radius: 28px; }
+    .blob.a { right: -20px; width: 200px; height: 200px; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8M16 14v4M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+</svg>
+
+<div class="concept-bar"><span>Design concepts</span><a href="index.html">Overview</a><a href="concept-1-editorial.html">1 · Editorial</a><a href="concept-2-rooted.html">2 · Rooted</a><a href="concept-3-organic.html" aria-current="page">3 · Organic</a></div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="#"><img src="assets/tree-accent.png" alt="" /><span>Kelly Marie <em>Wellbeing</em></span></a>
+    <nav aria-label="Main"><a href="#">Counselling</a><a href="#">Training &amp; Coaching</a><a href="#">Podcast</a><a href="#">Shop</a><a href="#">Meet the Team</a></nav>
+    <a class="btn btn-navy" href="#"><svg class="icon" style="width:15px;height:15px"><use href="#i-msg"/></svg>Contact Us</a>
+    <button class="burger" aria-label="Open menu"><svg class="icon"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="chip"><img src="assets/tree-accent.png" alt="" />BACP-registered psychotherapist · Leeds</span>
+        <h1>Making mental health <em>a priority</em></h1>
+        <p>Mental health services tailored to your business.</p>
+        <p>We offer counselling for staff and mental health awareness training for managers and leaders, so people get the right support at work.</p>
+        <div class="actions">
+          <a class="btn btn-navy" href="#"><svg class="icon"><use href="#i-msg"/></svg>Contact Us</a>
+          <a class="btn btn-soft" href="#"><svg class="icon"><use href="#i-calc"/></svg>Try Our Cost Calculator</a>
+        </div>
+      </div>
+      <div class="arch-wrap">
+        <span class="blob a"></span><span class="blob b"></span>
+        <div class="arch"><img src="assets/kelly.jpg" alt="Kelly Marie, founder and psychotherapist" /></div>
+        <div class="seal">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="circ" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text><textPath href="#circ">Making mental health a priority · </textPath></text></svg>
+          <img src="assets/tree-accent.png" alt="" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bento-sec">
+    <div class="wrap">
+      <div class="sec-title"><span class="kicker">How we can help</span><h2>Support that <em>grows</em> with your people</h2></div>
+      <div class="bento">
+        <a class="tile t-couns" href="#">
+          <img src="assets/mountain.jpg" alt="" />
+          <span class="kicker">Counselling</span>
+          <h3 style="margin-top:12px">A structured and safe space</h3>
+          <p>Evidence-based psychotherapy for individuals, groups and organisations. Face to face, at your workplace, or online.</p>
+          <p style="margin-top:12px">Psychodynamic, integrative and trauma-informed, with a clear structure to every session.</p>
+          <span class="go"><i><svg class="icon" style="width:16px;height:16px"><use href="#i-arrow"/></svg></i>Explore counselling</span>
+        </a>
+        <a class="tile t-train" href="#">
+          <span class="kicker" style="color:var(--accent-on-dark)">Training &amp; Coaching</span>
+          <h3 style="margin-top:12px">Help managers act early</h3>
+          <ul><li>Wellbeing Services Training</li><li>Training for Managers &amp; HR</li><li>Reflective Practice &amp; Coaching</li></ul>
+          <span class="go"><i><svg class="icon" style="width:16px;height:16px"><use href="#i-arrow"/></svg></i>See courses</span>
+        </a>
+        <a class="tile t-pod" href="#">
+          <img src="assets/podcast.jpg" alt="" />
+          <h3>The Podcast</h3>
+          <p>Honest conversations about mental health on Spotify and YouTube.</p>
+          <span class="go"><i><svg class="icon" style="width:16px;height:16px"><use href="#i-arrow"/></svg></i>Listen</span>
+        </a>
+        <a class="tile t-shop" href="#">
+          <img src="assets/leaflets.jpg" alt="" />
+          <h3>Leaflets</h3>
+          <p>Printed guides for your staff room, HR desk or noticeboard.</p>
+          <span class="go"><i><svg class="icon" style="width:16px;height:16px"><use href="#i-arrow"/></svg></i>Shop</span>
+        </a>
+        <a class="tile t-team" href="#">
+          <div class="faces"><img src="assets/kelly.jpg" alt="" /><img src="assets/team.jpg" alt="" /></div>
+          <h3>Meet the Team</h3>
+          <p>A small team delivering training, counselling and the podcast.</p>
+          <span class="go"><i><svg class="icon" style="width:16px;height:16px"><use href="#i-arrow"/></svg></i>Say hello</span>
+        </a>
+      </div>
+      <a class="tile t-calc" href="#">
+          <span class="ico"><svg class="icon" style="width:24px;height:24px"><use href="#i-calc"/></svg></span>
+          <span class="txt"><h3>What does poor mental health cost your business?</h3><p style="max-width:none">Use our cost calculator to estimate the impact of absence and lost productivity.</p></span>
+          <span class="btn btn-navy">Try the calculator <svg class="icon" style="width:16px;height:16px"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="steps-sec">
+    <div class="wrap">
+      <div class="sec-title"><span class="kicker">Getting started</span><h2>Three gentle <em>steps</em></h2></div>
+      <div class="steps">
+        <div class="s"><div class="n">1</div><h3>Initial Enquiry</h3><p>Fill in the contact form or send an email. Everything you send is kept confidential.</p></div>
+        <div class="s"><div class="n">2</div><h3>Free Consultation</h3><p>A free 20-minute call, so you can ask questions and see whether we're the right fit.</p></div>
+        <div class="s"><div class="n">3</div><h3>Begin</h3><p>We book sessions at times that suit you and check in regularly on how it's going.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <div class="cta-card">
+        <div>
+          <h2>Ready when <em>you are</em></h2>
+          <p>We treat every enquiry in confidence. A name and a short message is enough to get started.</p>
+        </div>
+        <a class="btn" href="#"><svg class="icon"><use href="#i-msg"/></svg>Contact Us</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#"><img src="assets/tree-accent.png" alt="" /><span>Kelly Marie <em>Wellbeing</em></span></a>
+    <nav aria-label="Footer"><a href="#">Counselling</a><a href="#">Training</a><a href="#">Podcast</a><a href="#">Shop</a><a href="#">Team</a><a href="#">Contactus@kellymariewellbeing.com</a><a href="#">LinkedIn</a></nav>
+    <p class="legal">&copy; 2026 Kelly Marie Wellbeing. All client information treated in strict confidence in accordance with BACP ethical guidelines.</p>
+  </div>
+</footer>
+</body>
+</html>

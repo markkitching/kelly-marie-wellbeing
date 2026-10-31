@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept 2 · Rooted | Kelly Marie Wellbeing</title>
+<link rel="stylesheet" href="assets/base.css" />
+<style>
+  /* ── Header sits on the navy hero ── */
+  .top { background: var(--navy); color: #fff; }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 84px; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo img { width: 46px; height: 46px; }
+  .logo b { display: block; font-family: var(--serif); font-weight: 600; font-size: 20px; line-height: 1.1; color: #fff; }
+  .logo span { font-family: var(--serif); font-size: 14px; color: var(--accent-on-dark); }
+  .links { display: flex; align-items: center; gap: 30px; font-size: 14.5px; }
+  .links a { text-decoration: none; color: #d5e0ea; }
+  .links a:hover { color: #fff; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--navy) !important; font-weight: 600; padding: 10px 18px; border-radius: 4px; }
+  .burger { display: none; background: none; border: 1px solid rgba(255,255,255,.25); color: #fff; width: 44px; height: 44px; border-radius: 6px; align-items: center; justify-content: center; }
+
+  /* ── Hero ── */
+  .hero { position: relative; overflow: hidden; padding: 72px 0 150px; }
+  .hero::after { content: ""; position: absolute; right: -180px; top: -60px; width: 820px; height: 820px; background: url(assets/tree-white.png) center/contain no-repeat; opacity: .06; pointer-events: none; }
+  .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr .85fr; gap: 64px; align-items: center; }
+  .tag { display: inline-flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-on-dark); }
+  .tag::before { content: ""; width: 28px; height: 1px; background: var(--accent-on-dark); }
+  .hero h1 { color: #fff; font-size: clamp(44px, 6.4vw, 80px); margin: 22px 0 24px; }
+  .hero h1 em { color: var(--accent-on-dark); }
+  .hero p { color: #c9d6e3; font-size: 18px; max-width: 540px; margin-bottom: 14px; }
+  .hero .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 34px; }
+  .btn { display: inline-flex; align-items: center; gap: 9px; padding: 15px 26px; border-radius: 4px; font-weight: 600; font-size: 15px; text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+  .btn-white { background: #fff; color: var(--navy); }
+  .btn-white:hover { background: var(--cream); }
+  .btn-ghost { border: 1px solid rgba(255,255,255,.35); color: #fff; }
+  .btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,.06); }
+  .portrait { position: relative; justify-self: end; width: 100%; max-width: 400px; }
+  .portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; border-radius: 6px; }
+  .portrait::before { content: ""; position: absolute; inset: 22px -22px -22px 22px; border: 1px solid var(--accent); border-radius: 6px; z-index: -1; }
+  .badge { position: absolute; left: -36px; bottom: 36px; background: #fff; color: var(--navy); border-radius: 6px; padding: 16px 18px; display: flex; gap: 12px; align-items: center; box-shadow: 0 18px 40px rgba(10, 25, 45, .25); }
+  .badge .icon { color: var(--accent-text); width: 26px; height: 26px; }
+  .badge b { display: block; font-size: 14px; }
+  .badge span { font-size: 12.5px; color: var(--muted); }
+
+  /* ── Service cards overlap the hero ── */
+  .cards { margin-top: -96px; position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .card { background: #fff; border-radius: 6px; padding: 30px 26px; box-shadow: 0 10px 30px rgba(28, 53, 83, .1); border-top: 3px solid var(--accent); display: flex; flex-direction: column; }
+  .card .ico { width: 48px; height: 48px; border-radius: 50%; background: var(--cream); color: var(--navy); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .card h3 { font-size: 22px; margin-bottom: 10px; }
+  .card p { font-size: 14.5px; color: var(--muted); flex: 1; margin-bottom: 18px; }
+  .card a { font-size: 14px; font-weight: 600; color: var(--accent-text); text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
+  .card a:hover { color: var(--navy); }
+
+  .trust { text-align: center; padding: 64px 0 24px; color: var(--muted); font-size: 14px; letter-spacing: .04em; }
+  .trust strong { font-family: var(--serif); font-weight: 400; font-size: 22px; color: var(--navy); margin: 0 18px; letter-spacing: 0; white-space: nowrap; }
+
+  /* ── Why it matters ── */
+  .split { padding: 96px 0; }
+  .split .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+  .split img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; border-radius: 6px; }
+  .kicker { font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-text); }
+  .split h2 { font-size: clamp(32px, 4vw, 46px); margin: 14px 0 20px; }
+  .split p { color: var(--muted); margin-bottom: 22px; }
+  .ticks { list-style: none; padding: 0; margin: 0 0 30px; display: grid; gap: 12px; }
+  .ticks li { display: flex; gap: 12px; align-items: flex-start; }
+  .ticks .icon { color: var(--accent-text); margin-top: 3px; }
+  .btn-navy { background: var(--navy); color: #fff; }
+  .btn-navy:hover { background: var(--accent-text); }
+
+  /* ── Process on light ── */
+  .process { background: var(--light); padding: 96px 0; }
+  .process h2 { font-size: clamp(32px, 4vw, 46px); text-align: center; margin: 12px 0 56px; }
+  .process .kicker { display: block; text-align: center; }
+  .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; position: relative; }
+  .flow::before { content: ""; position: absolute; top: 28px; left: 16%; right: 16%; height: 2px; background: var(--accent); opacity: .35; }
+  .stage { text-align: center; position: relative; }
+  .stage .dot { width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: #fff; font-family: var(--serif); font-size: 22px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 0 0 8px var(--light); }
+  .stage h3 { font-size: 22px; margin-bottom: 8px; }
+  .stage p { color: var(--muted); font-size: 15px; max-width: 300px; margin: 0 auto; }
+
+  /* ── Podcast band ── */
+  .pod { background: var(--navy); color: #fff; padding: 88px 0; }
+  .pod .wrap { display: grid; grid-template-columns: 320px 1fr; gap: 64px; align-items: center; }
+  .pod img { border-radius: 6px; width: 320px; height: 320px; object-fit: cover; }
+  .pod .kicker { color: var(--accent-on-dark); }
+  .pod h2 { color: #fff; font-size: clamp(32px, 4vw, 46px); margin: 14px 0 16px; }
+  .pod p { color: #c9d6e3; max-width: 560px; margin-bottom: 28px; }
+
+  /* ── Contact ── */
+  .contact { padding: 96px 0; }
+  .contact .wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; }
+  .contact h2 { font-size: clamp(32px, 4vw, 46px); margin: 14px 0 18px; }
+  .contact p { color: var(--muted); margin-bottom: 18px; }
+  .contact .mail { display: inline-flex; gap: 10px; align-items: center; color: var(--navy); font-weight: 500; text-decoration: none; }
+  form { background: var(--light); border-radius: 6px; padding: 34px; display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+  label { font-size: 13px; font-weight: 600; color: var(--navy); display: grid; gap: 6px; }
+  label.full { grid-column: 1 / -1; }
+  input, select, textarea { font: inherit; font-weight: 400; font-size: 15px; padding: 12px 14px; border: 1px solid #d3dce7; border-radius: 4px; background: #fff; color: var(--ink); }
+  textarea { min-height: 110px; resize: vertical; }
+  form .btn { grid-column: 1 / -1; justify-content: center; border: 0; cursor: pointer; }
+
+  footer { background: #142840; color: #a9b9ca; font-size: 14px; padding: 48px 0 36px; }
+  footer .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+  footer h4 { color: #fff; font-size: 16px; margin-bottom: 14px; }
+  footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: #fff; }
+  footer .logo img { width: 38px; height: 38px; }
+  footer .legal { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.1); padding-top: 22px; font-size: 12.5px; }
+
+  @media (max-width: 960px) {
+    .links a:not(.pill) { display: none; }
+    .burger { display: inline-flex; }
+    .cards { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px) {
+    .links .pill { display: none; }
+    .hero { padding: 40px 0 130px; }
+    .hero .wrap, .split .wrap, .pod .wrap, .contact .wrap, footer .wrap { grid-template-columns: 1fr; gap: 40px; }
+    .portrait { justify-self: start; max-width: 100%; }
+    .portrait::before { display: none; }
+    .badge { left: 12px; bottom: 12px; }
+    .cards { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr; gap: 40px; }
+    .flow::before { display: none; }
+    .pod img { width: 100%; height: auto; aspect-ratio: 1; }
+    form { grid-template-columns: 1fr; padding: 24px; }
+    .trust strong { display: block; margin: 8px 0; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8M16 14v4M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+  <symbol id="i-pres" viewBox="0 0 24 24"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+</svg>
+
+<div class="concept-bar"><span>Design concepts</span><a href="index.html">Overview</a><a href="concept-1-editorial.html">1 · Editorial</a><a href="concept-2-rooted.html" aria-current="page">2 · Rooted</a><a href="concept-3-organic.html">3 · Organic</a></div>
+
+<div class="top">
+  <header class="wrap bar">
+    <a class="logo" href="#"><img src="assets/tree-white.png" alt="" /><div><b>Kelly Marie</b><span>Wellbeing</span></div></a>
+    <nav class="links" aria-label="Main">
+      <a href="#">Counselling</a><a href="#">Training &amp; Coaching</a><a href="#">Podcast</a><a href="#">Shop</a><a href="#">Meet the Team</a>
+      <a href="#" class="pill"><svg class="icon" style="width:15px;height:15px"><use href="#i-msg"/></svg>Contact Us</a>
+      <button class="burger" aria-label="Open menu"><svg class="icon"><use href="#i-menu"/></svg></button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="tag">Kelly Marie Wellbeing</span>
+        <h1>Making mental health <em>a priority</em></h1>
+        <p>Mental health services tailored to your business.</p>
+        <p>We offer counselling for staff and mental health awareness training for managers and leaders, so people get the right support at work.</p>
+        <div class="actions">
+          <a class="btn btn-white" href="#"><svg class="icon"><use href="#i-msg"/></svg>Contact Us</a>
+          <a class="btn btn-ghost" href="#"><svg class="icon"><use href="#i-calc"/></svg>Try Our Cost Calculator</a>
+        </div>
+      </div>
+      <div class="portrait">
+        <img src="assets/kelly.jpg" alt="Kelly Marie, founder and psychotherapist" />
+        <div class="badge"><svg class="icon"><use href="#i-shield"/></svg><div><b>BACP-registered</b><span>Member No. 00922563</span></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<main>
+  <div class="wrap cards">
+    <article class="card"><div class="ico"><svg class="icon"><use href="#i-heart"/></svg></div><h3>Counselling</h3><p>Confidential therapy for staff, face to face, at your workplace or online.</p><a href="#">Find out more <svg class="icon" style="width:15px;height:15px"><use href="#i-arrow"/></svg></a></article>
+    <article class="card"><div class="ico"><svg class="icon"><use href="#i-pres"/></svg></div><h3>Training &amp; Coaching</h3><p>Practical courses that help managers and HR support their teams early.</p><a href="#">Find out more <svg class="icon" style="width:15px;height:15px"><use href="#i-arrow"/></svg></a></article>
+    <article class="card"><div class="ico"><svg class="icon"><use href="#i-mic"/></svg></div><h3>Podcast</h3><p>Honest conversations about mental health, on Spotify and YouTube.</p><a href="#">Listen now <svg class="icon" style="width:15px;height:15px"><use href="#i-arrow"/></svg></a></article>
+    <article class="card"><div class="ico"><svg class="icon"><use href="#i-book"/></svg></div><h3>Leaflets</h3><p>Printed guides and quick tips for your staff room or noticeboard.</p><a href="#">Visit the shop <svg class="icon" style="width:15px;height:15px"><use href="#i-arrow"/></svg></a></article>
+  </div>
+
+  <p class="trust wrap">In-house counselling and training delivered for teams at <strong>LADbible</strong><strong>Genuit Group</strong></p>
+
+  <section class="split">
+    <div class="wrap">
+      <img src="assets/workplace.jpg" alt="Two people talking at a desk" />
+      <div>
+        <span class="kicker">For organisations</span>
+        <h2>Support that works <em>before</em> problems build up</h2>
+        <p>Good wellbeing support and well-trained managers can mean fewer mental-health-related absences and better staff retention.</p>
+        <ul class="ticks">
+          <li><svg class="icon"><use href="#i-check"/></svg>Spot the signs that someone is struggling</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Supportive conversations and reasonable adjustments</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Return-to-work procedures and signposting</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Courses adapted to your organisation and its people</li>
+        </ul>
+        <a class="btn btn-navy" href="#"><svg class="icon"><use href="#i-calc"/></svg>See what poor mental health costs you</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="process">
+    <div class="wrap">
+      <span class="kicker">Getting started</span>
+      <h2>From first message to first session</h2>
+      <div class="flow">
+        <div class="stage"><div class="dot">1</div><h3>Initial Enquiry</h3><p>Fill in the contact form or send an email. Everything is kept confidential.</p></div>
+        <div class="stage"><div class="dot">2</div><h3>Free Consultation</h3><p>A free 20-minute call to ask questions and see whether we're the right fit.</p></div>
+        <div class="stage"><div class="dot">3</div><h3>Begin</h3><p>We agree what you want to achieve and check in regularly on how it's going.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pod">
+    <div class="wrap">
+      <img src="assets/podcast.jpg" alt="The Kelly Marie Podcast artwork" />
+      <div>
+        <span class="kicker">Podcast</span>
+        <h2>The Kelly Marie Podcast</h2>
+        <p>Honest conversations about mental health, whenever you want to listen. Hosted by Ella Kitching.</p>
+        <div class="actions" style="display:flex;gap:14px;flex-wrap:wrap">
+          <a class="btn btn-white" href="#">Listen on Spotify</a>
+          <a class="btn btn-ghost" href="#">Watch on YouTube</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div class="wrap">
+      <div>
+        <span class="kicker">Contact Us</span>
+        <h2>Enquiries</h2>
+        <p>Fill in the form and we'll get back to you. We treat every enquiry in confidence, and you don't need to share anything before you're ready.</p>
+        <a class="mail" href="#"><svg class="icon"><use href="#i-mail"/></svg>Contactus@kellymariewellbeing.com</a>
+      </div>
+      <form onsubmit="return false">
+        <label>Name<input type="text" /></label>
+        <label>Email<input type="email" /></label>
+        <label class="full">I'm interested in
+          <select><option>Workplace Wellbeing</option><option>Training &amp; Coaching</option><option>Mental Health Leaflets</option><option>Not sure yet</option></select>
+        </label>
+        <label class="full">Message<textarea></textarea></label>
+        <button class="btn btn-navy" type="submit">Send enquiry <svg class="icon"><use href="#i-arrow"/></svg></button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="logo" href="#"><img src="assets/tree-white.png" alt="" /><div><b>Kelly Marie</b><span>Wellbeing</span></div></a>
+      <p style="margin-top:14px">Mental health services tailored to your business.</p>
+    </div>
+    <div><h4>Quick Links</h4><ul><li><a href="#">Counselling</a></li><li><a href="#">Training &amp; Coaching</a></li><li><a href="#">Podcast</a></li><li><a href="#">Shop</a></li><li><a href="#">Meet the Team</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="#">Contactus@kellymariewellbeing.com</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+    <p class="legal">&copy; 2026 Kelly Marie Wellbeing. All client information treated in strict confidence in accordance with BACP ethical guidelines.</p>
+  </div>
+</footer>
+</body>
+</html>
