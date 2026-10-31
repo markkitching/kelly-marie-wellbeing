@@ -7,6 +7,7 @@
  */
 const assert = require("assert");
 const { merge, shape, shorten, formatDate, formatDuration, parseYouTubeFeed, unescapeXml, youtubeId,
+        longFormPlaylist,
         extractChannelId, channelUrlFor,
         takeRestored, newlyRemoved } = require("./sync-podcast-episodes.js");
 
@@ -186,6 +187,51 @@ test("a spotify-keyed sync ignores youtube-only episodes, and vice versa", () =>
   const { added } = mergeSpotify(youtubeOnly, [spotify("AAA", "A")]);
   assert.strictEqual(added, 1);
   assert.strictEqual(mergeSpotify(youtubeOnly, [spotify("AAA", "A")]).episodes.length, 2);
+});
+
+// Laid out as YouTube writes its feed: a Short's alternate link is a /shorts/ address.
+const FEED_WITH_SHORTS = `<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/">
+  <entry>
+    <yt:videoId>ShortClip01</yt:videoId>
+    <title>The final is tonight!! #podcast</title>
+    <link rel="alternate" href="https://www.youtube.com/shorts/ShortClip01"/>
+    <published>2026-10-30T09:00:00+00:00</published>
+    <media:description>A clip.</media:description>
+  </entry>
+  <entry>
+    <yt:videoId>FullEpisode</yt:videoId>
+    <title>When Does "I'm So OCD" Become OCD?</title>
+    <link rel="alternate" href="https://www.youtube.com/watch?v=FullEpisode"/>
+    <published>2026-10-15T09:00:00+00:00</published>
+    <media:description>The full episode.</media:description>
+  </entry>
+  <entry>
+    <yt:videoId>ShortClip02</yt:videoId>
+    <title>Stop listening to sad music on bad days</title>
+    <link href="https://www.youtube.com/shorts/ShortClip02" rel="alternate"/>
+    <published>2026-10-14T09:00:00+00:00</published>
+    <media:description>Another clip.</media:description>
+  </entry>
+</feed>`;
+
+test("Shorts in the feed are left out, whichever way round the link is written", () => {
+  const episodes = parseYouTubeFeed(FEED_WITH_SHORTS);
+  assert.deepStrictEqual(episodes.map((e) => e.id), ["FullEpisode"]);
+});
+
+test("a feed entry with no link at all is kept", () => {
+  assert.strictEqual(parseYouTubeFeed(FEED).length, 2);
+});
+
+test("Shorts never reach the page through a merge", () => {
+  const { episodes, added } = merge([], parseYouTubeFeed(FEED_WITH_SHORTS), "youtube");
+  assert.strictEqual(added, 1);
+  assert.strictEqual(episodes[0].youtube, "FullEpisode");
+});
+
+test("the long-form uploads playlist is the channel id with UC swapped for UULF", () => {
+  assert.strictEqual(longFormPlaylist("UCabcdefghijklmnopqrstuv"), "UULFabcdefghijklmnopqrstuv");
 });
 
 test("youtubeId matches what pages.js accepts", () => {

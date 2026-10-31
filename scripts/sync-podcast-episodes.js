@@ -5,11 +5,16 @@
  *
  * Sources, in order of how little setup they need:
  *
- *   youtube-rss  (default)  No credentials at all. The channel's public Atom feed, which
- *                           carries the 15 most recent videos. Gives a video id, so each
- *                           episode gets a playable still on the page.
+ *   youtube-rss  (default)  No credentials at all. A public Atom feed of the channel's
+ *                           15 most recent videos. Gives a video id, so each episode gets
+ *                           a playable still on the page.
  *   youtube-api             A Google API key. Same data, but the full back catalogue
  *                           rather than the last 15. One quota unit per call.
+ *
+ * Shorts are left out. Both YouTube sources read the channel's "long-form uploads"
+ * playlist (see longFormPlaylist), which YouTube keeps without Shorts in it. The feed
+ * source also drops anything whose link is a /shorts/ address, as a second line of
+ * defence and as the filter if it ever has to fall back to the full channel feed.
  *   spotify                 Client id + secret. Kept because it works, though Spotify
  *                           has new app creation on hold, so most people can't get
  *                           credentials right now.
@@ -217,9 +222,11 @@ async function resolveChannelId(channel = CHANNEL) {
   return id;
 }
 
-function shapeYouTube({ id, title, description, published }) {
+function shapeYouTube({ id, title, description, published, link }) {
   return {
     id,
+    // The feed links a Short to youtube.com/shorts/…, and everything else to /watch.
+    isShort: /\/shorts\//.test(String(link || "")),
     title: unescapeXml(title).trim(),
     description: shorten(unescapeXml(description)),
     meta: formatDate(String(published || "").slice(0, 10)),
@@ -227,10 +234,24 @@ function shapeYouTube({ id, title, description, published }) {
   };
 }
 
-// The channel's public Atom feed. No key, no quota — but only the 15 most recent.
+// YouTube keeps several playlists per channel alongside the full uploads list (UU…).
+// UULF… holds the long-form uploads only, so no Shorts. It isn't documented, but it is
+// widely relied on; if it ever goes, the feed source falls back to the channel feed
+// and filters Shorts by their links, and the API source stops rather than let them in.
+function longFormPlaylist(channelId) {
+  return "UULF" + String(channelId).slice(2);
+}
+
+// A public Atom feed. No key, no quota — but only the 15 most recent. Shorts, which the
+// feed links to /shorts/ rather than /watch, are dropped here whichever feed it is.
 function parseYouTubeFeed(xml) {
   const field = (block, tag) => {
     const found = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
+    return found ? found[1] : "";
+  };
+  const link = (block) => {
+    const found = block.match(/<link[^>]*rel="alternate"[^>]*href="([^"]*)"/) ||
+                  block.match(/<link[^>]*href="([^"]*)"[^>]*rel="alternate"/);
     return found ? found[1] : "";
   };
   return (xml.match(/<entry>[\s\S]*?<\/entry>/g) || [])
@@ -239,42 +260,43 @@ function parseYouTubeFeed(xml) {
       title: field(entry, "title"),
       description: field(entry, "media:description"),
       published: field(entry, "published"),
+      link: link(entry),
     }))
-    .filter((episode) => episode.id);
+    .filter((episode) => episode.id && !episode.isShort);
 }
 
 async function fetchYouTubeFeed() {
   const channelId = await resolveChannelId();
-  const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
-  const response = await fetch(url);
+  const feed = (query) => fetch(`https://www.youtube.com/feeds/videos.xml?${query}`);
+
+  let response = await feed(`playlist_id=${encodeURIComponent(longFormPlaylist(channelId))}`);
   if (response.status === 404) {
-    throw new Error(`YouTube has no feed for channel ${channelId}.`);
+    console.warn("the long-form uploads feed wasn't found — using the channel feed and filtering Shorts by their links");
+    response = await feed(`channel_id=${encodeURIComponent(channelId)}`);
+    if (response.status === 404) throw new Error(`YouTube has no feed for channel ${channelId}.`);
   }
   if (!response.ok) throw new Error(`YouTube returned ${response.status} for the channel feed.`);
   return parseYouTubeFeed(await response.text());
 }
 
-// The Data API, for more than the feed's 15. channels.list then playlistItems.list,
-// one quota unit each — search.list would cost 100 and is not needed.
+// The Data API, for more than the feed's 15. playlistItems.list on the long-form
+// uploads playlist, one quota unit per call — search.list would cost 100 and is not
+// needed. The API gives no way to tell a Short from its listing, so if that playlist
+// is ever missing this stops rather than fall back to the full uploads and let Shorts in.
 async function fetchYouTubeApi() {
   const key = process.env.YOUTUBE_API_KEY;
   if (!key) throw new Error("YOUTUBE_API_KEY must be set for --source youtube-api.");
   const channelId = await resolveChannelId();
 
-  const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${encodeURIComponent(channelId)}&key=${key}`;
-  const channelResponse = await fetch(channelUrl);
-  if (!channelResponse.ok) throw new Error(`YouTube returned ${channelResponse.status} looking up the channel. Check YOUTUBE_API_KEY and that the YouTube Data API v3 is enabled.`);
-  const channel = (await channelResponse.json()).items?.[0];
-  if (!channel) throw new Error(`YouTube knows no channel ${channelId}.`);
-
-  const uploads = channel.contentDetails.relatedPlaylists.uploads;
+  const uploads = longFormPlaylist(channelId);
   const episodes = [];
   let pageToken = "";
   while (episodes.length < LIMIT) {
     const listUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploads}` +
       `&maxResults=${Math.min(50, LIMIT - episodes.length)}&key=${key}` + (pageToken ? `&pageToken=${pageToken}` : "");
     const listResponse = await fetch(listUrl);
-    if (!listResponse.ok) throw new Error(`YouTube returned ${listResponse.status} listing uploads.`);
+    if (listResponse.status === 404) throw new Error(`YouTube has no long-form uploads playlist (${uploads}) for this channel. Use --source youtube-rss, which can filter Shorts without it.`);
+    if (!listResponse.ok) throw new Error(`YouTube returned ${listResponse.status} listing uploads. Check YOUTUBE_API_KEY and that the YouTube Data API v3 is enabled.`);
     const body = await listResponse.json();
     for (const item of body.items || []) {
       episodes.push(shapeYouTube({
@@ -460,7 +482,7 @@ async function main() {
 }
 
 // Exported so the merge rules can be tested without touching the network.
-module.exports = { merge, shape, shapeYouTube, parseYouTubeFeed, unescapeXml,
+module.exports = { merge, shape, shapeYouTube, parseYouTubeFeed, unescapeXml, longFormPlaylist,
                    takeRestored, newlyRemoved, readLedger,
                    extractChannelId, channelUrlFor,
                    spotifyId, youtubeId, shorten, formatDate, formatDuration };
