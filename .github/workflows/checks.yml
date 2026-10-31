@@ -10,7 +10,10 @@ on:
 
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    # Pinned rather than ubuntu-latest: the browser test installs Chromium through the
+    # project's pinned Playwright (1.56.1), which can't install on Ubuntu 26.04. Move this
+    # on when Playwright is upgraded to a version that supports the newer image.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
