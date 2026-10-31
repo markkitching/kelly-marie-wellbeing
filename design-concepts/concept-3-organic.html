@@ -35,9 +35,9 @@
   .hero h1 em { color: var(--accent-text); }
   .hero p { color: var(--muted); font-size: 18px; max-width: 520px; margin-bottom: 12px; }
   .hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
-  .arch-wrap { position: relative; justify-self: center; width: 100%; max-width: 420px; }
-  .arch { border-radius: 999px 999px 28px 28px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--cream); }
-  .arch img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .arch-wrap { position: relative; justify-self: center; width: 100%; max-width: 480px; }
+  .arch { border-radius: 999px 999px 28px 28px; overflow: hidden; aspect-ratio: 1 / 1.08; background: var(--cream); }
+  .arch img { width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
   .blob { position: absolute; z-index: -1; border-radius: 50%; }
   .blob.a { width: 260px; height: 260px; background: var(--cream); right: -60px; top: -30px; }
   .blob.b { width: 140px; height: 140px; background: #dbe6f0; left: -40px; bottom: 60px; }
@@ -63,7 +63,7 @@
   .tile .go { margin-top: auto; padding-top: 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--navy); }
   .go i { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
   .t-couns { grid-column: span 4; grid-row: span 2; background: #fff; padding-right: 46%; }
-  .t-couns img { position: absolute; right: 18px; top: 18px; bottom: 18px; width: 42%; height: calc(100% - 36px); object-fit: cover; object-position: center; border-radius: 999px 999px 20px 20px; }
+  .t-couns .illus { position: absolute; right: 18px; top: 18px; bottom: 18px; width: 42%; height: calc(100% - 36px); object-fit: cover; border-radius: 999px 999px 20px 20px; overflow: hidden; }
   .t-train { grid-column: span 2; grid-row: span 2; background: var(--navy); }
   .t-train h3 { color: #fff; }
   .t-train p { color: #c9d6e3; }
@@ -129,7 +129,7 @@
     .bento { grid-template-columns: 1fr; }
     .tile, .t-couns, .t-train, .t-pod, .t-shop, .t-team, .t-calc { grid-column: auto; grid-row: auto; }
     .t-couns { padding: 28px; }
-    .t-couns img { position: static; width: 100%; height: 280px; margin-bottom: 22px; order: -1; }
+    .t-couns .illus { position: static; width: 100%; height: 280px; margin-bottom: 22px; order: -1; }
     .t-calc { flex-direction: column; align-items: flex-start; }
     .steps { grid-template-columns: 1fr; gap: 40px; }
     .steps::before { display: none; }
@@ -173,7 +173,7 @@
       </div>
       <div class="arch-wrap">
         <span class="blob a"></span><span class="blob b"></span>
-        <div class="arch"><img src="assets/kelly.jpg" alt="Kelly Marie, founder and psychotherapist" /></div>
+        <div class="arch"><img src="assets/workplace.jpg" alt="Two people talking at a desk" /></div>
         <div class="seal">
           <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="circ" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text><textPath href="#circ">Making mental health a priority · </textPath></text></svg>
           <img src="assets/tree-accent.png" alt="" />
@@ -187,7 +187,17 @@
       <div class="sec-title"><span class="kicker">How we can help</span><h2>Support that <em>grows</em> with your people</h2></div>
       <div class="bento">
         <a class="tile t-couns" href="#">
-          <img src="assets/mountain.jpg" alt="" />
+          <svg class="illus" viewBox="0 0 300 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbe6f0"/><stop offset="1" stop-color="#f5f7fa"/></linearGradient></defs>
+            <rect width="300" height="420" fill="url(#sky)"/>
+            <circle cx="214" cy="104" r="44" fill="#fff" opacity=".85"/>
+            <path d="M0 292 C70 248 160 268 300 226 V420 H0Z" fill="#c6d6e5"/>
+            <image href="assets/tree-navy.png" x="78" y="150" width="150" height="150"/>
+            <path d="M0 318 C90 286 200 314 300 286 V420 H0Z" fill="#8fb3cf"/>
+            <path d="M0 362 C100 334 220 366 300 342 V420 H0Z" fill="#4a7fa5"/>
+            <path d="M0 396 C110 376 210 400 300 384 V420 H0Z" fill="#1c3553"/>
+            <g fill="#4a7fa5"><ellipse cx="60" cy="150" rx="5" ry="10" transform="rotate(-30 60 150)" opacity=".7"/><ellipse cx="250" cy="200" rx="4" ry="8" transform="rotate(40 250 200)" opacity=".6"/><ellipse cx="40" cy="230" rx="4" ry="8" transform="rotate(20 40 230)" opacity=".5"/><ellipse cx="270" cy="150" rx="3.5" ry="7" transform="rotate(-50 270 150)" opacity=".5"/></g>
+          </svg>
           <span class="kicker">Counselling</span>
           <h3 style="margin-top:12px">A structured and safe space</h3>
           <p>Evidence-based psychotherapy for individuals, groups and organisations. Face to face, at your workplace, or online.</p>
