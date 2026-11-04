@@ -1,7 +1,9 @@
   </main>
 
   <!-- ═══════════════════════════════════════════════ FOOTER ═══════════════════════════════════════════════ -->
-  <footer class="site-footer pt-12 pb-10">
+  {#- Light on the homepage, which already ends in a dark card; dark navy everywhere
+      else, so the other pages keep a strong ending (colours in site-header.njk). -#}
+  <footer class="site-footer{% if not homePage %} site-footer-dark on-dark{% endif %} pt-12 pb-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pt-8 border-t border-gray-200">
@@ -10,7 +12,7 @@
         <div class="max-w-xs">
           <a href="/" class="flex items-center gap-2.5 mb-3">
             {% if content.header.logoImage %}
-            <img src="{{ content.header.logoImage }}" alt="" width="38" height="38" class="w-[38px] h-[38px] object-contain flex-shrink-0" />
+            <img src="{{ content.header.logoImage }}" alt="" width="38" height="38" class="footer-logo w-[38px] h-[38px] object-contain flex-shrink-0" />
             {% else %}
             <span class="w-8 h-8 rounded-full bg-forest flex items-center justify-center flex-shrink-0">
               <i data-lucide="{{ content.header.logoIcon }}" class="text-sage-light w-4 h-4"></i>
