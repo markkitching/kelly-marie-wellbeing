@@ -53,14 +53,18 @@ module.exports = () => {
   const accent = theme.customAccent || pal.accent;
   const light = theme.customLight || pal.light;
   const cream = theme.customCream || pal.cream;
+  // The tinted bands that alternate with white on every page but the homepage. A step
+  // stronger than the page background, which is too close to white to see on many screens.
+  const band = cream;
 
   return {
     dark,
     accent,
     light,
     cream,
+    band,
     // Accent for text and buttons on the light backgrounds (and white text on it).
-    accentText: readable(accent, "#000000", ["#ffffff", light, cream]),
+    accentText: readable(accent, "#000000", ["#ffffff", light, cream, band]),
     // Accent for text on the dark background (footer, quote bands, Approach section).
     accentOnDark: readable(accent, "#ffffff", [dark, mix(dark, "#ffffff", 0.05)]),
     // Secondary text on the dark background: a soft white, made just light enough to
