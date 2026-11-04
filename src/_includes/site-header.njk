@@ -4,14 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% if pageTitle %}{{ pageTitle }} | {{ content.header.logoLine1 }} {{ content.header.logoLine2 }}{% else %}{{ content.site.title }}{% endif %}</title>
-  <meta name="description" content="{{ pageDescription or content.site.description }}" />
+  {#- A page's own description from Page settings, by address; templates that set
+      pageDescription themselves (Shop, calculator, Terms, Privacy) are the fallback. -#}
+  {%- set ownDescriptions = content.site.descriptions or {} -%}
+  {%- set descriptionKey = {"/counselling/": "counselling", "/training-coaching/": "trainingCoaching", "/podcast/": "podcast", "/meet-the-team/": "meetTheTeam", "/contact/": "contact", "/shop/": "shop"}[page.url] -%}
+  {%- set pageDescription = (ownDescriptions[descriptionKey] if descriptionKey else "") or pageDescription or content.site.description -%}
+  <meta name="description" content="{{ pageDescription }}" />
 
   <!-- Link previews on social media. A page can set pageDescription to be described in
        its own words; the rest use the site-wide description. -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="{{ content.header.logoLine1 }} {{ content.header.logoLine2 }}" />
   <meta property="og:title" content="{% if pageTitle %}{{ pageTitle }}{% else %}{{ content.site.title }}{% endif %}" />
-  <meta property="og:description" content="{{ pageDescription or content.site.description }}" />
+  <meta property="og:description" content="{{ pageDescription }}" />
   <meta property="og:url" content="{{ links.site }}{{ page.url }}" />
   {# The logo card (src/images/share-image.jpg, 1200×630) shown when a link is shared. #}
   <meta property="og:image" content="{{ links.site }}/images/share-image.jpg" />
