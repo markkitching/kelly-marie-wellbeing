@@ -55,7 +55,7 @@ module.exports = () => {
   const cream = theme.customCream || pal.cream;
   // The tinted bands that alternate with white on every page but the homepage. A step
   // stronger than the page background, which is too close to white to see on many screens.
-  const band = mix(accent, light, 0.86);
+  const band = cream;
 
   return {
     dark,
@@ -73,7 +73,7 @@ module.exports = () => {
     // Soft tints of the accent, for the homepage's tile backgrounds and the hills in its
     // illustration. Worked out from the scheme so they follow it when it changes. Only
     // the softest carries text, and that text is dark grey or the main dark colour.
-    tintSoft: band,
+    tintSoft: mix(accent, light, 0.86),
     tintMid: mix(accent, light, 0.73),
     tintDeep: mix(accent, light, 0.45),
   };
