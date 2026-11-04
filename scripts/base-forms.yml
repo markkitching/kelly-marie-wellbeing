@@ -19,7 +19,32 @@ content:
         type: string
       - name: description
         label: Search-engine description
+        description: The short summary Google shows under the homepage in search results, and in link previews. Also used for any page without its own description below. Aim for about 150 characters.
         type: text
+      - name: descriptions
+        label: Search-engine descriptions for other pages
+        description: Each page's summary in Google results and link previews. Leave one empty to use the homepage description. Aim for about 150 characters. (The cost calculator's is under Cost calculator.)
+        type: object
+        fields:
+          - name: counselling
+            label: Counselling
+            type: text
+          - name: trainingCoaching
+            label: Training & Coaching
+            type: text
+          - name: podcast
+            label: Podcast
+            type: text
+          - name: meetTheTeam
+            label: Meet the Team
+            type: text
+          - name: contact
+            label: Contact
+            type: text
+          - name: shop
+            label: Shop
+            description: Empty uses the Shop page's intro.
+            type: text
       - name: formspreeEndpoint
         label: Contact form address (Formspree)
         type: string
