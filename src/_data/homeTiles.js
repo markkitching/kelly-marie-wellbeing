@@ -10,11 +10,12 @@ const shopPage = require("./shopPage.js");
 // somewhere that doesn't exist.
 //
 // Some tiles borrow from the page they lead to rather than asking for the same thing
-// twice: the Training tile lists that page's card titles, the Team tile shows the team's
+// twice: the Training tile shows that page's intro and cards, the Team tile shows the team's
 // photos, and the Podcast and Shop tiles fall back to those pages' own artwork.
 //
 // Read fresh each time, so `eleventy --serve` picks up edits.
 const clean = (value) => (typeof value === "string" ? value.trim() : "");
+const firstSentence = (text) => (clean(text).match(/^.*?[.!?](?=\s|$)/) || [clean(text)])[0];
 
 module.exports = () => {
   const home = content().home || {};
@@ -31,8 +32,14 @@ module.exports = () => {
       image: clean(home.counsellingImage),
       imageAlt: clean(home.counsellingImageAlt),
     }),
+    // The wide tile: its own text if set, otherwise the Training page's intro, and each of
+    // that page's cards with the first sentence of its description.
     training: tile("training-coaching", {
-      items: (training.cards || []).map((card) => card.title).slice(0, 4),
+      text: clean(home.trainingText) || clean(training.intro),
+      items: (training.cards || [])
+        .filter((card) => clean(card.title))
+        .map((card) => ({ title: clean(card.title), summary: firstSentence(card.description) }))
+        .slice(0, 4),
     }),
     podcast: tile("podcast", {
       image: clean(home.podcastImage) || podcast.audioArtwork || "",

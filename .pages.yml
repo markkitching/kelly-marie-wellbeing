@@ -621,6 +621,10 @@ content:
       - name: trainingHeading
         label: Training tile — heading
         type: string
+      - name: trainingText
+        label: Training tile — text (optional)
+        description: Leave empty to use the intro from the Training & Coaching page. The course boxes come from that page's cards.
+        type: text
       - name: trainingLink
         label: Training tile — link text
         type: string
