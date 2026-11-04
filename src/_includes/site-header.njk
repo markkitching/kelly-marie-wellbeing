@@ -85,6 +85,14 @@
     .site-footer a { text-decoration: none; transition: color 0.2s ease; }
     .site-footer a:hover { color: var(--dark); }
     .site-footer .small-print a { text-decoration: underline; text-underline-offset: 2px; }
+    /* The dark version, on every page but the homepage */
+    .site-footer-dark { background: var(--dark); color: var(--muted-on-dark); }
+    .site-footer-dark .text-forest { color: #ffffff; }
+    .site-footer-dark .text-sage { color: var(--accent-on-dark); }
+    .site-footer-dark .text-gray-600 { color: var(--muted-on-dark); }
+    .site-footer-dark .border-gray-200 { border-color: transparent; padding-top: 0; }
+    .site-footer-dark a:hover { color: #ffffff; }
+    .site-footer-dark .footer-logo { background: #ffffff; border-radius: 999px; padding: 3px; }
     /* Cards: a quiet border colour change on hover, no lift or shadow. The coloured top
        border some cards carry is left as it is. */
     .service-card { transition: border-color 0.2s ease; }
