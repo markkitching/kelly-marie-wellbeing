@@ -1,0 +1,38 @@
+{
+  "subject": "Your mental health cost plan for {organisation}",
+  "organisationFallback": "your organisation",
+  "greeting": "Hi {name},",
+  "introText": "Thanks for using our cost calculator. Here's a short plan for {organisation}, based on the numbers you entered.",
+  "numbersHeading": "Your numbers",
+  "numbersText": "Based on what you entered, poor mental health could be costing {organisation} around {total} a year. That's about {perEmployee} for each person you employ.",
+  "biggestShareText": "The biggest share for you is {largest}.",
+  "meaningHeading": "What that means",
+  "meaningPresenteeism": "Most of this cost comes from people who are still at work but struggling. It's the hardest one to see. Work slows down, mistakes creep in, and by the time anyone notices, it has often turned into sickness absence or a resignation. Managers who know what to look for can usually pick it up much earlier.",
+  "meaningTurnover": "Most of this cost comes from people leaving. When someone leaves because they've been struggling, you pay for it twice: recruiting and training their replacement, then waiting months for that person to get up to speed. Often the person would have stayed if the first conversation with their manager had gone differently.",
+  "meaningAbsence": "Most of this cost comes from sickness absence. Mental health absences tend to last longer than most, and how the first few days are handled makes a big difference to how quickly someone comes back.",
+  "trainingHeading": "What training would look like for you",
+  "trainingText": "With {managers} managers and team leaders, we'd suggest {sessions}. Every session is tailored to your organisation.",
+  "sessionsSmall": "one small full-day session",
+  "sessionsOne": "one full-day session, for a group of up to {size}",
+  "sessionsMany": "{count} full-day sessions, in groups of up to {size}",
+  "estimatedNote": "We've estimated the number of managers and team leaders from your headcount, at about 1 for every {ratio} staff. Tell us the real number and we'll adjust the plan.",
+  "managerRatio": 10,
+  "freeHeading": "Three things you can do this month, for free",
+  "freeSteps": [
+    {
+      "text": "Look at how absence is recorded. If the reason is often blank or 'other', the problem stays invisible. A simple, confidential category for stress, anxiety or low mood makes it much easier to see."
+    },
+    {
+      "text": "Ask your managers one question: 'If someone on your team told you they were struggling, would you know what to say?' Their answers will tell you a lot."
+    },
+    {
+      "text": "Make sure everyone knows where to get help, including your Employee Assistance Programme if you have one, and Samaritans on 116 123, free and available any time."
+    }
+  ],
+  "nextHeading": "Next step",
+  "nextText": "Want to talk your results through? Book a free 20-minute call with us.",
+  "buttonLabel": "Book a free call",
+  "bookingUrl": "",
+  "signOff": "Kelly Marie Wellbeing",
+  "reasonText": "You're receiving this email because you asked for your personal plan on our website."
+}

@@ -271,11 +271,11 @@ content:
         label: Text above the result
         type: string
       - name: captureHeading
-        label: Printable summary — heading
-        description: Above the short form people fill in to download a printable (PDF) summary.
+        label: Personal plan form — heading
+        description: Above the short form people fill in to have their personal plan emailed to them. The plan's own wording is under "Personal plan email".
         type: string
       - name: captureText
-        label: Printable summary — text
+        label: Personal plan form — text
         type: text
       - name: sourceNote
         label: Small print (source of the figures)
@@ -317,6 +317,112 @@ content:
         label: Advanced — starting assumption, employer on-costs (%)
         description: Leave blank to use the default (15).
         type: number
+  - name: personal-plan
+    label: Personal plan email
+    description: >-
+      The plan emailed to people who fill in the form under the cost calculator. Words
+      in {curly brackets} are filled in for each person, so keep them as they are.
+    type: file
+    path: src/content/personal-plan.json
+    format: json
+    fields:
+      - name: subject
+        label: Email subject
+        description: "{organisation} is their organisation, or the text below if they left it blank."
+        type: string
+      - name: organisationFallback
+        label: When no organisation is given, say
+        type: string
+      - name: greeting
+        label: Greeting
+        description: "{name} is their first name."
+        type: string
+      - name: introText
+        label: Opening line
+        type: text
+      - name: numbersHeading
+        label: Section 1 heading
+        type: string
+      - name: numbersText
+        label: Section 1 text
+        description: "{organisation}, {total} (a year) and {perEmployee} are filled in. The table of the three costs follows."
+        type: text
+      - name: biggestShareText
+        label: Section 1, biggest share line
+        description: "{largest} is their largest cost, e.g. staff leaving."
+        type: string
+      - name: meaningHeading
+        label: Section 2 heading
+        type: string
+      - name: meaningPresenteeism
+        label: Section 2 text when the biggest cost is working while unwell
+        type: text
+      - name: meaningTurnover
+        label: Section 2 text when the biggest cost is staff leaving
+        type: text
+      - name: meaningAbsence
+        label: Section 2 text when the biggest cost is sickness absence
+        type: text
+      - name: trainingHeading
+        label: Section 3 heading
+        type: string
+      - name: trainingText
+        label: Section 3 text
+        description: "{managers} is their number of managers (about 5, say, when estimated); {sessions} is one of the three lines below."
+        type: text
+      - name: sessionsSmall
+        label: Sessions, for fewer than 6 managers
+        type: string
+      - name: sessionsOne
+        label: Sessions, when one session is enough
+        description: "{size} is the group size: 6, 9, 12 or 15."
+        type: string
+      - name: sessionsMany
+        label: Sessions, when more than one is needed
+        description: "{count} is the number of sessions, {size} the group size."
+        type: string
+      - name: estimatedNote
+        label: Note when the number of managers was estimated
+        description: "{ratio} is the number below."
+        type: text
+      - name: managerRatio
+        label: Staff per manager, for estimating
+        description: Used when someone leaves the managers box blank. 10 means 1 manager for every 10 staff, rounded up.
+        type: number
+      - name: freeHeading
+        label: Section 4 heading
+        type: string
+      - name: freeSteps
+        label: Section 4, things to do
+        description: Numbered in the email in this order. Drag to reorder.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{text}'
+        fields:
+          - name: text
+            label: Text
+            type: text
+      - name: nextHeading
+        label: Section 5 heading
+        type: string
+      - name: nextText
+        label: Section 5 text
+        type: text
+      - name: buttonLabel
+        label: Button text
+        type: string
+      - name: bookingUrl
+        label: Booking link
+        description: Where the button goes, starting https://. Leave empty to send people to the contact page instead.
+        type: string
+      - name: signOff
+        label: Sign-off
+        type: string
+      - name: reasonText
+        label: Why they're getting this email (small print)
+        type: text
   - name: shop
     label: 'Page: Shop'
     type: file

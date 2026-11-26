@@ -10,8 +10,10 @@
     2. "Make this estimate more accurate" (optional, inside the calculator) — their own
        figures, compared side by side;
     3. "How we calculated this" — every assumption stated, and editable;
-    4. a printable summary, behind a short form (Formspree,
-       the same endpoint as the contact form).
+    4. "Get your personal plan": a short form that stores the details with Formspree
+       (the same endpoint as the contact form), then asks functions/api/plan.js to
+       email the visitor their plan (wording in src/content/personal-plan.json) and to
+       tell us. The printable summary is offered once it's sent.
 
   The arithmetic lives in src/js/cost-calculator.js, tested by scripts/test-calculator.js.
 
@@ -46,7 +48,9 @@
   orgName: content.header.logoLine1 + " " + content.header.logoLine2,
   heading: calc.heading or "What Is Poor Mental Health Costing Your Business?",
   sourceNote: calc.sourceNote,
-  roiText: calc.ctaText
+  roiText: calc.ctaText,
+  planEndpoint: planSettings.endpoint,
+  turnstileSiteKey: planSettings.turnstileSiteKey
 } -%}
 {%- set perEmployee = calcConfig.perEmployee.presenteeism + calcConfig.perEmployee.turnover + calcConfig.perEmployee.absence -%}
 {%- set tag = calcHeadingTag or "h2" -%}
@@ -243,16 +247,19 @@
         </div>
       </details>
 
-      <!-- ── 4. Printable summary, behind a short form ── -->
+      <!-- ── 4. Personal plan by email (and the printable summary), behind a short form ── -->
       <div class="bg-white rounded-lg border border-gray-200 border-t-4 border-t-forest px-6 py-6 sm:px-8 sm:py-8" id="calc-summary" tabindex="-1">
         <div data-calc-locked>
-          <{{ subTag }} class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get a printable summary" }}</{{ subTag }}>
-          <p class="text-gray-600 mt-2 mb-6">{{ (calc.captureText or "Download a one-page summary of your estimate to share with your manager, leadership team or board.") | lines }}</p>
+          <{{ subTag }} class="font-serif text-forest text-2xl">{{ calc.captureHeading or "Get your personal plan" }}</{{ subTag }}>
+          <p class="text-gray-600 mt-2 mb-6">{{ (calc.captureText or "We'll email you a short plan for your organisation, based on your numbers.") | lines }}</p>
 
           <form class="space-y-5" data-calc-form action="{{ content.site.formspreeEndpoint }}" method="POST" novalidate>
             <input type="hidden" name="_subject" value="Cost calculator lead" />
             <input type="hidden" name="source" value="Cost calculator" />
             <input type="hidden" name="estimate" value="" data-calc-form-estimate />
+            {#- Filled in on sending: when they agreed, and what they said about updates. -#}
+            <input type="hidden" name="consent_given_at" value="" data-calc-consent-time />
+            <input type="hidden" name="updates_consent" value="" data-calc-updates-answer />
             {#- Formspree's honeypot: people never see it, bots fill it in. -#}
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
@@ -272,6 +279,12 @@
               <label for="calc-org" class="{{ labelClass }}">Organisation <span class="text-gray-600 font-normal">(optional)</span></label>
               <input id="calc-org" name="organisation" type="text" autocomplete="organization" class="{{ inputClass }}" />
             </div>
+            <div>
+              <label for="calc-managers" class="{{ labelClass }}">Number of managers and team leaders <span class="text-gray-600 font-normal">(optional)</span></label>
+              <p id="calc-managers-hint" class="{{ hintClass }}">So we can suggest how training might work for you. Leave it blank and we'll estimate it.</p>
+              <input id="calc-managers" name="managers" type="text" inputmode="numeric" autocomplete="off" aria-describedby="calc-managers-hint calc-managers-error" class="{{ inputClass }} sm:max-w-[12rem]" />
+              <p id="calc-managers-error" class="{{ errorClass }}" role="alert"></p>
+            </div>
 
             <label class="flex items-start gap-3 cursor-pointer">
               <input type="checkbox" name="wants_to_talk" value="Yes" class="w-6 h-6 accent-forest flex-shrink-0" data-calc-talk-box />
@@ -286,7 +299,7 @@
               <label class="flex items-start gap-3 cursor-pointer">
                 <input id="calc-consent" type="checkbox" name="consent" value="Yes" required aria-describedby="calc-consent-error" class="w-6 h-6 accent-forest flex-shrink-0" data-calc-consent />
                 <span class="text-sm text-gray-700">
-                  I agree to {{ calcConfig.orgName }} storing my details and the figures above so they can provide my summary and, if I've asked, get in touch about training.
+                  I agree to {{ calcConfig.orgName }} storing my details and the figures above so they can email me my plan and, if I've asked, get in touch about training.
                   See our <a href="/privacy/" class="text-forest font-medium underline underline-offset-2 hover:text-sage" target="_blank">privacy policy</a>.
                   <span class="text-red-700" aria-hidden="true">*</span>
                 </span>
@@ -294,17 +307,29 @@
               <p id="calc-consent-error" class="{{ errorClass }}" role="alert"></p>
             </div>
 
+            {#- Separate and optional, unticked: agreeing to the plan isn't agreeing to updates. -#}
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" name="updates" value="Yes" class="w-6 h-6 accent-forest flex-shrink-0" data-calc-updates />
+              <span class="text-sm text-gray-700">Send me occasional updates from {{ calcConfig.orgName }}. <span class="text-gray-600">(optional)</span></span>
+            </label>
+
+            {%- if calcConfig.turnstileSiteKey %}
+            {#- Cloudflare Turnstile, the spam check: usually invisible, sometimes a tick box. -#}
+            <div data-calc-turnstile></div>
+            {%- endif %}
+
             <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors disabled:opacity-60" data-calc-submit>
-              <i data-lucide="file-text" class="w-4 h-4"></i>
-              <span data-calc-submit-label>Get my summary</span>
+              <i data-lucide="mail" class="w-4 h-4"></i>
+              <span data-calc-submit-label>Email me my plan</span>
             </button>
             <p class="hidden text-sm text-red-700" role="alert" data-calc-form-error></p>
           </form>
         </div>
 
         <div class="hidden" data-calc-unlocked>
-          <{{ subTag }} class="font-serif text-forest text-2xl">Your summary is ready</{{ subTag }}>
-          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you. Download it below; it reflects the figures currently entered above.</p>
+          <{{ subTag }} class="font-serif text-forest text-2xl" data-calc-done-heading>Your plan is on its way</{{ subTag }}>
+          <p class="text-gray-600 mt-2" data-calc-thanks>Thank you. Check your inbox in the next few minutes, and your junk folder if you can't see it.</p>
+          <p class="text-gray-600 mt-3">You can also download a printable summary of your figures.</p>
           <div class="flex flex-wrap gap-4 mt-6">
             <button type="button" class="inline-flex items-center gap-2 bg-forest text-white font-medium px-6 py-3 rounded hover:bg-sage transition-colors" data-calc-download>
               <i data-lucide="download" class="w-4 h-4"></i>
@@ -357,3 +382,6 @@
 <script id="calc-config" type="application/json">{{ calcConfig | dump | replace("<", "\\u003c") | safe }}</script>
 <script src="{{ '/js/cost-calculator.js' | versioned }}"></script>
 <script src="{{ '/js/cost-calculator-page.js' | versioned }}"></script>
+{%- if calcConfig.turnstileSiteKey %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=kmwTurnstileReady" async defer></script>
+{%- endif %}

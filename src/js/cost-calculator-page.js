@@ -3,7 +3,8 @@
  * fields, asks cost-calculator.js for the numbers, and draws them.
  *
  * Everything is worked out in the browser. The only thing ever sent anywhere is the
- * summary form, and only when the visitor submits it.
+ * personal plan form, and only when the visitor submits it: first to Formspree, which
+ * stores it as before, then to /api/plan (functions/api/plan.js), which emails the plan.
  */
 (function () {
   "use strict";
@@ -238,18 +239,38 @@
   var submitLabel = $("[data-calc-submit-label]");
   var formError = $("[data-calc-form-error]");
   var talkBox = $("[data-calc-talk-box]");
+  var managersInput = form.elements.managers;
+
+  // ── Spam check (Cloudflare Turnstile) ───────────
+  // Only when a site key is set for this deployment; the widget is usually invisible.
+  var turnstileId = null;
+  var turnstileBox = $("[data-calc-turnstile]");
+  window.kmwTurnstileReady = function () {
+    if (!turnstileBox || !window.turnstile || turnstileId !== null) return;
+    turnstileId = window.turnstile.render(turnstileBox, { sitekey: config.turnstileSiteKey, size: "flexible", appearance: "interaction-only" });
+  };
+  if (window.turnstile) window.kmwTurnstileReady();
+  function turnstileToken() {
+    return turnstileId !== null && window.turnstile ? window.turnstile.getResponse(turnstileId) || "" : "";
+  }
 
   talkBox.addEventListener("change", function () {
     $("[data-calc-message]").classList.toggle("hidden", !talkBox.checked);
   });
 
+  function readManagers() {
+    return C.parseField(managersInput.value, { integer: true, min: 1, max: 100000 });
+  }
+
   function validateForm() {
     var ok = true;
     var name = form.elements.name, email = form.elements.email, consent = form.elements.consent;
+    var managers = readManagers();
     var checks = [
       [name, !name.value.trim() ? "Please enter your name." : ""],
       [email, !email.value.trim() ? "Please enter your email address." : !email.validity.valid ? "Please enter a valid email address." : ""],
-      [consent, !consent.checked ? "Please tick to agree before we can provide your summary." : ""],
+      [managersInput, managers.error ? (managers.error === "Please enter a number of 1 or more." ? "Please enter 1 or more, or leave it blank." : managers.error) : ""],
+      [consent, !consent.checked ? "Please tick to agree before we can send your plan." : ""],
     ];
     checks.forEach(function (c) {
       showError(c[0], c[1]);
@@ -274,29 +295,84 @@
       return;
     }
 
+    if (config.turnstileSiteKey && !turnstileToken()) {
+      formError.textContent = "Please wait a moment while we check you're not a robot, then try again.";
+      formError.classList.remove("hidden");
+      return;
+    }
+
+    var sentAt = new Date().toISOString();
+    var updates = $("[data-calc-updates]").checked;
     $("[data-calc-form-estimate]").value = summaryText();
+    $("[data-calc-consent-time]").value = sentAt;
+    $("[data-calc-updates-answer]").value = (updates ? "Yes" : "No") + " (" + sentAt + ")";
+    var token = turnstileToken();
     submitBtn.disabled = true;
     submitLabel.textContent = "Sending…";
 
-    fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
+    // Formspree first, so the details are stored even if the email step fails.
+    var stored = new FormData(form);
+    stored.delete("cf-turnstile-response");
+    stored.delete("updates");
+    fetch(form.action, { method: "POST", body: stored, headers: { Accept: "application/json" } })
       .then(function (res) {
         if (!res.ok) throw new Error("Server error");
-        try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch (err) { /* private mode — fine */ }
-        if (talkBox.checked) {
-          $("[data-calc-thanks]").textContent = "Thank you. We'll be in touch about training soon. Download your summary below; it reflects the figures currently entered above.";
-        }
-        setUnlocked(true);
-        $("#calc-summary").focus();
+        return sendPlan(token, updates).then(function (emailSent) {
+          try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch (err) { /* private mode — fine */ }
+          var email = form.elements.email.value.trim();
+          if (emailSent) {
+            $("[data-calc-done-heading]").textContent = "Your plan is on its way";
+            $("[data-calc-thanks]").textContent = "Thank you. We've emailed your plan to " + email +
+              ". It should arrive in the next few minutes; check your junk folder if you can't see it." +
+              (talkBox.checked ? " We'll also be in touch about training." : "");
+          } else {
+            $("[data-calc-done-heading]").textContent = "Thank you";
+            $("[data-calc-thanks]").textContent = "Your details have reached us, but we couldn't email your plan just now. " +
+              "We'll send it to " + email + " as soon as we can.";
+          }
+          setUnlocked(true);
+          $("#calc-summary").focus();
+        });
       })
       .catch(function () {
         formError.textContent = "Sorry, that didn't send. Please try again, or email " + config.contactEmail + ".";
         formError.classList.remove("hidden");
+        if (turnstileId !== null && window.turnstile) window.turnstile.reset(turnstileId);
       })
       .then(function () {
         submitBtn.disabled = false;
-        submitLabel.textContent = "Get my summary";
+        submitLabel.textContent = "Email me my plan";
       });
   });
+
+  // Asks /api/plan to email the plan. Resolves true once it's sent; false if it can't
+  // be (the details are already stored, so the visitor isn't asked to try again).
+  function sendPlan(token, updates) {
+    var s = state, managers = readManagers().value;
+    var body = {
+      turnstileToken: token,
+      name: form.elements.name.value,
+      email: form.elements.email.value,
+      organisation: form.elements.organisation.value,
+      managers: managers,
+      wantsToTalk: talkBox.checked,
+      message: talkBox.checked ? form.elements.message.value : "",
+      consentPlan: form.elements.consent.checked,
+      consentUpdates: updates,
+      staff: s.staff,
+      inputs: { salary: s.inputs.salary, absentStaff: s.inputs.absentStaff, leavers: s.inputs.leavers, strugglingStaff: s.inputs.strugglingStaff },
+      assumptions: {
+        daysPerAbsence: s.assumptions.daysPerAbsence,
+        replacementPct: s.assumptions.replacementPct,
+        productivityLossPct: s.assumptions.productivityLossPct,
+        onCostPct: s.assumptions.onCostPct,
+      },
+    };
+    return fetch(config.planEndpoint, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+      .then(function (res) { return res.json().catch(function () { return {}; }); })
+      .then(function (data) { return data.ok === true && data.emailSent === true; })
+      .catch(function () { return false; });
+  }
 
   // "Talk to us" opens the same form with the box ticked. Once they've already sent it,
   // the contact page is the better next step, so the link is left to do its job.

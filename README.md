@@ -625,15 +625,63 @@ there falls back to the default in `src/js/cost-calculator.js`.
 | `scripts/test-page-titles.js` | Builds a copy of the site with an apostrophe and `&` in the calculator heading, and checks titles and link previews aren't escaped twice: `npm run test:titles` |
 | `scripts/test-calculator-page.js` | The page in a real browser (headcount, warnings, form, summary): `npm run build && npm run test:page` |
 | `src/privacy.njk` | The privacy policy both forms link to |
+| `src/content/personal-plan.json` | The personal plan's wording, manager ratio and booking link (CMS: **Personal plan email**) |
+| `src/lib/personal-plan.js` | Works out the plan (biggest cost, training groups) and writes the two emails |
+| `src/lib/plan-handler.js` | Checks a request (spam check, details) and sends the emails through Resend |
+| `functions/api/plan.js` | The Cloudflare Pages Function at `/api/plan` that calls the handler |
+| `src/lib/colors-core.js` | The colour scheme maths, shared by the site and the emails |
+| `scripts/test-plan.js` | Groups, biggest-cost versions, both emails and the handler's checks: `npm run test:plan` |
 
 - **Headcount estimate:** staff × a per-employee cost per category (Deloitte 2024 UK
   totals ÷ ~30 million employees — that division is our approximation). Always free.
 - **Your figures:** optional salary and staff counts, run through assumptions the visitor
   can see and edit. A blank category keeps its headcount figure. Counts need a salary.
-- **The printable (PDF) summary** sits behind a short form that posts to the same
-  Formspree endpoint as the contact form, with the subject "Cost calculator lead" and the
-  visitor's figures attached. Nothing they type is sent anywhere until they submit it.
-- Everything is worked out in the browser; there is no server code.
+- **"Get your personal plan"** is a short form. On sending, the page first posts it to the
+  same Formspree endpoint as the contact form (subject "Cost calculator lead"), exactly as
+  before, now with the manager count, the consent time and the separate "updates" answer.
+  Then it asks `/api/plan` to email the plan. If that step fails the details are still
+  stored, the visitor is told, and the printable (PDF) summary still unlocks.
+- **The plan email** is the plan itself (HTML plus a plain-text version, no attachment),
+  sent from `PLAN_FROM`. Section 2 shows only the paragraph for the visitor's biggest cost.
+  Training: as many sessions as groups of 15 need, all the same size (6, 9, 12 or 15);
+  fewer than 6 people is one small session. A blank manager count is estimated at 1 per
+  *Staff per manager* (10) and labelled as an estimate. No prices.
+- **The notification** to `NOTIFY_TO` lists everything they gave, both consent answers
+  with the time, and whether the plan email went. A Formspree "Cost calculator lead"
+  email without a matching "New personal plan request" means the email step failed:
+  send their plan by hand.
+- The sums are still done in the browser; `/api/plan` repeats them from the same code
+  (`cost-calculator.js`) so the email can't disagree with the page.
+
+#### Personal plan emails: one-time setup (Cloudflare and Resend)
+
+Nothing is emailed until these are set. Until then the form still stores everything with
+Formspree and says the plan couldn't be emailed.
+
+1. **Resend** (resend.com, free plan): add the domain `kellymariewellbeing.com`. Resend
+   lists three records to add in **Cloudflare → DNS** (all *DNS only*, grey cloud):
+   an **MX** and a **TXT (SPF)** record on `send`, and a **TXT (DKIM)** record on
+   `resend._domainkey`. Copy the values from Resend exactly. The SPF record is on `send`,
+   so the existing root SPF record (`v=spf1 include:_spf.mail.hostinger.com ~all`, for
+   Hostinger email) is **not changed**. Leave open and click tracking off. Then create an
+   API key with *Sending access* for this domain only.
+2. **Turnstile** (Cloudflare → Turnstile → Add widget): mode *Managed*, hostnames
+   `kellymariewellbeing.com` and `kelly-marie-counselling.pages.dev` (so previews work).
+   Note the site key and secret key.
+3. **Cloudflare Pages → project → Settings → Variables and Secrets**, for **Production**
+   and **Preview**:
+
+   | Name | Type | Value |
+   |---|---|---|
+   | `RESEND_API_KEY` | Secret | the Resend API key |
+   | `TURNSTILE_SECRET_KEY` | Secret | the Turnstile secret key |
+   | `TURNSTILE_SITE_KEY` | Text | the Turnstile site key (read at build time) |
+   | `PLAN_FROM` | Text | `Kelly Marie Wellbeing <plan@kellymariewellbeing.com>` |
+   | `PLAN_REPLY_TO` | Text | `contactus@kellymariewellbeing.com` |
+   | `NOTIFY_TO` | Text | `contactus@kellymariewellbeing.com` (comma-separate for more) |
+
+   Then redeploy, as the site key is read when the site is built.
+4. **DMARC** already exists (`v=DMARC1; p=none`). It can stay as it is.
 
 ### Shop page
 
