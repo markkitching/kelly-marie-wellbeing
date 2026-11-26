@@ -112,7 +112,8 @@ function planText(plan, words) {
 
 /**
  * The visitor's email: { subject, html, text }.
- * site: { url, contactUrl, email, logo, sourceNote, colors }
+ * site: { url, contactUrl, email, sourceNote, colors }
+ * No pictures: many inboxes block them until asked, which would leave a gap.
  */
 function renderPlanEmail(plan, words, site) {
   const t = planText(plan, words);
@@ -156,10 +157,7 @@ function renderPlanEmail(plan, words, site) {
 <tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;">
 <tr><td style="background:${k.dark};padding:24px 32px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="padding-right:12px;"><img src="${esc(site.logo)}" width="40" height="40" alt="" style="display:block;border-radius:20px;background:#ffffff;"></td>
-<td style="font-family:${serif};font-size:20px;color:#ffffff;">Kelly Marie <em style="color:${k.accentOnDark};">Wellbeing</em></td>
-</tr></table>
+<p style="margin:0;font-family:${serif};font-size:22px;color:#ffffff;">Kelly Marie <em style="color:${k.accentOnDark};">Wellbeing</em></p>
 </td></tr>
 <tr><td style="padding:32px 32px 8px;">
 ${p(t.greeting)}

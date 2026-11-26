@@ -30,7 +30,6 @@ const site = {
   url: "https://kellymariewellbeing.com",
   contactUrl: "https://kellymariewellbeing.com/contact/",
   email: "contactus@kellymariewellbeing.com",
-  logo: "https://kellymariewellbeing.com/images/kmclogo-tree-1.jpeg",
   sourceNote: "This is an estimate based on UK averages, not a measurement of your organisation.",
   colors: { dark: "#1c3553", accent: "#4a7fa5", light: "#f5f7fa", cream: "#e8eef5", accentText: "#406d8e", accentOnDark: "#8fb0c7" },
 };
@@ -153,6 +152,7 @@ test("the email is laid out for phones (viewport set, max 600px wide, no attachm
   const email = plan.renderPlanEmail(plan.buildPlan(details()), words, site);
   assert.ok(email.html.includes('name="viewport"'));
   assert.ok(email.html.includes("max-width:600px"));
+  assert.ok(!/<img\b/i.test(email.html), "no pictures, so nothing is blocked");
 });
 
 section("the request handler");

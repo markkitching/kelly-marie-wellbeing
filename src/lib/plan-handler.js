@@ -202,7 +202,6 @@ async function handle(request, env, fetchFn) {
     url: links.site,
     contactUrl: links.site + links.contact,
     email: contact.email,
-    logo: links.site + "/images/kmclogo-tree-1.jpeg",
     sourceNote: calculator.sourceNote || "",
     colors: colorsFor(theme),
   };
