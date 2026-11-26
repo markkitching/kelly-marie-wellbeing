@@ -218,6 +218,17 @@ test("sends the plan to the visitor and the notification to us", async () => {
   }
 });
 
+test("settings pasted with quote marks or spaces still work", async () => {
+  const { fetchFn, sent } = fakeServices();
+  const env = Object.assign({}, ENV, { PLAN_FROM: '  "Kelly Marie Wellbeing <plan@kellymariewellbeing.com>" ', NOTIFY_TO: "“contactus@kellymariewellbeing.com”" });
+  await handler.handle(request(goodBody()), env, fetchFn);
+  assert.strictEqual(sent[0].from, "Kelly Marie Wellbeing <plan@kellymariewellbeing.com>");
+  assert.deepStrictEqual(sent[1].to, ["contactus@kellymariewellbeing.com"]);
+  const quotedName = fakeServices();
+  await handler.handle(request(goodBody()), Object.assign({}, ENV, { PLAN_FROM: '"Kelly Marie Wellbeing" <plan@kellymariewellbeing.com>' }), quotedName.fetchFn);
+  assert.strictEqual(quotedName.sent[0].from, '"Kelly Marie Wellbeing" <plan@kellymariewellbeing.com>', "a quoted name is left alone");
+});
+
 test("sends nothing when the spam check fails", async () => {
   const { fetchFn, sent } = fakeServices({ human: false });
   const res = await handler.handle(request(goodBody()), ENV, fetchFn);

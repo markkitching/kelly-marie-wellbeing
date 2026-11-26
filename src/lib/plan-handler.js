@@ -39,6 +39,14 @@ const ASSUMPTION_RULES = {
   onCostPct: { min: 0, max: 100 },
 };
 
+// A setting as typed into Cloudflare, without stray spaces or the quote marks people
+// sometimes paste round a value ("…", '…' or curly “…”).
+// Only a pair round the whole value is taken off, so "Name" <address> stays as it is.
+const setting = (value) => {
+  const v = String(value || "").trim();
+  return /^["'“‘].*["'”’]$/.test(v) ? v.slice(1, -1).trim() : v;
+};
+
 const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 
@@ -146,7 +154,10 @@ async function sendEmail(env, fetchFn, message) {
       headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify(message),
     });
-    return res.ok ? "" : `resend_${res.status}`;
+    if (res.ok) return "";
+    // Resend names the problem, e.g. "validation_error"; nothing sensitive.
+    const data = await res.json().catch(() => ({}));
+    return `resend_${res.status}` + (data && data.name ? `_${String(data.name).replace(/[^a-z_]/gi, "").slice(0, 30)}` : "");
   } catch (err) {
     return "resend_unreachable";
   }
@@ -159,7 +170,7 @@ async function sendEmail(env, fetchFn, message) {
  */
 async function handle(request, env, fetchFn) {
   fetchFn = fetchFn || fetch;
-  env = env || {};
+  env = Object.fromEntries(Object.entries(env || {}).map(([k, v]) => [k, typeof v === "string" ? setting(v) : v]));
   if (REQUIRED.some((k) => !env[k])) return json(503, { ok: false, error: "not_configured" });
 
   // Only from the site's own pages (the live site or a preview of it).
