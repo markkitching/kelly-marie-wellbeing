@@ -34,6 +34,9 @@ jobs:
       - name: Calculator sums
         run: npm run test:calc
 
+      - name: Personal plan and the emails it's sent in
+        run: npm run test:plan
+
       - name: Podcast sync merge rules
         run: npm run test:sync
 
