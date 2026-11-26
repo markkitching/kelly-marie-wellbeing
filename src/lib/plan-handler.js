@@ -147,7 +147,7 @@ async function verifyTurnstile(token, ip, env, fetchFn) {
 
 // Resolves "" when Resend accepted the email, or a short code saying why not (e.g.
 // "resend_401" for a wrong API key), shown to the visitor as a reference.
-async function sendEmail(env, fetchFn, message) {
+async function sendEmail(env, fetchFn, message, detail) {
   try {
     const res = await fetchFn("https://api.resend.com/emails", {
       method: "POST",
@@ -157,7 +157,9 @@ async function sendEmail(env, fetchFn, message) {
     if (res.ok) return "";
     // Resend names the problem, e.g. "validation_error"; nothing sensitive.
     const data = await res.json().catch(() => ({}));
-    return `resend_${res.status}` + (data && data.name ? `_${String(data.name).replace(/[^a-z_]/gi, "").slice(0, 30)}` : "");
+    const code = `resend_${res.status}` + (data && data.name ? `_${String(data.name).replace(/[^a-z_]/gi, "").slice(0, 30)}` : "");
+    // On preview links only, Resend's own explanation too, to make setting up easier.
+    return detail && data && data.message ? `${code}: ${String(data.message).slice(0, 200)}` : code;
   } catch (err) {
     return "resend_unreachable";
   }
@@ -205,6 +207,7 @@ async function handle(request, env, fetchFn) {
     colors: colorsFor(theme),
   };
   const visitorEmail = plan.renderPlanEmail(result, words, site);
+  const preview = new URL(request.url).hostname.endsWith(".pages.dev");
   const emailError = await sendEmail(env, fetchFn, {
     from: env.PLAN_FROM,
     to: [lead.email],
@@ -212,7 +215,7 @@ async function handle(request, env, fetchFn) {
     subject: visitorEmail.subject,
     html: visitorEmail.html,
     text: visitorEmail.text,
-  });
+  }, preview);
   const emailSent = !emailError;
 
   const notice = plan.renderNotification(result, { ...lead, submittedAt: new Date().toISOString(), emailSent });

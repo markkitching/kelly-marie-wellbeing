@@ -374,7 +374,7 @@
       .then(function (res) {
         return res.json().catch(function () { return {}; }).then(function (data) {
           var sent = data.ok === true && data.emailSent === true;
-          return { sent: sent, code: sent ? "" : String(data.error || "http_" + res.status).slice(0, 40) };
+          return { sent: sent, code: sent ? "" : String(data.error || "http_" + res.status).slice(0, 260) };
         });
       })
       .catch(function () { return { sent: false, code: "network" }; });
