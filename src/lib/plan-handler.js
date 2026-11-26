@@ -137,6 +137,8 @@ async function verifyTurnstile(token, ip, env, fetchFn) {
   }
 }
 
+// Resolves "" when Resend accepted the email, or a short code saying why not (e.g.
+// "resend_401" for a wrong API key), shown to the visitor as a reference.
 async function sendEmail(env, fetchFn, message) {
   try {
     const res = await fetchFn("https://api.resend.com/emails", {
@@ -144,15 +146,16 @@ async function sendEmail(env, fetchFn, message) {
       headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify(message),
     });
-    return res.ok;
+    return res.ok ? "" : `resend_${res.status}`;
   } catch (err) {
-    return false;
+    return "resend_unreachable";
   }
 }
 
 /**
  * request: a POST with a JSON body from src/js/cost-calculator-page.js.
- * Answers { ok: true, emailSent } or { ok: false, error } with a matching status.
+ * Answers { ok: true, emailSent } or { ok: false, error } with a matching status; when
+ * the plan email fails, { ok: true, emailSent: false, error: "resend_<status>" }.
  */
 async function handle(request, env, fetchFn) {
   fetchFn = fetchFn || fetch;
@@ -191,7 +194,7 @@ async function handle(request, env, fetchFn) {
     colors: colorsFor(theme),
   };
   const visitorEmail = plan.renderPlanEmail(result, words, site);
-  const emailSent = await sendEmail(env, fetchFn, {
+  const emailError = await sendEmail(env, fetchFn, {
     from: env.PLAN_FROM,
     to: [lead.email],
     reply_to: env.PLAN_REPLY_TO || contact.email,
@@ -199,6 +202,7 @@ async function handle(request, env, fetchFn) {
     html: visitorEmail.html,
     text: visitorEmail.text,
   });
+  const emailSent = !emailError;
 
   const notice = plan.renderNotification(result, { ...lead, submittedAt: new Date().toISOString(), emailSent });
   await sendEmail(env, fetchFn, {
@@ -210,7 +214,7 @@ async function handle(request, env, fetchFn) {
     text: notice.text,
   });
 
-  return json(200, { ok: true, emailSent });
+  return json(200, emailSent ? { ok: true, emailSent } : { ok: true, emailSent, error: emailError });
 }
 
 module.exports = { handle, readSubmission };

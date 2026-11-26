@@ -317,7 +317,8 @@
     fetch(form.action, { method: "POST", body: stored, headers: { Accept: "application/json" } })
       .then(function (res) {
         if (!res.ok) throw new Error("Server error");
-        return sendPlan(token, updates).then(function (emailSent) {
+        return sendPlan(token, updates).then(function (result) {
+          var emailSent = result.sent;
           try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch (err) { /* private mode — fine */ }
           var email = form.elements.email.value.trim();
           if (emailSent) {
@@ -328,7 +329,7 @@
           } else {
             $("[data-calc-done-heading]").textContent = "Thank you";
             $("[data-calc-thanks]").textContent = "Your details have reached us, but we couldn't email your plan just now. " +
-              "We'll send it to " + email + " as soon as we can.";
+              "We'll send it to " + email + " as soon as we can." + (result.code ? " (Reference: " + result.code + ")" : "");
           }
           setUnlocked(true);
           $("#calc-summary").focus();
@@ -345,8 +346,9 @@
       });
   });
 
-  // Asks /api/plan to email the plan. Resolves true once it's sent; false if it can't
-  // be (the details are already stored, so the visitor isn't asked to try again).
+  // Asks /api/plan to email the plan. Resolves { sent, code }: sent is false if it can't
+  // be (the details are already stored, so the visitor isn't asked to try again), and
+  // code is the short reason the server gave, shown as a reference for us.
   function sendPlan(token, updates) {
     var s = state, managers = readManagers().value;
     var body = {
@@ -369,9 +371,13 @@
       },
     };
     return fetch(config.planEndpoint, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
-      .then(function (res) { return res.json().catch(function () { return {}; }); })
-      .then(function (data) { return data.ok === true && data.emailSent === true; })
-      .catch(function () { return false; });
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          var sent = data.ok === true && data.emailSent === true;
+          return { sent: sent, code: sent ? "" : String(data.error || "http_" + res.status).slice(0, 40) };
+        });
+      })
+      .catch(function () { return { sent: false, code: "network" }; });
   }
 
   // "Talk to us" opens the same form with the box ticked. Once they've already sent it,

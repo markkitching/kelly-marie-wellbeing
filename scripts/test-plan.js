@@ -276,7 +276,7 @@ test("blank managers: the notification says it was estimated", async () => {
 test("if the plan email fails, we're still told, and the page hears it wasn't sent", async () => {
   const { fetchFn, sent } = fakeServices({ resendFails: true });
   const res = await handler.handle(request(goodBody()), ENV, fetchFn);
-  assert.deepStrictEqual(await res.json(), { ok: true, emailSent: false });
+  assert.deepStrictEqual(await res.json(), { ok: true, emailSent: false, error: "resend_500" });
   assert.strictEqual(sent.length, 2);
   assert.ok(sent[1].text.includes("Plan email sent: No"));
 });
