@@ -3,3 +3,6 @@ _site/
 .DS_Store
 # Built by `npm run css` (part of `npm run build`) from styles/tailwind.css
 src/css/site.css
+
+# Local state from `wrangler pages dev` (testing the plan function)
+.wrangler/

@@ -55,13 +55,22 @@ const test = async (name, fn) => {
   const base = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch();
   const errors = [];
+  // What the form sent: to Formspree (stored) and to /api/plan (emails the plan).
+  const sent = { formspree: null, plan: null };
 
   async function openCalculator() {
     const context = await browser.newContext();
     await context.route("**/*", (route) => {
       const url = route.request().url();
+      if (url === `${base}/api/plan`) {
+        sent.plan = JSON.parse(route.request().postData());
+        return route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true,"emailSent":true}' });
+      }
       if (url.startsWith(base)) return route.continue();
-      if (url.includes("formspree.io")) return route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' });
+      if (url.includes("formspree.io")) {
+        sent.formspree = route.request().postDataBuffer().toString();
+        return route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' });
+      }
       return route.abort();
     });
     const page = await context.newPage();
@@ -160,12 +169,34 @@ const test = async (name, fn) => {
     await page.click("[data-calc-reset]");
   });
 
-  await test("the summary form unlocks the download, which opens the summary", async () => {
+  await test("managers must be a whole number, or left blank", async () => {
+    await page.fill("#calc-staff", "50");
+    await page.fill("#calc-managers", "2.5");
+    await page.click("[data-calc-submit]");
+    assert.match(await page.locator("#calc-managers-error").innerText(), /whole number/);
+    assert.strictEqual(sent.formspree, null, "nothing should be sent");
+    await page.fill("#calc-managers", "");
+  });
+
+  await test("the plan form stores the details, asks for the plan, and unlocks the download", async () => {
     await page.fill("#calc-staff", "50");
     await page.fill("#calc-name", "Test Person");
     await page.fill("#calc-email", "test@example.com");
+    await page.fill("#calc-managers", "12");
     await page.check("#calc-consent");
     await page.click("[data-calc-submit]");
+    await page.locator("[data-calc-download]").waitFor({ state: "visible" });
+    const field = (name) => (sent.formspree.match(new RegExp(`name="${name}"\\r\\n\\r\\n([^\\r]*)`)) || [])[1];
+    assert.strictEqual(field("managers"), "12");
+    assert.strictEqual(field("consent"), "Yes");
+    assert.match(field("updates_consent") || "", /^No \(\d{4}-/, "the updates answer is stored with a time");
+    assert.match(field("consent_given_at") || "", /^\d{4}-\d\d-\d\dT/);
+    assert.ok(!sent.formspree.includes("cf-turnstile-response"), "the spam-check token isn't stored");
+    assert.strictEqual(sent.plan.managers, 12);
+    assert.strictEqual(sent.plan.staff, 50);
+    assert.strictEqual(sent.plan.consentPlan, true);
+    assert.strictEqual(sent.plan.consentUpdates, false);
+    assert.match(await page.locator("[data-calc-thanks]").innerText(), /emailed your plan to test@example\.com/);
     await page.locator("[data-calc-download]").waitFor({ state: "visible" });
     const [popup] = await Promise.all([
       page.waitForEvent("popup"),
@@ -177,7 +208,7 @@ const test = async (name, fn) => {
   });
 
   await test("download with no headcount says why instead of doing nothing", async () => {
-    // Follows the test above, so the summary is already unlocked.
+    // Follows the test above, so the download is already unlocked.
     await page.fill("#calc-staff", "");
     let opened = false;
     page.once("popup", () => { opened = true; });
